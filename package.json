@@ -1,0 +1,14 @@
+{
+  "name": "peregrine-academy-storefront",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Peregrine Academy Unified Storefront & Commerce Engine",
+  "type": "module",
+  "scripts": {
+    "dev": "node --experimental-strip-types server.js",
+    "test": "node --experimental-strip-types --test tests/*.test.mjs",
+    "build": "node build.js"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
