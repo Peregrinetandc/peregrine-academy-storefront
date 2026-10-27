@@ -6,8 +6,50 @@
   <title>Complete Your Arabic Learning Package | Peregrine Academy</title>
   <meta name="description" content="Get instant access to the complete Peregrine Arabic Learning Package: Spoken Arabic LMS Course (₹1,499), Spoken Arabic Book with 952 audio clips (₹499), and AI Speaking Partner (FREE for the first month). Total payable: ₹1,998." />
   
+  <!-- Open Graph / Meta Ads Social Sharing -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://peregrineacademy.in/" />
+  <meta property="og:title" content="Complete Arabic Learning Package | Peregrine Academy" />
+  <meta property="og:description" content="Master Spoken Emirati Arabic with 30-Hour LMS Masterclasses and 40-Chapter Digital Book with 952 native audio recordings. Directed by Dr. Muhammed Swalih T (PhD, EFLU Hyderabad)." />
+  <meta property="og:image" content="https://peregrineacademy.in/images/khaliji-front-cover.jpeg" />
+  <meta property="og:site_name" content="Peregrine Academy" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Complete Arabic Learning Package | Peregrine Academy" />
+  <meta name="twitter:description" content="Master Spoken Emirati Arabic with 30-Hour LMS Masterclasses and 40-Chapter Digital Book with 952 native audio recordings." />
+  <meta name="twitter:image" content="https://peregrineacademy.in/images/khaliji-front-cover.jpeg" />
+
   <link rel="icon" type="image/png" href="/favicon.png" />
   <link rel="apple-touch-icon" href="/favicon.png" />
+
+  <!-- Meta Pixel Code for Ad Tracking -->
+  <meta name="meta-pixel-id" content="" />
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    
+    // Auto-detect pixel ID from window global, meta tag, or query param (?pixel=... or ?fb_pixel=...)
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const pixelId = window.__META_PIXEL_ID || 
+                      document.querySelector('meta[name="meta-pixel-id"]')?.content || 
+                      urlParams.get('pixel') ||
+                      urlParams.get('fb_pixel');
+      if (pixelId && pixelId.trim().length > 3) {
+        fbq('init', pixelId.trim());
+        fbq('track', 'PageView');
+      }
+    } catch (e) {
+      console.warn('[Pixel init error]', e);
+    }
+  </script>
 
   <!-- Official Razorpay Checkout Library -->
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
