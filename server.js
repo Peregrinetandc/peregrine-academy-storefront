@@ -9,13 +9,13 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { handleCreateOrder, handleVerifyPayment, handleRazorpayWebhook } from './src/api/orders.ts';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const modulePath = fileURLToPath(import.meta.url);
+const moduleDir = path.dirname(modulePath);
 const PORT = process.env.PORT || 3000;
-const PUBLIC_DIR = path.join(__dirname, 'public');
+const PUBLIC_DIR = path.join(moduleDir, 'public');
 
 // Optional lightweight local .env loader
-const envPath = path.join(__dirname, '.env');
+const envPath = path.join(moduleDir, '.env');
 if (fs.existsSync(envPath)) {
   const envContent = fs.readFileSync(envPath, 'utf8');
   for (const line of envContent.split('\n')) {

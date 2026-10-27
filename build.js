@@ -7,13 +7,13 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const modulePath = fileURLToPath(import.meta.url);
+const moduleDir = path.dirname(modulePath);
 
 console.log('=== Building Peregrine Academy Storefront Artifacts ===');
 
 // 1. Verify index.html exists and is complete
-const indexPath = path.join(__dirname, 'public', 'index.html');
+const indexPath = path.join(moduleDir, 'public', 'index.html');
 if (!fs.existsSync(indexPath)) {
   console.error('[build error] public/index.html is missing!');
   process.exit(1);

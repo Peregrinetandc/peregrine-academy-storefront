@@ -257,4 +257,60 @@ describe('Serverless Deployment Adapters (Netlify & Vercel)', () => {
       assert.equal(res.body.success, false);
     });
   });
+
+  describe('Serverless Bundler Identifier Collision Protection (Regression Prevention)', () => {
+    test('Zero files in src/, netlify/, and api/ declare top-level __filename or __dirname', async () => {
+      const fs = await import('node:fs');
+      const path = await import('node:path');
+      const { fileURLToPath } = await import('node:url');
+
+      const currentDir = path.dirname(fileURLToPath(import.meta.url));
+      const rootDir = path.join(currentDir, '..');
+
+      function scanDir(dir) {
+        let results = [];
+        if (!fs.existsSync(dir)) return results;
+        const entries = fs.readdirSync(dir, { withFileTypes: true });
+        for (const entry of entries) {
+          const fullPath = path.join(dir, entry.name);
+          if (entry.isDirectory()) {
+            results = results.concat(scanDir(fullPath));
+          } else if (entry.name.endsWith('.ts') || entry.name.endsWith('.js') || entry.name.endsWith('.mjs')) {
+            results.push(fullPath);
+          }
+        }
+        return results;
+      }
+
+      const filesToScan = [
+        ...scanDir(path.join(rootDir, 'src')),
+        ...scanDir(path.join(rootDir, 'netlify')),
+        ...scanDir(path.join(rootDir, 'api'))
+      ];
+
+      for (const filePath of filesToScan) {
+        const content = fs.readFileSync(filePath, 'utf8');
+        const hasConflict = /(const|let|var)\s+(__filename|__dirname)\b/.test(content);
+        assert.equal(
+          hasConflict,
+          false,
+          `File ${path.relative(rootDir, filePath)} contains forbidden declaration of __filename or __dirname which causes Netlify bundler SyntaxError collision.`
+        );
+      }
+    });
+
+    test('order-repository.ts uses safe modulePath and moduleDir identifiers', async () => {
+      const fs = await import('node:fs');
+      const path = await import('node:path');
+      const { fileURLToPath } = await import('node:url');
+      const currentDir = path.dirname(fileURLToPath(import.meta.url));
+      const repoFile = path.join(currentDir, '../src/lib/storage/order-repository.ts');
+      const content = fs.readFileSync(repoFile, 'utf8');
+
+      assert.match(content, /const\s+modulePath\s*=\s*fileURLToPath/);
+      assert.match(content, /const\s+moduleDir\s*=\s*path\.dirname/);
+      assert.doesNotMatch(content, /const\s+__filename/);
+      assert.doesNotMatch(content, /const\s+__dirname/);
+    });
+  });
 });
