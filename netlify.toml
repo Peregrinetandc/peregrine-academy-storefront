@@ -7,6 +7,21 @@
   NODE_VERSION = "22"
 
 [[redirects]]
+  from = "/api/order/create"
+  to = "/.netlify/functions/order-create"
+  status = 200
+
+[[redirects]]
+  from = "/api/order/verify"
+  to = "/.netlify/functions/order-verify"
+  status = 200
+
+[[redirects]]
+  from = "/api/webhook/razorpay"
+  to = "/.netlify/functions/webhook-razorpay"
+  status = 200
+
+[[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/api/:splat"
   status = 200

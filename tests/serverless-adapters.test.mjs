@@ -3,6 +3,9 @@ import assert from 'node:assert/strict';
 import crypto from 'node:crypto';
 
 import netlifyHandler, { handler as netlifyV1Handler } from '../netlify/functions/api.ts';
+import orderCreateHandler from '../netlify/functions/order-create.ts';
+import orderVerifyHandler from '../netlify/functions/order-verify.ts';
+import webhookHandler from '../netlify/functions/webhook-razorpay.ts';
 import vercelHandler from '../api/index.ts';
 
 describe('Serverless Deployment Adapters (Netlify & Vercel)', () => {
@@ -10,6 +13,69 @@ describe('Serverless Deployment Adapters (Netlify & Vercel)', () => {
   const webhookSecret = 'whsec_serverless_456';
   process.env.RAZORPAY_KEY_SECRET = secret;
   process.env.RAZORPAY_WEBHOOK_SECRET = webhookSecret;
+
+  describe('Dedicated Netlify Functions Endpoints', () => {
+    test('order-create function processes ₹499 book request', async () => {
+      const req = new Request('https://example.com/.netlify/functions/order-create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sku: 'SKU_BOOK_KHALIJI_STORIES',
+          customerEmail: 'dedicated.func@peregrineacademy.in',
+          customerName: 'Dedicated Test'
+        })
+      });
+      const res = await orderCreateHandler(req);
+      assert.equal(res.status, 200);
+      const data = await res.json();
+      assert.equal(data.success, true);
+    });
+
+    test('order-create function strictly fails closed for paused bundle', async () => {
+      const req = new Request('https://example.com/.netlify/functions/order-create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sku: 'SKU_BUNDLE_ALL_IN_ONE',
+          customerEmail: 'dedicated.bundle@peregrineacademy.in',
+          customerName: 'Dedicated Bundle'
+        })
+      });
+      const res = await orderCreateHandler(req);
+      assert.equal(res.status, 400);
+      const data = await res.json();
+      assert.equal(data.success, false);
+      assert.equal(data.isPaused, true);
+    });
+
+    test('order-verify function rejects tampered signature', async () => {
+      const req = new Request('https://example.com/.netlify/functions/order-verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          orderId: 'fake-id',
+          razorpayOrderId: 'fake-order',
+          razorpayPaymentId: 'fake-pay',
+          razorpaySignature: 'bad-sig'
+        })
+      });
+      const res = await orderVerifyHandler(req);
+      assert.equal(res.status, 400);
+    });
+
+    test('webhook-razorpay function rejects invalid signature', async () => {
+      const req = new Request('https://example.com/.netlify/functions/webhook-razorpay', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-razorpay-signature': 'bad_wh_sig'
+        },
+        body: JSON.stringify({ event: 'payment.captured' })
+      });
+      const res = await webhookHandler(req);
+      assert.equal(res.status, 400);
+    });
+  });
 
   describe('Netlify Functions V2 (Standard Web Request/Response)', () => {
     test('OPTIONS /api/order/create returns 204 CORS preflight', async () => {
