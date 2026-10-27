@@ -74,9 +74,26 @@ const ALLOWED_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
 
 /**
  * Validates whether an order state transition is permitted.
+ * Invariant: An order in 'failed' status can NEVER transition to 'draft' if payment evidence exists
+ * (razorpayPaymentId or paymentVerifiedAt), preventing double charges and orphaned paid orders.
  */
-export function canTransitionOrder(currentStatus: OrderStatus, targetStatus: OrderStatus): boolean {
+export function canTransitionOrder(
+  current: OrderStatus | StorefrontOrder,
+  targetStatus: OrderStatus,
+  hasPaymentEvidence?: boolean
+): boolean {
+  const currentStatus: OrderStatus = typeof current === 'string' ? current : current.status;
+  const paymentRecorded: boolean = typeof current === 'object'
+    ? Boolean(current.razorpayPaymentId || current.paymentVerifiedAt)
+    : Boolean(hasPaymentEvidence);
+
   if (currentStatus === targetStatus) return true;
+
+  // Invariant: Failed order with payment evidence cannot transition back to draft
+  if (currentStatus === 'failed' && targetStatus === 'draft' && paymentRecorded) {
+    return false;
+  }
+
   const allowed = ALLOWED_TRANSITIONS[currentStatus];
   return !!allowed && allowed.includes(targetStatus);
 }
@@ -85,7 +102,10 @@ export function canTransitionOrder(currentStatus: OrderStatus, targetStatus: Ord
  * Performs a validated state transition on an order.
  */
 export function transitionOrder(order: StorefrontOrder, nextStatus: OrderStatus): StorefrontOrder {
-  if (!canTransitionOrder(order.status, nextStatus)) {
+  if (!canTransitionOrder(order, nextStatus)) {
+    if (order.status === 'failed' && nextStatus === 'draft' && (order.razorpayPaymentId || order.paymentVerifiedAt)) {
+      throw new Error(`Cannot transition failed order '${order.id}' to 'draft' because payment evidence exists (${order.razorpayPaymentId || 'verified'}). Reconcile payment or route to retry/refund.`);
+    }
     throw new Error(`Illegal order state transition from '${order.status}' to '${nextStatus}'`);
   }
 

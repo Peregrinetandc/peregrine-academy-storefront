@@ -120,6 +120,11 @@ const server = http.createServer(async (req, res) => {
   // Static File Serving
   let filePath = path.join(PUBLIC_DIR, url.pathname === '/' ? 'index.html' : url.pathname);
   if (!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
+    if (path.extname(url.pathname)) {
+      res.writeHead(404, { 'Content-Type': 'text/plain' });
+      res.end('Not Found');
+      return;
+    }
     filePath = path.join(PUBLIC_DIR, 'index.html');
   }
 
@@ -130,12 +135,16 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
-    const ext = path.extname(filePath);
+    const ext = path.extname(filePath).toLowerCase();
     let contentType = 'text/html';
     if (ext === '.js') contentType = 'text/javascript';
     else if (ext === '.css') contentType = 'text/css';
     else if (ext === '.json') contentType = 'application/json';
     else if (ext === '.svg') contentType = 'image/svg+xml';
+    else if (ext === '.png') contentType = 'image/png';
+    else if (ext === '.jpg' || ext === '.jpeg') contentType = 'image/jpeg';
+    else if (ext === '.webp') contentType = 'image/webp';
+    else if (ext === '.ico') contentType = 'image/x-icon';
 
     res.writeHead(200, { 'Content-Type': contentType });
     res.end(data);

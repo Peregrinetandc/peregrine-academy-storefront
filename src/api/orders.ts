@@ -6,6 +6,7 @@ import {
   verifyRazorpayWebhookSignature,
   createRazorpayOrder,
   fetchRazorpayPayment,
+  captureRazorpayPayment,
   type RazorpayOrderResponse
 } from '../lib/razorpay.ts';
 import {
@@ -80,7 +81,7 @@ export async function handleCreateOrder(
   if ((catalogItem.sku === 'SKU_BUNDLE_ALL_IN_ONE' || catalogItem.isBundlePaused) && !config?.allowPausedBundleForTesting) {
     return {
       success: false,
-      error: catalogItem.pauseNotice || 'The Complete Arabic Learning Package checkout is temporarily paused while AI Speaking Partner entitlement policies and limits are finalized. Online payment is disabled.',
+      error: catalogItem.pauseNotice || 'Because AIAS access limits and duration are undecided, bundle checkout cannot safely operate and is temporarily paused. Online payment is disabled.',
       order: null as any,
       razorpayOrderId: '',
       isPaused: true
@@ -206,7 +207,10 @@ export async function handleCreateOrder(
     razorpayOrderId,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-    metadata: req.metadata || {}
+    metadata: {
+      ...(req.metadata || {}),
+      allowPausedBundleForTesting: Boolean(config?.allowPausedBundleForTesting)
+    }
   };
 
   // Persist order durably to local storage
@@ -288,6 +292,18 @@ export async function handleVerifyPayment(
     };
   }
 
+  // Commercial Safety Gate: Complete Arabic Learning Package verification & fulfillment is PAUSED
+  const isBundleOrder = order.sku === 'SKU_BUNDLE_ALL_IN_ONE' ||
+    order.items.some(i => i.sku === 'SKU_BUNDLE_ALL_IN_ONE' || i.sku === 'SKU_AIAS_TUTOR_PASS');
+  const isAuthorizedTestBundle = Boolean(config?.allowPausedBundleForTesting || (order.metadata as any)?.allowPausedBundleForTesting);
+
+  if (isBundleOrder && !isAuthorizedTestBundle) {
+    return {
+      success: false,
+      error: 'Payment verification forbidden: Because AIAS access limits and duration are undecided, bundle checkout cannot safely operate and is paused. Online payment is disabled.'
+    };
+  }
+
   // Strict Order ID match: verify that the payment corresponds to this specific internal order
   if (req.razorpayOrderId !== order.razorpayOrderId) {
     return {
@@ -321,10 +337,10 @@ export async function handleVerifyPayment(
     return { success: false, error: 'Razorpay secret key not configured for payment verification.' };
   }
 
-  // Optional gateway payment verification (fetches payment entity directly from Razorpay)
+  // Gateway payment verification and capture enforcement
   if (keyId && secret && !config?.skipGatewayFetch && !keyId.startsWith('rzp_test_placeholder_mock')) {
     try {
-      const payment = await fetchRazorpayPayment({
+      let payment = await fetchRazorpayPayment({
         paymentId: req.razorpayPaymentId,
         keyId,
         keySecret: secret,
@@ -350,10 +366,48 @@ export async function handleVerifyPayment(
         };
       }
 
-      if (payment.status !== 'captured' && payment.status !== 'authorized') {
+      // If payment is authorized but not yet captured, execute server-side capture
+      if (payment.status === 'authorized') {
+        try {
+          payment = await captureRazorpayPayment({
+            paymentId: req.razorpayPaymentId,
+            amountInSubunits: expectedSubunits,
+            currency: order.currency,
+            keyId,
+            keySecret: secret,
+            fetchFn: config?.fetchFn
+          });
+        } catch (capErr: any) {
+          // Re-fetch to confirm whether capture succeeded despite network timeout/drop
+          try {
+            const refetched = await fetchRazorpayPayment({
+              paymentId: req.razorpayPaymentId,
+              keyId,
+              keySecret: secret,
+              fetchFn: config?.fetchFn
+            });
+            if (refetched.status === 'captured') {
+              payment = refetched;
+            } else {
+              return {
+                success: false,
+                error: `Payment is authorized but capture could not be completed: ${capErr.message}`
+              };
+            }
+          } catch {
+            return {
+              success: false,
+              error: `Payment capture failed: ${capErr.message}`
+            };
+          }
+        }
+      }
+
+      // STRICT INVARIANT: Digital fulfillment requires payment in 'captured' status!
+      if (payment.status !== 'captured') {
         return {
           success: false,
-          error: `Payment is not in captured/authorized status (current: ${payment.status})`
+          error: `Payment cannot trigger fulfillment because it is not captured (current status: ${payment.status})`
         };
       }
     } catch (err: any) {
@@ -375,11 +429,18 @@ export async function handleVerifyPayment(
   );
 
   if (!atomicTransition.success || !atomicTransition.order) {
-    // If CAS failed because order was already updated to paid by a simultaneous webhook, return duplicate
+    // If CAS failed because order was already updated to paid/provisioning/fulfilled by a simultaneous webhook,
+    // verify payment ownership and return truthful success indicating verified payment and in-flight/completed fulfillment
     const current = await orderRepository.get(order.id);
     if (current && (current.status === 'paid' || current.status === 'fulfilled' || current.status === 'provisioning')) {
+      if (current.razorpayPaymentId && current.razorpayPaymentId !== req.razorpayPaymentId) {
+        return {
+          success: false,
+          error: 'Order was already marked paid with a different payment ID.'
+        };
+      }
       return {
-        success: current.status === 'fulfilled',
+        success: true,
         order: current,
         paymentVerified: true,
         fulfillmentStatus: current.status,
@@ -465,6 +526,18 @@ export async function handleRazorpayWebhook(
       return { success: false, error: `No internal order found for Razorpay order ID ${rzpOrderId}` };
     }
 
+    // Safety Gate: Reject webhook provisioning for paused bundle orders
+    const isBundleOrder = matchedOrder.sku === 'SKU_BUNDLE_ALL_IN_ONE' ||
+      matchedOrder.items.some(i => i.sku === 'SKU_BUNDLE_ALL_IN_ONE' || i.sku === 'SKU_AIAS_TUTOR_PASS');
+    const isAuthorizedTestBundle = Boolean((matchedOrder.metadata as any)?.allowPausedBundleForTesting);
+
+    if (isBundleOrder && !isAuthorizedTestBundle) {
+      return {
+        success: false,
+        error: 'Webhook fulfillment rejected: Because AIAS access limits and duration are undecided, bundle checkout cannot safely operate and is paused.'
+      };
+    }
+
     // Idempotency: If already paid or fulfilled, do not re-provision
     if (matchedOrder.status === 'fulfilled' || matchedOrder.status === 'paid' || matchedOrder.status === 'provisioning') {
       return {
@@ -539,5 +612,104 @@ export async function handleRetryProvisioning(
       success: false,
       error: err.message || String(err)
     };
+  }
+}
+
+/**
+ * Reconciles an ambiguous order directly against Razorpay gateway status before allowing retries or refunds.
+ * Prevents double-charging customers when client responses were lost or ambiguous.
+ */
+export async function reconcileOrderPayment(
+  orderId: string,
+  config?: OrderApiConfig
+): Promise<{
+  reconciled: boolean;
+  order: StorefrontOrder | null;
+  status: string;
+  paymentId?: string;
+  error?: string;
+}> {
+  const order = await orderRepository.get(orderId);
+  if (!order) {
+    return { reconciled: false, order: null, status: 'not_found', error: `Order not found: ${orderId}` };
+  }
+
+  // Safety Gate: Reject reconciliation/fulfillment for paused bundle orders
+  const isBundleOrder = order.sku === 'SKU_BUNDLE_ALL_IN_ONE' ||
+    order.items.some(i => i.sku === 'SKU_BUNDLE_ALL_IN_ONE' || i.sku === 'SKU_AIAS_TUTOR_PASS');
+  const isAuthorizedTestBundle = Boolean(config?.allowPausedBundleForTesting || (order.metadata as any)?.allowPausedBundleForTesting);
+
+  if (isBundleOrder && !isAuthorizedTestBundle) {
+    return {
+      reconciled: false,
+      order,
+      status: order.status,
+      error: 'Reconciliation forbidden: Bundle checkout is paused while AI Speaking Partner terms are undecided.'
+    };
+  }
+
+  const keyId = config?.razorpayKeyId || process.env.RAZORPAY_KEY_ID;
+  const secret = config?.razorpayKeySecret || process.env.RAZORPAY_KEY_SECRET;
+
+  if (order.status === 'fulfilled') {
+    return { reconciled: true, order, status: 'fulfilled', paymentId: order.razorpayPaymentId };
+  }
+
+  if (!order.razorpayOrderId || !keyId || !secret) {
+    return { reconciled: true, order, status: order.status, paymentId: order.razorpayPaymentId };
+  }
+
+  try {
+    if (order.razorpayPaymentId) {
+      let payment = await fetchRazorpayPayment({
+        paymentId: order.razorpayPaymentId,
+        keyId,
+        keySecret: secret,
+        fetchFn: config?.fetchFn
+      });
+
+      // If authorized, attempt capture
+      if (payment.status === 'authorized') {
+        try {
+          payment = await captureRazorpayPayment({
+            paymentId: order.razorpayPaymentId,
+            amountInSubunits: order.amountInr * 100,
+            currency: order.currency,
+            keyId,
+            keySecret: secret,
+            fetchFn: config?.fetchFn
+          });
+        } catch {
+          // Keep current status if capture fails
+        }
+      }
+
+      if (payment.status === 'captured') {
+        if (order.status === 'pending_payment') {
+          const transitioned = await orderRepository.transitionStatusAtomic(
+            order.id,
+            'pending_payment',
+            'paid',
+            { razorpayPaymentId: payment.id }
+          );
+          if (transitioned.success && transitioned.order) {
+            const orchestration = await executeOrderProvisioning(
+              transitioned.order,
+              config?.provisioningOptions || { simulate: true }
+            );
+            await orderRepository.save(orchestration.order);
+            return {
+              reconciled: true,
+              order: orchestration.order,
+              status: orchestration.order.status,
+              paymentId: payment.id
+            };
+          }
+        }
+      }
+    }
+    return { reconciled: true, order, status: order.status, paymentId: order.razorpayPaymentId };
+  } catch (err: any) {
+    return { reconciled: false, order, status: order.status, error: err.message };
   }
 }

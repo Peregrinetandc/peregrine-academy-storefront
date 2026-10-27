@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { type StorefrontOrder, type OrderStatus, transitionOrder } from '../order-state-machine.ts';
+import { type IOrderRepository, type TransitionResult } from './types.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -12,9 +13,9 @@ const ORDERS_FILE = path.join(DATA_DIR, 'storefront-orders.json');
 
 /**
  * Local Durable Order Repository with Atomic File Persistence and In-Memory Cache.
- * Prevents financial order data loss across process restarts.
+ * Prevents financial order data loss across process restarts in local dev and tests.
  */
-class LocalOrderRepository {
+export class LocalOrderRepository implements IOrderRepository {
   private cache: Map<string, StorefrontOrder> = new Map();
   private initialized: boolean = false;
   private activeDataDir: string = DATA_DIR;
@@ -149,11 +150,14 @@ class LocalOrderRepository {
       if (paymentProof.razorpaySignature) current.razorpaySignature = paymentProof.razorpaySignature;
     }
 
-    const updated = transitionOrder(current, targetStatus);
-    this.cache.set(updated.id, updated);
-    this.persistToDisk();
-
-    return { success: true, order: updated };
+    try {
+      const updated = transitionOrder(current, targetStatus);
+      this.cache.set(updated.id, updated);
+      this.persistToDisk();
+      return { success: true, order: updated };
+    } catch (err: any) {
+      return { success: false, error: err.message, order: current };
+    }
   }
 
   public async clearForTesting(): Promise<void> {

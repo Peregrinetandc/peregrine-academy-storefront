@@ -4,5 +4,8 @@
 node_modules/
 .DS_Store
 *.log
-data/storefront-orders.json
-data/storefront-orders.json.tmp
+data/
+.data/
+*.tmp*
+*.tmp.*
+

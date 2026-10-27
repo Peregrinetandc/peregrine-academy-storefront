@@ -49,6 +49,29 @@ export async function executeOrderProvisioning(
     };
   }
 
+  // Safety Invariant: Refuse to provision paused bundle orders unless explicitly authorized for testing
+  const isBundleOrder = order.sku === 'SKU_BUNDLE_ALL_IN_ONE' ||
+    order.items.some(i => i.sku === 'SKU_BUNDLE_ALL_IN_ONE' || i.sku === 'SKU_AIAS_TUTOR_PASS');
+  const isAuthorizedTestBundle = Boolean(
+    options?.simulate ||
+    (order.metadata as any)?.allowPausedBundleForTesting
+  );
+
+  if (isBundleOrder && !isAuthorizedTestBundle) {
+    return {
+      order,
+      allSucceeded: false,
+      provisionedCount: 0,
+      failedCount: order.items.length,
+      itemResults: order.items.map(i => ({
+        sku: i.sku,
+        targetPlatform: i.targetPlatform,
+        success: false,
+        error: 'Provisioning forbidden: Because AIAS access limits and duration are undecided, bundle checkout cannot safely operate and is paused.'
+      }))
+    };
+  }
+
   // Must be in 'paid' or 'partially_provisioned' to start provisioning
   let currentOrder = transitionOrder(order, 'provisioning');
   const updatedItems: OrderItem[] = [];

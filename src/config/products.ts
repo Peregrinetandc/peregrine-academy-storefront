@@ -142,8 +142,8 @@ export const PRODUCT_CATALOG: Record<string, ProductCatalogItem> = {
     ],
     isLaunchReady: false,
     isBundlePaused: true,
-    pauseNotice: 'The Complete Arabic Learning Package checkout is temporarily paused while AI Speaking Partner entitlement policies and limits are finalized. Online payment is disabled.',
-    termsPendingNotice: 'Includes 1 month free AI speaking partner. Commercial checkout paused pending final terms approval.'
+    pauseNotice: 'Because AIAS access limits and duration are undecided, bundle checkout cannot safely operate and is temporarily paused. Online payment is disabled.',
+    termsPendingNotice: 'Because AIAS access limits and duration are undecided, bundle checkout cannot safely operate and is temporarily paused. Online payment is disabled.'
   }
 };
 
