@@ -31,7 +31,7 @@ describe('Serverless Deployment Adapters (Netlify & Vercel)', () => {
       assert.equal(data.success, true);
     });
 
-    test('order-create function strictly fails closed for paused bundle', async () => {
+    test('order-create function processes bundle request for Complete Package at ₹1,998', async () => {
       const req = new Request('https://example.com/.netlify/functions/order-create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -42,10 +42,27 @@ describe('Serverless Deployment Adapters (Netlify & Vercel)', () => {
         })
       });
       const res = await orderCreateHandler(req);
+      assert.equal(res.status, 200);
+      const data = await res.json();
+      assert.equal(data.success, true);
+      assert.equal(data.amountInSubunits, 199800);
+      assert.equal(data.order.amountInr, 1998);
+    });
+
+    test('order-create function strictly fails closed for invalid or unready SKU with 400', async () => {
+      const req = new Request('https://example.com/.netlify/functions/order-create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sku: 'SKU_UNKNOWN_INVALID',
+          customerEmail: 'invalid@example.com',
+          customerName: 'Invalid'
+        })
+      });
+      const res = await orderCreateHandler(req);
       assert.equal(res.status, 400);
       const data = await res.json();
       assert.equal(data.success, false);
-      assert.equal(data.isPaused, true);
     });
 
     test('order-verify function rejects tampered signature', async () => {
@@ -105,7 +122,7 @@ describe('Serverless Deployment Adapters (Netlify & Vercel)', () => {
       assert.ok(data.order.id);
     });
 
-    test('POST /api/order/create for Complete Package strictly fails closed (paused) with 400', async () => {
+    test('POST /api/order/create for Complete Package succeeds with 200', async () => {
       const req = new Request('https://example.com/api/order/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -116,11 +133,25 @@ describe('Serverless Deployment Adapters (Netlify & Vercel)', () => {
         })
       });
       const res = await netlifyHandler(req, {});
-      assert.equal(res.status, 400);
+      assert.equal(res.status, 200);
       const data = await res.json();
-      assert.equal(data.success, false);
-      assert.equal(data.isPaused, true);
-      assert.match(data.error, /undecided/);
+      assert.equal(data.success, true);
+      assert.equal(data.amountInSubunits, 199800);
+      assert.equal(data.order.amountInr, 1998);
+    });
+
+    test('POST /api/order/create strictly fails closed for invalid SKU with 400', async () => {
+      const req = new Request('https://example.com/api/order/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sku: 'SKU_INVALID_FAKE',
+          customerEmail: 'fake@example.com',
+          customerName: 'Fake'
+        })
+      });
+      const res = await netlifyHandler(req, {});
+      assert.equal(res.status, 400);
     });
 
     test('POST /api/order/verify rejects invalid signature with 400', async () => {
@@ -205,15 +236,25 @@ describe('Serverless Deployment Adapters (Netlify & Vercel)', () => {
       assert.equal(res.body.amountInSubunits, 49900);
     });
 
-    test('POST /api/order/create rejects paused bundle with 400', async () => {
+    test('POST /api/order/create creates ₹1,998 bundle order', async () => {
       const res = await dispatchVercel('POST', '/api/order/create', {
         sku: 'SKU_BUNDLE_ALL_IN_ONE',
         customerEmail: 'vercel.bundle@peregrineacademy.in',
         customerName: 'Vercel Bundle User'
       });
+      assert.equal(res.status, 200);
+      assert.equal(res.body.success, true);
+      assert.equal(res.body.amountInSubunits, 199800);
+    });
+
+    test('POST /api/order/create rejects invalid SKU with 400', async () => {
+      const res = await dispatchVercel('POST', '/api/order/create', {
+        sku: 'SKU_INVALID_FAKE',
+        customerEmail: 'invalid@example.com',
+        customerName: 'Invalid'
+      });
       assert.equal(res.status, 400);
       assert.equal(res.body.success, false);
-      assert.equal(res.body.isPaused, true);
     });
   });
 });

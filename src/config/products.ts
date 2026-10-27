@@ -91,59 +91,57 @@ export const PRODUCT_CATALOG: Record<string, ProductCatalogItem> = {
     id: 'aias-tutor',
     name: 'AI Speaking Partner (Rashid & Maryam)',
     arabicName: 'المعلم الذكي للمحادثة الخليجية',
-    badge: 'FREE for 1st Month in Package',
+    badge: 'Preview on Reader App',
     headline: 'Emirati Speaking Practice Grounded in Academic Research',
-    description: 'Practice spoken conversations with Rashid & Maryam grounded in textbook curriculum. FREE for the first month (30 days) when purchased in the Arabic Learning Package. Non-recurring; no auto-debit.',
+    description: 'Practice spoken conversations with Rashid & Maryam grounded in textbook curriculum. Available in preview directly on the Reader app (30 days access, non-recurring, no auto-debit).',
     priceInr: 0,
     compareAtPriceInr: 79,
     isBundle: false,
     accessDurationMonths: 1, // 30-day initial access
-    accessDestination: 'https://arabic.peregrineacademy.in',
+    accessDestination: 'https://arabic.peregrineacademy.in/#ai-tutor',
     features: [
       'Interactive Spoken Emirati Dialogue Practice with Rashid & Maryam',
       'Real-time Pronunciation Evaluation & Phonetic Guidance',
       'Direct Grounding in 40 Textbook Chapters & Vocabulary',
-      'FREE for 30 days with package; non-recurring (no auto-renewal)'
+      'Non-recurring 30-day preview; no stored cards, no auto-renewal'
     ],
     specs: [
       { label: 'AI Model', value: 'RAG Grounded Gulf Arabic LLM' },
       { label: 'Personas', value: 'Rashid & Maryam' },
-      { label: 'Duration', value: '1 Month Free (30 Days, Non-recurring)' }
+      { label: 'Duration', value: '30 Days Preview (Non-recurring)' },
+      { label: 'Availability', value: 'Direct on Reader App' }
     ],
     isLaunchReady: true,
-    termsPendingNotice: 'AI Speaking Partner is free for the first 30 days. No recurring subscription or auto-charges.'
+    termsPendingNotice: 'Available in preview on https://arabic.peregrineacademy.in/#ai-tutor'
   },
   ALL_IN_ONE_BUNDLE: {
     sku: 'SKU_BUNDLE_ALL_IN_ONE',
-    id: 'all-in-one-bundle',
-    name: 'Complete Arabic Learning Package (3-in-1)',
-    arabicName: 'الباقة الشاملة لإتقان اللهجة الخليجية',
-    badge: 'Proposed Total: ₹1,998',
-    headline: 'LMS Course (₹1,499) + Book (₹499) + AI Speaking Partner (FREE 1st Month)',
-    description: 'The unified Arabic Learning Package: Spoken Arabic LMS Course (₹1,499), Spoken Arabic Book (₹499), and AI Speaking Partner (FREE for the first month). Total payable: ₹1,998.',
+    id: 'book-course-bundle',
+    name: 'Complete Arabic Learning Package (Book + Course)',
+    arabicName: 'الباقة المتكاملة: الكتاب ودورة المحادثة',
+    badge: 'Best Value • ₹1,998',
+    headline: 'Spoken Arabic LMS Course (₹1,499) + Spoken Arabic Digital Book (₹499)',
+    description: 'Complete learning package combining the 30-Contact-Hour Spoken Arabic LMS Course and the 40-Chapter Spoken Arabic Digital Book with 952 native audio clips. Instant multi-platform activation.',
     priceInr: 1998,
-    compareAtPriceInr: 2077,
+    compareAtPriceInr: 2498,
     isBundle: true,
-    includedSkus: ['SKU_LMS_SPOKEN_ARABIC', 'SKU_BOOK_KHALIJI_STORIES', 'SKU_AIAS_TUTOR_PASS'],
+    includedSkus: ['SKU_LMS_SPOKEN_ARABIC', 'SKU_BOOK_KHALIJI_STORIES'],
     accessDurationMonths: 12,
-    accessDestination: 'https://www.peregrineacademy.in/claim',
+    accessDestination: 'https://www.peregrineacademy.in',
     features: [
-      'Full 30-Hour Spoken Arabic LMS Course (₹1,499)',
-      '40-Chapter Spoken Arabic Book with 952 Audio Clips (₹499)',
-      'AI Speaking Partner: FREE for the first month (30 days, ₹0 today)',
-      'Single-Click Multi-Platform Activation & Immediate Access',
-      'No hidden fees, no auto-renewal, and no recurring charges'
+      'Full 30-Hour Spoken Arabic LMS Course (1 Year Access)',
+      '40-Chapter Spoken Arabic Book with 952 Audio Recordings (Lifetime Access)',
+      'Instant Digital Delivery: LMS enrollment & HMAC-signed Reader claim token',
+      'One-time payment: No subscription, no recurring billing, no hidden fees'
     ],
     specs: [
-      { label: 'LMS Course', value: '₹1,499' },
-      { label: 'Spoken Book', value: '₹499' },
-      { label: 'AI Partner', value: 'FREE for 1st Month (₹0)' },
-      { label: 'Total Payable', value: '₹1,998' }
+      { label: 'LMS Course', value: '₹1,499 (1 Year Access)' },
+      { label: 'Spoken Book', value: '₹499 (Lifetime Access)' },
+      { label: 'Total Payable', value: '₹1,998 (One-time payment)' },
+      { label: 'AI Partner', value: 'Free Preview on Reader' }
     ],
-    isLaunchReady: false,
-    isBundlePaused: true,
-    pauseNotice: 'Because AIAS access limits and duration are undecided, bundle checkout cannot safely operate and is temporarily paused. Online payment is disabled.',
-    termsPendingNotice: 'Because AIAS access limits and duration are undecided, bundle checkout cannot safely operate and is temporarily paused. Online payment is disabled.'
+    isLaunchReady: true,
+    isBundlePaused: false
   }
 };
 

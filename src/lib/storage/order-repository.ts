@@ -4,11 +4,11 @@ import { fileURLToPath } from 'node:url';
 import { type StorefrontOrder, type OrderStatus, transitionOrder } from '../order-state-machine.ts';
 import { type IOrderRepository, type TransitionResult } from './types.ts';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const moduleFilePath = fileURLToPath(import.meta.url);
+const moduleDirectory = path.dirname(moduleFilePath);
 
 // Root directory for local durable storage
-const DATA_DIR = process.env.STOREFRONT_DATA_DIR || path.join(__dirname, '../../../data');
+const DATA_DIR = process.env.STOREFRONT_DATA_DIR || path.join(moduleDirectory, '../../../data');
 const ORDERS_FILE = path.join(DATA_DIR, 'storefront-orders.json');
 
 /**

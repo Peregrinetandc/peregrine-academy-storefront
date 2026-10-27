@@ -48,29 +48,19 @@ describe('Storefront API Handlers (Orders, Payments, & Claims)', () => {
     assert.equal(res.order.items[0].targetPlatform, 'AIAS');
   });
 
-  test('handleCreateOrder for Complete Learning Package strictly fails closed when checkout is paused', async () => {
+  test('handleCreateOrder for Complete Learning Package creates pending order at ₹1,998 with 2 items', async () => {
     const res = await handleCreateOrder({
       sku: 'SKU_BUNDLE_ALL_IN_ONE',
       customerEmail: 'bundle.scholar@peregrineacademy.in',
       customerName: 'Amina Al-Nuaimi'
     });
 
-    assert.equal(res.success, false);
-    assert.equal(res.isPaused, true);
-    assert.match(res.error || '', /temporarily paused/);
-  });
-
-  test('handleCreateOrder for Complete Learning Package creates pending order at ₹1,998 with 3 items when authorized for testing', async () => {
-    const res = await handleCreateOrder({
-      sku: 'SKU_BUNDLE_ALL_IN_ONE',
-      customerEmail: 'bundle.scholar@peregrineacademy.in',
-      customerName: 'Amina Al-Nuaimi'
-    }, { allowPausedBundleForTesting: true });
-
     assert.equal(res.success, true);
     assert.ok(res.order);
     assert.equal(res.order.amountInr, 1998);
-    assert.equal(res.order.items.length, 3);
+    assert.equal(res.order.items.length, 2);
+    assert.ok(res.order.items.some(i => i.sku === 'SKU_LMS_SPOKEN_ARABIC'));
+    assert.ok(res.order.items.some(i => i.sku === 'SKU_BOOK_KHALIJI_STORIES'));
   });
 
   test('handleCreateOrder rejects invalid email or missing name', async () => {
@@ -125,11 +115,9 @@ describe('Storefront API Handlers (Orders, Payments, & Claims)', () => {
     // Verify line items
     const lmsItem = verifyRes.order.items.find(i => i.targetPlatform === 'LMS');
     const bookItem = verifyRes.order.items.find(i => i.targetPlatform === 'BOOK_READER');
-    const aiasItem = verifyRes.order.items.find(i => i.targetPlatform === 'AIAS');
 
     assert.equal(lmsItem?.provisioningStatus, 'granted');
     assert.equal(bookItem?.provisioningStatus, 'granted');
     assert.ok(bookItem?.claimUrl?.includes('/claim?token='));
-    assert.equal(aiasItem?.provisioningStatus, 'granted');
   });
 });

@@ -43,14 +43,13 @@ describe('Product Catalog & Authoritative Server-Side Pricing', () => {
     assert.equal(bundle.isBundle, true);
     assert.deepEqual(bundle.includedSkus, [
       'SKU_LMS_SPOKEN_ARABIC',
-      'SKU_BOOK_KHALIJI_STORIES',
-      'SKU_AIAS_TUTOR_PASS'
+      'SKU_BOOK_KHALIJI_STORIES'
     ]);
-    // 1499 + 499 + 0 = 1998
-    const sum = PRODUCT_CATALOG.LMS_COURSE.priceInr + PRODUCT_CATALOG.BOOK_READER.priceInr + PRODUCT_CATALOG.AIAS_PASS.priceInr;
-    assert.equal(bundle.priceInr, sum, 'Package price must equal sum of the 3 components: ₹1,499 + ₹499 + ₹0 = ₹1,998');
-    assert.equal(bundle.isLaunchReady, false, 'Bundle checkout must be marked not launch-ready while paused');
-    assert.equal(bundle.isBundlePaused, true, 'Bundle checkout must be explicitly marked paused');
+    // 1499 + 499 = 1998
+    const sum = PRODUCT_CATALOG.LMS_COURSE.priceInr + PRODUCT_CATALOG.BOOK_READER.priceInr;
+    assert.equal(bundle.priceInr, sum, 'Package price must equal sum of the components: ₹1,499 + ₹499 = ₹1,998');
+    assert.equal(bundle.isLaunchReady, true, 'Bundle checkout must be marked launch-ready');
+    assert.equal(bundle.isBundlePaused, false, 'Bundle checkout must not be paused');
   });
 
   test('calculateOrderPrice correctly calculates single items using authoritative server pricing', () => {

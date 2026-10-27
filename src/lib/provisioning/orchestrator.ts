@@ -49,15 +49,14 @@ export async function executeOrderProvisioning(
     };
   }
 
-  // Safety Invariant: Refuse to provision paused bundle orders unless explicitly authorized for testing
-  const isBundleOrder = order.sku === 'SKU_BUNDLE_ALL_IN_ONE' ||
-    order.items.some(i => i.sku === 'SKU_BUNDLE_ALL_IN_ONE' || i.sku === 'SKU_AIAS_TUTOR_PASS');
+  // Safety Invariant: Refuse to provision paused orders unless explicitly authorized for testing
+  const isPausedOrder = Boolean((order.metadata as any)?.isPaused);
   const isAuthorizedTestBundle = Boolean(
     options?.simulate ||
     (order.metadata as any)?.allowPausedBundleForTesting
   );
 
-  if (isBundleOrder && !isAuthorizedTestBundle) {
+  if (isPausedOrder && !isAuthorizedTestBundle) {
     return {
       order,
       allSucceeded: false,
@@ -67,7 +66,7 @@ export async function executeOrderProvisioning(
         sku: i.sku,
         targetPlatform: i.targetPlatform,
         success: false,
-        error: 'Provisioning forbidden: Because AIAS access limits and duration are undecided, bundle checkout cannot safely operate and is paused.'
+        error: 'Provisioning forbidden: This order is marked paused.'
       }))
     };
   }

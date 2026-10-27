@@ -142,92 +142,112 @@
         <!-- Heading -->
         <div class="border-b border-slate-100 pb-3 mb-3.5 sm:mb-4">
           <h1 id="checkout-heading" class="text-lg sm:text-xl md:text-2xl font-black text-slate-950 tracking-tight leading-snug">
-            Complete Your Arabic Learning Package
+            Choose Your Arabic Learning Package
           </h1>
           <p class="text-xs sm:text-sm text-slate-600 mt-1">
-            Enroll directly in the Spoken Arabic LMS Course, Spoken Arabic Digital Book, and AI Speaking Partner.
+            Direct institutional access to structured video masterclasses, interactive digital reader, and pronunciation labs.
           </p>
         </div>
 
-        <!-- Commercial Safety Notice: Bundle Checkout Paused Banner -->
-        <div id="bundle-safety-banner" class="mb-4 sm:mb-5 p-3 sm:p-4 rounded-xl bg-amber-50/90 border border-amber-300 text-amber-950 text-xs sm:text-sm leading-relaxed" role="note">
-          <div class="flex items-start gap-2.5 sm:gap-3">
-            <svg class="w-5 h-5 text-amber-700 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-            </svg>
-            <div>
-              <strong class="font-bold text-slate-900 block sm:inline">Bundle Checkout Paused</strong>
-              <span class="text-slate-800 block mt-0.5">
-                Because AIAS access limits and duration are undecided, bundle checkout cannot safely operate and is paused. Online payment is disabled.
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Three Product Rows with Authentic Visuals -->
-        <div class="space-y-2.5 sm:space-y-3 mb-4 sm:mb-5" aria-label="Learning Package Items" role="list">
-          
-          <!-- Item 1: LMS Course -->
-          <div class="p-3 sm:p-3.5 rounded-xl bg-slate-50/90 border border-slate-200/90 flex items-center justify-between gap-2.5 sm:gap-3" role="listitem">
-            <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
-              <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-lg bg-emerald-950 text-amber-300 flex items-center justify-center flex-shrink-0 shadow-xs border border-emerald-900" aria-hidden="true">
-                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 14v7" />
-                </svg>
+        <!-- Product Selection Options -->
+        <div class="mb-4 sm:mb-5">
+          <label class="block text-xs font-black uppercase tracking-wider text-slate-700 mb-2">
+            Select Your Package
+          </label>
+          <div class="space-y-2.5" role="radiogroup" aria-label="Select Learning Package">
+            
+            <!-- Option 1: Complete Learning Package (Book + Course Bundle) -->
+            <label id="card-bundle" class="relative block p-3.5 sm:p-4 rounded-xl border-2 border-emerald-600 bg-emerald-50/40 shadow-xs cursor-pointer transition">
+              <input type="radio" name="product-sku" value="SKU_BUNDLE_ALL_IN_ONE" checked class="sr-only" onchange="selectProduct('SKU_BUNDLE_ALL_IN_ONE')" />
+              <div class="flex items-start justify-between gap-3">
+                <div class="flex items-start gap-2.5 sm:gap-3 min-w-0">
+                  <span id="radio-dot-bundle" class="w-5 h-5 rounded-full border-2 border-emerald-600 bg-emerald-600 flex items-center justify-center flex-shrink-0 mt-0.5 text-white text-xs font-bold">✓</span>
+                  <div class="min-w-0">
+                    <div class="flex items-center gap-2 flex-wrap">
+                      <span class="text-xs sm:text-sm font-black text-slate-950">Complete Arabic Learning Package (Book + Course)</span>
+                      <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-700 text-white">Best Value</span>
+                    </div>
+                    <p class="text-[11px] sm:text-xs text-slate-600 mt-1 leading-relaxed">
+                      Includes <strong>Full 30-Hour Spoken Arabic LMS Course</strong> (1 Year Access) + <strong>Spoken Arabic Digital Book</strong> with 952 native audio clips (Lifetime Access).
+                    </p>
+                    <div class="mt-1.5 flex items-center gap-2 text-[10px] text-emerald-800 font-semibold flex-wrap">
+                      <span>✓ Instant Multi-Platform Delivery</span>
+                      <span>•</span>
+                      <span>✓ Non-Recurring, One-Time Payment</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="text-right flex-shrink-0 pl-1">
+                  <div class="text-sm sm:text-base font-black text-slate-950 font-mono">₹1,998</div>
+                  <div class="text-[10px] text-slate-400 line-through font-mono">₹2,498</div>
+                </div>
               </div>
-              <div class="min-w-0">
-                <div class="text-xs sm:text-sm font-bold text-slate-900 truncate">Spoken Arabic LMS Course</div>
-                <div class="text-[10px] sm:text-xs text-slate-500 truncate">30 Contact Hours Video Curriculum • 1 Year Access</div>
+            </label>
+
+            <!-- Option 2: Spoken Arabic LMS Course -->
+            <label id="card-lms" class="relative block p-3.5 sm:p-4 rounded-xl border border-slate-200 bg-white shadow-xs cursor-pointer transition hover:border-slate-400">
+              <input type="radio" name="product-sku" value="SKU_LMS_SPOKEN_ARABIC" class="sr-only" onchange="selectProduct('SKU_LMS_SPOKEN_ARABIC')" />
+              <div class="flex items-start justify-between gap-3">
+                <div class="flex items-start gap-2.5 sm:gap-3 min-w-0">
+                  <span id="radio-dot-lms" class="w-5 h-5 rounded-full border border-slate-300 bg-white flex items-center justify-center flex-shrink-0 mt-0.5 text-white text-xs font-bold"></span>
+                  <div class="min-w-0">
+                    <span class="text-xs sm:text-sm font-bold text-slate-900 block">Spoken Arabic LMS Course (30 Contact Hours)</span>
+                    <p class="text-[11px] sm:text-xs text-slate-600 mt-0.5 leading-relaxed">
+                      Structured video lessons, speaking labs, and certificate of completion. 1 Year full access on learn.peregrineacademy.in.
+                    </p>
+                  </div>
+                </div>
+                <div class="text-right flex-shrink-0 pl-1">
+                  <div class="text-sm sm:text-base font-extrabold text-slate-900 font-mono">₹1,499</div>
+                  <div class="text-[10px] text-slate-400 line-through font-mono">₹2,499</div>
+                </div>
               </div>
-            </div>
-            <div class="text-right flex-shrink-0 pl-1">
-              <span class="text-xs sm:text-sm font-extrabold text-slate-900 font-mono">₹1,499</span>
-            </div>
+            </label>
+
+            <!-- Option 3: Spoken Arabic Digital Book -->
+            <label id="card-book" class="relative block p-3.5 sm:p-4 rounded-xl border border-slate-200 bg-white shadow-xs cursor-pointer transition hover:border-slate-400">
+              <input type="radio" name="product-sku" value="SKU_BOOK_KHALIJI_STORIES" class="sr-only" onchange="selectProduct('SKU_BOOK_KHALIJI_STORIES')" />
+              <div class="flex items-start justify-between gap-3">
+                <div class="flex items-start gap-2.5 sm:gap-3 min-w-0">
+                  <span id="radio-dot-book" class="w-5 h-5 rounded-full border border-slate-300 bg-white flex items-center justify-center flex-shrink-0 mt-0.5 text-white text-xs font-bold"></span>
+                  <div class="min-w-0">
+                    <span class="text-xs sm:text-sm font-bold text-slate-900 block">Spoken Arabic Book (Digital Reader)</span>
+                    <p class="text-[11px] sm:text-xs text-slate-600 mt-0.5 leading-relaxed">
+                      40 narrative chapters with 952 synchronized native Emirati audio clips and grammar glosses. Lifetime digital access.
+                    </p>
+                  </div>
+                </div>
+                <div class="text-right flex-shrink-0 pl-1">
+                  <div class="text-sm sm:text-base font-extrabold text-slate-900 font-mono">₹499</div>
+                  <div class="text-[10px] text-slate-400 line-through font-mono">₹999</div>
+                </div>
+              </div>
+            </label>
+
           </div>
 
-          <!-- Item 2: Spoken Arabic Book (Authentic Cover Artwork) -->
-          <div class="p-3 sm:p-3.5 rounded-xl bg-slate-50/90 border border-slate-200/90 flex items-center justify-between gap-2.5 sm:gap-3" role="listitem">
-            <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
-              <img 
-                src="/images/khaliji-front-cover.jpeg" 
-                alt="Spoken Arabic Book Cover" 
-                class="w-7 h-10 sm:w-9 sm:h-12 object-cover rounded shadow-xs border border-slate-200 flex-shrink-0"
-              />
-              <div class="min-w-0">
-                <div class="text-xs sm:text-sm font-bold text-slate-900 truncate">Spoken Arabic Book</div>
-                <div class="text-[10px] sm:text-xs text-slate-500 truncate">40 Narrative Stories • 952 Native Audio Clips</div>
-              </div>
-            </div>
-            <div class="text-right flex-shrink-0 pl-1">
-              <span class="text-xs sm:text-sm font-extrabold text-slate-900 font-mono">₹499</span>
-            </div>
-          </div>
-
-          <!-- Item 3: AI Speaking Partner (Free for 1st Month) -->
-          <div class="p-3 sm:p-3.5 rounded-xl bg-emerald-50/50 border border-emerald-200/80 flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 sm:gap-3" role="listitem">
-            <div class="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1">
-              <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-lg bg-emerald-700 text-white flex items-center justify-center flex-shrink-0 shadow-xs" aria-hidden="true">
-                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+          <!-- AI Speaking Partner Informational Card -->
+          <div class="mt-3 p-3 rounded-xl bg-slate-50 border border-slate-200/90 flex items-start justify-between gap-3 text-xs leading-relaxed">
+            <div class="flex items-start gap-2.5 min-w-0">
+              <div class="w-7 h-7 rounded-lg bg-emerald-700 text-white flex items-center justify-center flex-shrink-0 mt-0.5" aria-hidden="true">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z" />
                 </svg>
               </div>
               <div class="min-w-0">
                 <div class="flex items-center gap-1.5 flex-wrap">
-                  <span class="text-xs sm:text-sm font-bold text-slate-900">AI Speaking Partner</span>
-                  <span class="px-1.5 py-0.2 rounded text-[9px] sm:text-[10px] font-bold bg-emerald-100 text-emerald-800">1st Month</span>
+                  <strong class="font-bold text-slate-900">AI Speaking Partner (Rashid &amp; Maryam)</strong>
+                  <span class="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-800">Preview Available</span>
                 </div>
-                <div class="text-[10px] sm:text-xs text-emerald-800 font-medium truncate">Daily conversation practice with Rashid &amp; Maryam</div>
+                <p class="text-[11px] text-slate-600 mt-0.5">
+                  Conversational Emirati dialect practice. Available in preview directly on the Reader app (30-day non-recurring trial; no auto-debit).
+                </p>
               </div>
             </div>
-            <div class="w-full sm:w-auto text-right flex-shrink-0 pt-1 sm:pt-0">
-              <span class="inline-block text-[10px] sm:text-[11px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full uppercase tracking-wider">
-                FREE for the first month
-              </span>
-            </div>
+            <a href="https://arabic.peregrineacademy.in/#ai-tutor" target="_blank" rel="noopener noreferrer" class="text-emerald-800 hover:text-emerald-950 font-bold whitespace-nowrap self-center text-[11px] underline flex-shrink-0">
+              Explore &rarr;
+            </a>
           </div>
-
         </div>
 
         <!-- Total Payable Summary Box -->
@@ -235,8 +255,8 @@
           <div class="flex items-baseline justify-between gap-2">
             <div>
               <span class="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-slate-700">Total Payable</span>
-              <div class="text-[10px] sm:text-[11px] text-slate-500 mt-0.5">
-                (₹1,499 Course + ₹499 Book + ₹0 AI 1st Month)
+              <div id="package-breakdown-display" class="text-[10px] sm:text-[11px] text-slate-500 mt-0.5">
+                (₹1,499 Course + ₹499 Book • One-time Payment)
               </div>
             </div>
             <div class="text-right">
@@ -244,7 +264,7 @@
             </div>
           </div>
           <div class="mt-2 pt-2 border-t border-slate-200/80 text-[10px] sm:text-[11px] text-slate-500 leading-tight">
-            * <strong>No hidden fees or recurring subscriptions:</strong> The AI Speaking Partner is included free for 30 days. No recurring charges will ever be billed without separate explicit authorization.
+            🔒 <strong>Direct digital delivery:</strong> Access credentials and claim links are generated immediately upon confirmed payment. No recurring charges, subscriptions, or hidden fees.
           </div>
         </div>
 
@@ -276,25 +296,14 @@
             <input type="tel" id="cust-phone" placeholder="+971 50 000 0000" class="w-full min-h-[44px] px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition bg-slate-50/50" autocomplete="tel" />
           </div>
 
-          <!-- Prominent Checkout CTA Button (Safely Disabled while Bundle Paused) -->
+          <!-- Prominent Checkout CTA Button -->
           <div class="pt-2">
-            <button type="button" id="submit-pay-btn" disabled aria-disabled="true" class="w-full min-h-[48px] py-3.5 sm:py-4 px-4 rounded-xl text-sm sm:text-base font-bold text-slate-500 bg-slate-200 border border-slate-300 cursor-not-allowed select-none transition flex items-center justify-center gap-2 shadow-none">
+            <button type="submit" id="submit-pay-btn" class="w-full min-h-[48px] py-3.5 sm:py-4 px-4 rounded-xl text-sm sm:text-base font-bold text-white bg-emerald-800 hover:bg-emerald-900 active:bg-emerald-950 select-none transition flex items-center justify-center gap-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2">
               <span aria-hidden="true">🔒</span>
-              <span>Proceed to Secure Payment</span>
-              <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-300 text-slate-600 font-mono">Paused (₹1,998)</span>
+              <span id="btn-text">Proceed to Secure Payment</span>
+              <span id="btn-price-badge" class="text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-900 text-amber-200 font-mono">₹1,998</span>
+              <span aria-hidden="true">&rarr;</span>
             </button>
-
-            <!-- Clear explanation of pause and alternative direct purchase links -->
-            <div id="bundle-disabled-explanation" class="mt-2.5 p-3 rounded-xl bg-amber-50/90 border border-amber-300/80 text-amber-950 text-xs leading-relaxed text-center sm:text-left">
-              <div class="flex items-center justify-center sm:justify-start gap-1.5 font-bold text-amber-900 mb-0.5">
-                <span aria-hidden="true">⏸️</span>
-                <span>Checkout Temporarily Disabled</span>
-              </div>
-              <p class="text-slate-700">Because AIAS access limits and duration are undecided, bundle checkout cannot safely operate and is paused. Online payment is disabled.</p>
-              <p class="mt-1.5 text-slate-600">
-                To purchase individual items: explore the <a href="https://arabic.peregrineacademy.in/" target="_blank" rel="noopener noreferrer" class="font-bold text-amber-800 underline hover:text-amber-950">Spoken Arabic Digital Book (₹499)</a> and <a href="https://learn.peregrineacademy.in/" target="_blank" rel="noopener noreferrer" class="font-bold text-emerald-800 underline hover:text-emerald-950">LMS Course (₹1,499)</a> below.
-              </p>
-            </div>
 
             <div class="flex items-center justify-center gap-2 sm:gap-3 text-[10px] sm:text-[11px] text-slate-500 mt-2.5 flex-wrap">
               <span class="inline-flex items-center gap-1">🔒 256-bit SSL</span>
@@ -460,18 +469,77 @@
   </footer>
 
   <script>
-    const PACKAGE_SKU = 'SKU_BUNDLE_ALL_IN_ONE';
-    const PACKAGE_TOTAL_INR = 1998;
-    const IS_BUNDLE_PAUSED = true;
-    const BUNDLE_PAUSE_REASON = 'Because AIAS access limits and duration are undecided, bundle checkout cannot safely operate and is paused. Online payment is disabled.';
+    let selectedSku = 'SKU_BUNDLE_ALL_IN_ONE';
+    const PRODUCTS = {
+      'SKU_BUNDLE_ALL_IN_ONE': {
+        sku: 'SKU_BUNDLE_ALL_IN_ONE',
+        name: 'Complete Arabic Learning Package (Book + Course)',
+        priceInr: 1998,
+        breakdown: '(₹1,499 Course + ₹499 Book • One-time Payment)',
+        buttonBadge: '₹1,998'
+      },
+      'SKU_LMS_SPOKEN_ARABIC': {
+        sku: 'SKU_LMS_SPOKEN_ARABIC',
+        name: 'Spoken Arabic LMS Course',
+        priceInr: 1499,
+        breakdown: '(30 Contact Hours Video Course • 1 Year Access)',
+        buttonBadge: '₹1,499'
+      },
+      'SKU_BOOK_KHALIJI_STORIES': {
+        sku: 'SKU_BOOK_KHALIJI_STORIES',
+        name: 'Spoken Arabic Book (Digital Reader)',
+        priceInr: 499,
+        breakdown: '(40 Stories + 952 Audio Recordings • Lifetime Access)',
+        buttonBadge: '₹499'
+      }
+    };
+
     const trackedPurchases = new Set();
 
+    function selectProduct(sku) {
+      if (!PRODUCTS[sku]) return;
+      selectedSku = sku;
+      const p = PRODUCTS[sku];
+
+      // Update total display & button badge
+      const totalDisplay = document.getElementById('package-total-display');
+      const breakdownDisplay = document.getElementById('package-breakdown-display');
+      const btnBadge = document.getElementById('btn-price-badge');
+
+      if (totalDisplay) totalDisplay.innerText = `₹${p.priceInr.toLocaleString('en-IN')}`;
+      if (breakdownDisplay) breakdownDisplay.innerText = p.breakdown;
+      if (btnBadge) btnBadge.innerText = p.buttonBadge;
+
+      // Update card visual states
+      const cardMap = [
+        { id: 'bundle', sku: 'SKU_BUNDLE_ALL_IN_ONE' },
+        { id: 'lms', sku: 'SKU_LMS_SPOKEN_ARABIC' },
+        { id: 'book', sku: 'SKU_BOOK_KHALIJI_STORIES' }
+      ];
+
+      cardMap.forEach(({ id, sku: cardSku }) => {
+        const card = document.getElementById(`card-${id}`);
+        const dot = document.getElementById(`radio-dot-${id}`);
+        if (!card || !dot) return;
+
+        if (cardSku === sku) {
+          card.className = 'relative block p-3.5 sm:p-4 rounded-xl border-2 border-emerald-600 bg-emerald-50/40 shadow-xs cursor-pointer transition';
+          dot.className = 'w-5 h-5 rounded-full border-2 border-emerald-600 bg-emerald-600 flex items-center justify-center flex-shrink-0 mt-0.5 text-white text-xs font-bold';
+          dot.innerText = '✓';
+        } else {
+          card.className = 'relative block p-3.5 sm:p-4 rounded-xl border border-slate-200 bg-white shadow-xs cursor-pointer transition hover:border-slate-400';
+          dot.className = 'w-5 h-5 rounded-full border border-slate-300 bg-white flex items-center justify-center flex-shrink-0 mt-0.5 text-white text-xs font-bold';
+          dot.innerText = '';
+        }
+      });
+    }
+
     // Trigger Meta Pixel InitiateCheckout event on initial page load
-    if (window.fbq && !IS_BUNDLE_PAUSED) {
+    if (window.fbq) {
       window.fbq('track', 'InitiateCheckout', {
-        content_ids: [PACKAGE_SKU],
+        content_ids: [selectedSku],
         content_name: 'Complete Arabic Learning Package',
-        value: PACKAGE_TOTAL_INR,
+        value: 1998,
         currency: 'INR'
       });
     }
@@ -524,7 +592,7 @@
               </div>
               <p class="text-[11px] text-emerald-800">
                 Activation Code: <strong>${item.claimToken}</strong><br/>
-                Free Access Window: <strong>Valid until ${expiresDate}</strong> (Non-recurring; no auto-debit).
+                Access Window: <strong>Valid until ${expiresDate}</strong> (Non-recurring; no auto-debit).
               </p>
               <a href="${item.claimUrl || 'https://arabic.peregrineacademy.in/?tutor=open'}" target="_blank" class="mt-2 min-h-[44px] inline-flex items-center text-xs font-bold text-emerald-900 hover:underline">
                 Launch AI Speaking Partner &rarr;
@@ -569,16 +637,6 @@
     async function handleCheckoutSubmit(e) {
       if (e && e.preventDefault) e.preventDefault();
       const errBox = document.getElementById('checkout-error');
-
-      // Strict client-side safety guard: prevent handler invocation while bundle is paused
-      if (IS_BUNDLE_PAUSED) {
-        if (errBox) {
-          errBox.classList.remove('hidden');
-          errBox.innerHTML = `<strong>Bundle Checkout Paused:</strong> ${BUNDLE_PAUSE_REASON}`;
-        }
-        return false;
-      }
-
       const submitBtn = document.getElementById('submit-pay-btn');
       errBox.classList.add('hidden');
 
@@ -600,8 +658,16 @@
         return;
       }
 
+      if (phone && !/^\+?[0-9\s\-]{7,16}$/.test(phone)) {
+        errBox.classList.remove('hidden');
+        errBox.innerText = 'Please enter a valid phone number (e.g. +971 50 123 4567) or leave it blank.';
+        document.getElementById('cust-phone').focus();
+        return;
+      }
+
+      const activeProduct = PRODUCTS[selectedSku] || PRODUCTS['SKU_BUNDLE_ALL_IN_ONE'];
       submitBtn.disabled = true;
-      submitBtn.innerText = 'Checking Package Status...';
+      submitBtn.innerText = 'Initiating Secure Order...';
 
       try {
         // Step 1: Create real server-side order with authoritative catalog price
@@ -609,7 +675,7 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            sku: PACKAGE_SKU,
+            sku: activeProduct.sku,
             customerEmail: email,
             customerName: name,
             customerPhone: phone
@@ -618,21 +684,17 @@
 
         const createData = await createRes.json();
         if (!createRes.ok || !createData.success) {
-          // If checkout is paused, show clear commercial safety message
-          if (createData.isPaused) {
-            throw new Error('Bundle temporarily unavailable: ' + (createData.error || "We're finalizing the access terms for the AI Speaking Partner before opening bundle purchases. This package is not available for online checkout yet."));
-          }
           throw new Error(createData.error || 'Failed to create order on server.');
         }
 
-        // Step 2: Open official Razorpay Checkout modal (when enabled)
+        // Step 2: Open official Razorpay Checkout modal
         if (typeof window.Razorpay === 'function') {
           const options = {
             key: createData.razorpayKeyId,
-            amount: createData.amountInSubunits || (PACKAGE_TOTAL_INR * 100),
+            amount: createData.amountInSubunits || (activeProduct.priceInr * 100),
             currency: createData.currency || 'INR',
             name: 'Peregrine Academy',
-            description: 'Complete Arabic Learning Package',
+            description: activeProduct.name,
             order_id: createData.razorpayOrderId,
             prefill: {
               name: name,
@@ -674,13 +736,13 @@
                 errBox.innerText = verifyErr.message || 'Payment verification failed.';
               } finally {
                 submitBtn.disabled = false;
-                submitBtn.innerHTML = `<span>Proceed to Secure Payment</span> <span class="text-amber-300 font-mono">₹1,998</span> <span aria-hidden="true">&rarr;</span>`;
+                submitBtn.innerHTML = `<span>Proceed to Secure Payment</span> <span class="text-amber-200 font-mono">${activeProduct.buttonBadge}</span> <span aria-hidden="true">&rarr;</span>`;
               }
             },
             modal: {
               ondismiss: function () {
                 submitBtn.disabled = false;
-                submitBtn.innerHTML = `<span>Proceed to Secure Payment</span> <span class="text-amber-300 font-mono">₹1,998</span> <span aria-hidden="true">&rarr;</span>`;
+                submitBtn.innerHTML = `<span>Proceed to Secure Payment</span> <span class="text-amber-200 font-mono">${activeProduct.buttonBadge}</span> <span aria-hidden="true">&rarr;</span>`;
               }
             }
           };
@@ -690,35 +752,23 @@
             errBox.classList.remove('hidden');
             errBox.innerText = 'Payment failed: ' + (resp.error?.description || 'Transaction declined.');
             submitBtn.disabled = false;
-            submitBtn.innerHTML = `<span>Proceed to Secure Payment</span> <span class="text-amber-300 font-mono">₹1,998</span> <span aria-hidden="true">&rarr;</span>`;
+            submitBtn.innerHTML = `<span>Proceed to Secure Payment</span> <span class="text-amber-200 font-mono">${activeProduct.buttonBadge}</span> <span aria-hidden="true">&rarr;</span>`;
           });
           rzpInstance.open();
         } else {
-          // Fallback if Razorpay checkout.js could not be loaded from CDN (e.g. offline environment)
+          // Fallback if Razorpay checkout.js could not be loaded from CDN (e.g. offline unit test environment)
           errBox.classList.remove('hidden');
           errBox.innerHTML = `<strong>Checkout Notice:</strong> Razorpay Checkout script could not be loaded from CDN. Internal Order <code>${createData.order.orderNumber}</code> created with Gateway Order ID <code>${createData.razorpayOrderId}</code>.`;
           submitBtn.disabled = false;
-          submitBtn.innerHTML = `<span>Proceed to Secure Payment</span> <span class="text-amber-300 font-mono">₹1,998</span> <span aria-hidden="true">&rarr;</span>`;
+          submitBtn.innerHTML = `<span>Proceed to Secure Payment</span> <span class="text-amber-200 font-mono">${activeProduct.buttonBadge}</span> <span aria-hidden="true">&rarr;</span>`;
         }
 
       } catch (err) {
         errBox.classList.remove('hidden');
         errBox.innerText = err.message || 'An error occurred during order processing.';
         submitBtn.disabled = false;
-        submitBtn.innerHTML = `<span>Proceed to Secure Payment</span> <span class="text-amber-300 font-mono">₹1,998</span> <span aria-hidden="true">&rarr;</span>`;
+        submitBtn.innerHTML = `<span>Proceed to Secure Payment</span> <span class="text-amber-200 font-mono">${activeProduct.buttonBadge}</span> <span aria-hidden="true">&rarr;</span>`;
       }
-    }
-
-    // Intercept keyboard Enter submissions on customer form while bundle is paused
-    const orderForm = document.getElementById('order-form');
-    if (orderForm) {
-      orderForm.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          handleCheckoutSubmit(e);
-          return false;
-        }
-      });
     }
   </script>
 </body>

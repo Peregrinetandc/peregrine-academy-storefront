@@ -14,10 +14,28 @@ import {
   retryOrderProvisioning,
   type ProvisioningOptions
 } from '../lib/provisioning/orchestrator.ts';
-import { orderRepository } from '../lib/storage/order-repository.ts';
+import { orderRepository, LocalOrderRepository } from '../lib/storage/order-repository.ts';
+import { SupabaseOrderRepository } from '../lib/storage/supabase-order-repository.ts';
+import { type IOrderRepository } from '../lib/storage/types.ts';
 
 // Live in-memory cache view backed durably by LocalOrderRepository / disk
 export const memoryOrderLedger = orderRepository.getLiveCache();
+
+let activeRepoOverride: IOrderRepository | null = null;
+
+export function setOrderRepositoryForTesting(repo: IOrderRepository | null) {
+  activeRepoOverride = repo;
+}
+
+export function getActiveOrderRepository(): IOrderRepository {
+  if (activeRepoOverride) return activeRepoOverride;
+  const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (supabaseUrl && serviceRoleKey && !serviceRoleKey.startsWith('mock_')) {
+    return new SupabaseOrderRepository({ supabaseUrl, serviceRoleKey });
+  }
+  return orderRepository;
+}
 
 export interface CreateOrderRequest {
   sku: string;
@@ -77,11 +95,11 @@ export async function handleCreateOrder(
     return { success: false, error: `Invalid SKU: ${req.sku}`, order: null as any, razorpayOrderId: '' };
   }
 
-  // Commercial Safety Gate: Complete Arabic Learning Package checkout is PAUSED
-  if ((catalogItem.sku === 'SKU_BUNDLE_ALL_IN_ONE' || catalogItem.isBundlePaused) && !config?.allowPausedBundleForTesting) {
+  // Commercial Safety Gate: Check if product or bundle is explicitly paused
+  if (catalogItem.isBundlePaused && !config?.allowPausedBundleForTesting) {
     return {
       success: false,
-      error: catalogItem.pauseNotice || 'Because AIAS access limits and duration are undecided, bundle checkout cannot safely operate and is temporarily paused. Online payment is disabled.',
+      error: catalogItem.pauseNotice || 'Checkout for this package is currently paused.',
       order: null as any,
       razorpayOrderId: '',
       isPaused: true
@@ -153,8 +171,8 @@ export async function handleCreateOrder(
   let razorpayOrderId = '';
   let isTestMode = false;
 
-  // Real server-to-server Razorpay order creation
-  if (keyId && keySecret && !keyId.startsWith('rzp_test_placeholder_unconfigured')) {
+  // Real server-to-server Razorpay order creation (only for positive amount charges)
+  if (amountInSubunits > 0 && keyId && keySecret && !keyId.startsWith('rzp_test_placeholder_unconfigured')) {
     try {
       const rzpOrder: RazorpayOrderResponse = await createRazorpayOrder({
         amountInSubunits,
@@ -178,6 +196,9 @@ export async function handleCreateOrder(
         razorpayOrderId: ''
       };
     }
+  } else if (amountInSubunits === 0) {
+    // Zero-amount free activation
+    razorpayOrderId = `order_free_${randomSuffix.toLowerCase()}_${Date.now().toString().slice(-6)}`;
   } else {
     // Fail closed in production if gateway credentials are missing
     if (process.env.NODE_ENV === 'production') {
@@ -213,8 +234,8 @@ export async function handleCreateOrder(
     }
   };
 
-  // Persist order durably to local storage
-  await orderRepository.save(order);
+  // Persist order durably to active storage
+  await getActiveOrderRepository().save(order);
 
   return {
     success: true,
@@ -249,7 +270,8 @@ export async function handleVerifyPayment(
   }
 
   // Durable order lookup
-  const order = await orderRepository.get(req.orderId);
+  const repo = getActiveOrderRepository();
+  const order = await repo.get(req.orderId);
   if (!order) {
     return { success: false, error: `Order not found: ${req.orderId}` };
   }
@@ -292,15 +314,14 @@ export async function handleVerifyPayment(
     };
   }
 
-  // Commercial Safety Gate: Complete Arabic Learning Package verification & fulfillment is PAUSED
-  const isBundleOrder = order.sku === 'SKU_BUNDLE_ALL_IN_ONE' ||
-    order.items.some(i => i.sku === 'SKU_BUNDLE_ALL_IN_ONE' || i.sku === 'SKU_AIAS_TUTOR_PASS');
+  // Commercial Safety Gate: Check if order was created as a paused bundle
+  const isPausedOrder = Boolean((order.metadata as any)?.isPaused);
   const isAuthorizedTestBundle = Boolean(config?.allowPausedBundleForTesting || (order.metadata as any)?.allowPausedBundleForTesting);
 
-  if (isBundleOrder && !isAuthorizedTestBundle) {
+  if (isPausedOrder && !isAuthorizedTestBundle) {
     return {
       success: false,
-      error: 'Payment verification forbidden: Because AIAS access limits and duration are undecided, bundle checkout cannot safely operate and is paused. Online payment is disabled.'
+      error: 'Payment verification forbidden: This bundle checkout is currently paused.'
     };
   }
 
@@ -418,7 +439,7 @@ export async function handleVerifyPayment(
   }
 
   // Atomic Compare-And-Swap transition from 'pending_payment' to 'paid'
-  const atomicTransition = await orderRepository.transitionStatusAtomic(
+  const atomicTransition = await repo.transitionStatusAtomic(
     order.id,
     'pending_payment',
     'paid',
@@ -431,7 +452,7 @@ export async function handleVerifyPayment(
   if (!atomicTransition.success || !atomicTransition.order) {
     // If CAS failed because order was already updated to paid/provisioning/fulfilled by a simultaneous webhook,
     // verify payment ownership and return truthful success indicating verified payment and in-flight/completed fulfillment
-    const current = await orderRepository.get(order.id);
+    const current = await repo.get(order.id);
     if (current && (current.status === 'paid' || current.status === 'fulfilled' || current.status === 'provisioning')) {
       if (current.razorpayPaymentId && current.razorpayPaymentId !== req.razorpayPaymentId) {
         return {
@@ -454,7 +475,7 @@ export async function handleVerifyPayment(
 
   // Trigger provisioning orchestrator
   const orchestration = await executeOrderProvisioning(paidOrder, config?.provisioningOptions || { simulate: true });
-  await orderRepository.save(orchestration.order);
+  await repo.save(orchestration.order);
 
   // Crucial Rule: An order is ONLY fulfilled if all entitlements actually succeeded
   if (orchestration.allSucceeded) {
@@ -520,21 +541,21 @@ export async function handleRazorpayWebhook(
 
     const rzpOrderId = payment.order_id;
     // Find matching order in durable repository by razorpayOrderId
-    const matchedOrder = await orderRepository.findByRazorpayOrderId(rzpOrderId);
+    const repo = getActiveOrderRepository();
+    const matchedOrder = await repo.findByRazorpayOrderId(rzpOrderId);
 
     if (!matchedOrder) {
       return { success: false, error: `No internal order found for Razorpay order ID ${rzpOrderId}` };
     }
 
-    // Safety Gate: Reject webhook provisioning for paused bundle orders
-    const isBundleOrder = matchedOrder.sku === 'SKU_BUNDLE_ALL_IN_ONE' ||
-      matchedOrder.items.some(i => i.sku === 'SKU_BUNDLE_ALL_IN_ONE' || i.sku === 'SKU_AIAS_TUTOR_PASS');
+    // Safety Gate: Reject webhook provisioning if order was marked paused
+    const isPausedOrder = Boolean((matchedOrder.metadata as any)?.isPaused);
     const isAuthorizedTestBundle = Boolean((matchedOrder.metadata as any)?.allowPausedBundleForTesting);
 
-    if (isBundleOrder && !isAuthorizedTestBundle) {
+    if (isPausedOrder && !isAuthorizedTestBundle) {
       return {
         success: false,
-        error: 'Webhook fulfillment rejected: Because AIAS access limits and duration are undecided, bundle checkout cannot safely operate and is paused.'
+        error: 'Webhook fulfillment rejected: This bundle checkout is currently paused.'
       };
     }
 
@@ -558,7 +579,7 @@ export async function handleRazorpayWebhook(
     }
 
     // Atomic CAS transition
-    const atomicTransition = await orderRepository.transitionStatusAtomic(
+    const atomicTransition = await repo.transitionStatusAtomic(
       matchedOrder.id,
       'pending_payment',
       'paid',
@@ -571,7 +592,7 @@ export async function handleRazorpayWebhook(
 
     const paidOrder = atomicTransition.order;
     const orchestration = await executeOrderProvisioning(paidOrder, config?.provisioningOptions || { simulate: true });
-    await orderRepository.save(orchestration.order);
+    await repo.save(orchestration.order);
 
     return {
       success: orchestration.allSucceeded,
@@ -595,14 +616,15 @@ export async function handleRetryProvisioning(
   order?: StorefrontOrder;
   error?: string;
 }> {
-  const order = await orderRepository.get(orderId);
+  const repo = getActiveOrderRepository();
+  const order = await repo.get(orderId);
   if (!order) {
     return { success: false, error: `Order not found: ${orderId}` };
   }
 
   try {
     const orchestration = await retryOrderProvisioning(order, options || { simulate: true });
-    await orderRepository.save(orchestration.order);
+    await repo.save(orchestration.order);
     return {
       success: orchestration.allSucceeded,
       order: orchestration.order
@@ -629,22 +651,22 @@ export async function reconcileOrderPayment(
   paymentId?: string;
   error?: string;
 }> {
-  const order = await orderRepository.get(orderId);
+  const repo = getActiveOrderRepository();
+  const order = await repo.get(orderId);
   if (!order) {
     return { reconciled: false, order: null, status: 'not_found', error: `Order not found: ${orderId}` };
   }
 
-  // Safety Gate: Reject reconciliation/fulfillment for paused bundle orders
-  const isBundleOrder = order.sku === 'SKU_BUNDLE_ALL_IN_ONE' ||
-    order.items.some(i => i.sku === 'SKU_BUNDLE_ALL_IN_ONE' || i.sku === 'SKU_AIAS_TUTOR_PASS');
+  // Safety Gate: Reject reconciliation for paused bundle orders
+  const isPausedOrder = Boolean((order.metadata as any)?.isPaused);
   const isAuthorizedTestBundle = Boolean(config?.allowPausedBundleForTesting || (order.metadata as any)?.allowPausedBundleForTesting);
 
-  if (isBundleOrder && !isAuthorizedTestBundle) {
+  if (isPausedOrder && !isAuthorizedTestBundle) {
     return {
       reconciled: false,
       order,
       status: order.status,
-      error: 'Reconciliation forbidden: Bundle checkout is paused while AI Speaking Partner terms are undecided.'
+      error: 'Reconciliation forbidden: This bundle checkout is currently paused.'
     };
   }
 
@@ -686,7 +708,7 @@ export async function reconcileOrderPayment(
 
       if (payment.status === 'captured') {
         if (order.status === 'pending_payment') {
-          const transitioned = await orderRepository.transitionStatusAtomic(
+          const transitioned = await repo.transitionStatusAtomic(
             order.id,
             'pending_payment',
             'paid',
@@ -697,7 +719,7 @@ export async function reconcileOrderPayment(
               transitioned.order,
               config?.provisioningOptions || { simulate: true }
             );
-            await orderRepository.save(orchestration.order);
+            await repo.save(orchestration.order);
             return {
               reconciled: true,
               order: orchestration.order,

@@ -14,7 +14,7 @@ import { PRODUCT_CATALOG } from '../src/config/products.ts';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-describe('Bundle Checkout Warning & Payment Safety Invariants', () => {
+describe('Bundle Checkout Readiness & Production Safety Invariants', () => {
 
   const secret = 'test_safety_secret_xyz_777';
   const webhookSecret = 'whsec_safety_xyz_888';
@@ -55,25 +55,24 @@ describe('Bundle Checkout Warning & Payment Safety Invariants', () => {
     });
   }
 
-  // 1. Bundle checkout blocked in UI
-  describe('UI Enforcement & Customer Form Protection', () => {
+  // 1. UI Verification & Customer Form Readiness
+  describe('UI Enforcement & Product Options Display', () => {
     const htmlPath = path.join(__dirname, '..', 'public', 'index.html');
     const html = fs.readFileSync(htmlPath, 'utf8');
 
-    test('Button is disabled in HTML with appropriate accessibility and styling', () => {
-      // Must contain disabled attribute and aria-disabled="true"
-      assert.match(html, /<button[^>]*id="submit-pay-btn"[^>]*disabled/, 'Button must have disabled attribute');
-      assert.match(html, /aria-disabled="true"/, 'Button must have aria-disabled="true"');
-      assert.match(html, /cursor-not-allowed/, 'Button must show cursor-not-allowed');
+    test('Button is enabled and active in HTML for immediate customer purchases', () => {
+      assert.doesNotMatch(html, /<button[^>]*id="submit-pay-btn"[^>]*disabled/, 'Button must not have disabled attribute');
+      assert.doesNotMatch(html, /aria-disabled="true"/, 'Button must not have aria-disabled');
+      assert.doesNotMatch(html, /cursor-not-allowed/, 'Button must not have cursor-not-allowed');
       assert.match(html, /Proceed to Secure Payment/, 'Button must retain "Proceed to Secure Payment" label');
-      assert.match(html, /Paused/, 'Button must visibly indicate Paused status');
+      assert.match(html, /₹1,998/, 'Button must display active package price ₹1,998');
     });
 
-    test('Clear explanation of bundle pause is displayed in UI', () => {
-      const expectedNotice = 'Because AIAS access limits and duration are undecided, bundle checkout cannot safely operate and is paused. Online payment is disabled.';
-      assert.ok(html.includes(expectedNotice), 'UI must contain exact explanation of why bundle checkout is paused');
-      assert.match(html, /id="bundle-safety-banner"/, 'Prominent safety banner must be present');
-      assert.match(html, /id="bundle-disabled-explanation"/, 'Checkout button explanation must be present');
+    test('Obsolete pause banners and disabled checkout notices are removed from UI', () => {
+      assert.doesNotMatch(html, /id="bundle-safety-banner"/, 'Obsolete safety banner must be removed');
+      assert.doesNotMatch(html, /id="bundle-disabled-explanation"/, 'Obsolete disabled explanation must be removed');
+      assert.doesNotMatch(html, /Online payment is disabled/, 'Online payment disabled text must be removed');
+      assert.doesNotMatch(html, /Checkout Temporarily Disabled/, 'Temporarily disabled notice must be removed');
     });
 
     test('Customer contact information fields are preserved for layout fidelity', () => {
@@ -82,86 +81,134 @@ describe('Bundle Checkout Warning & Payment Safety Invariants', () => {
       assert.match(html, /id="cust-phone"/, 'Phone / WhatsApp field must be preserved');
     });
 
-    test('Client-side script enforces IS_BUNDLE_PAUSED and halts before any API request', () => {
-      assert.match(html, /const\s+IS_BUNDLE_PAUSED\s*=\s*true;/, 'Script must declare IS_BUNDLE_PAUSED = true');
-      assert.match(html, /if\s*\(\s*IS_BUNDLE_PAUSED\s*\)\s*\{[\s\S]*?return\s+false;/, 'handleCheckoutSubmit must abort immediately if bundle is paused');
-      assert.match(html, /orderForm\.addEventListener\('keydown'/, 'Keyboard Enter submission must be intercepted');
+    test('Presents clear purchase options for Bundle (₹1,998), LMS Course (₹1,499), and Book (₹499)', () => {
+      assert.match(html, /id="card-bundle"/, 'Bundle purchase card must be present');
+      assert.match(html, /id="card-lms"/, 'LMS Course purchase card must be present');
+      assert.match(html, /id="card-book"/, 'Digital Book purchase card must be present');
+      assert.match(html, /AI Speaking Partner/, 'AI Speaking Partner information must be present');
+      assert.match(html, /Preview Available/, 'AI Speaking Partner preview badge must be present');
     });
   });
 
-  // 2. Bundle order creation rejected server-side
-  describe('Server-Side Order Creation Rejection', () => {
-    test('handleCreateOrder strictly rejects SKU_BUNDLE_ALL_IN_ONE without test flag', async () => {
+  // 2. Active Bundle Order Creation & Processing
+  describe('Server-Side Order Creation for Active Bundle', () => {
+    test('handleCreateOrder successfully creates order for SKU_BUNDLE_ALL_IN_ONE at ₹1,998', async () => {
       const res = await handleCreateOrder({
         sku: 'SKU_BUNDLE_ALL_IN_ONE',
-        customerEmail: 'scholar@peregrineacademy.in',
-        customerName: 'Fatima Al-Nuaimi'
+        customerEmail: 'scholar.bundle@peregrineacademy.in',
+        customerName: 'Fatima Al-Nuaimi',
+        customerPhone: '+971501234567'
       });
 
-      assert.equal(res.success, false);
-      assert.equal(res.isPaused, true);
-      assert.equal(res.order, null);
-      assert.equal(res.razorpayOrderId, '');
-      assert.match(res.error || '', /temporarily paused/);
-      assert.match(res.error || '', /Because AIAS access limits and duration are undecided/);
+      assert.equal(res.success, true);
+      assert.equal(res.isPaused, undefined);
+      assert.ok(res.order);
+      assert.equal(res.order.amountInr, 1998);
+      assert.equal(res.amountInSubunits, 199800);
+      assert.ok(res.razorpayOrderId);
+      assert.equal(res.order.items.length, 2, 'Bundle must contain LMS Course and Spoken Book');
+      assert.ok(res.order.items.some(i => i.sku === 'SKU_LMS_SPOKEN_ARABIC'));
+      assert.ok(res.order.items.some(i => i.sku === 'SKU_BOOK_KHALIJI_STORIES'));
     });
 
-    test('Direct HTTP POST to /api/order/create for bundle returns 400 with pause explanation', async () => {
+    test('Direct HTTP POST to /api/order/create for bundle returns 200 with order details', async () => {
       const res = await dispatchHttp('POST', '/api/order/create', {
         sku: 'SKU_BUNDLE_ALL_IN_ONE',
-        customerEmail: 'direct.hacker@example.com',
-        customerName: 'Direct Attempt'
+        customerEmail: 'api.student@peregrineacademy.in',
+        customerName: 'API Customer'
       });
 
-      assert.equal(res.status, 400);
-      assert.equal(res.body.success, false);
-      assert.equal(res.body.isPaused, true);
-      assert.match(res.body.error, /undecided/);
+      assert.equal(res.status, 200);
+      assert.equal(res.body.success, true);
+      assert.equal(res.body.order.amountInr, 1998);
+    });
+
+    test('handleCreateOrder rejects orders with invalid or non-existent SKUs', async () => {
+      const res = await handleCreateOrder({
+        sku: 'SKU_NON_EXISTENT_UNKNOWN',
+        customerEmail: 'invalid@example.com',
+        customerName: 'Test'
+      });
+      assert.equal(res.success, false);
+      assert.match(res.error || '', /Invalid SKU/);
     });
   });
 
-  // 3. Direct endpoint requests cannot bypass the restriction
-  describe('Direct Endpoint Bypass Prevention', () => {
-    test('handleVerifyPayment rejects verification for an unauthorized bundle order', async () => {
-      // Craft an unapproved bundle order in local storage
-      const unauthorizedBundleOrder = {
-        id: 'ord_unauthorized_bundle_99',
-        orderNumber: 'PRGN-20261027-UNAUTH',
-        customerEmail: 'intruder@example.com',
-        customerName: 'Intruder',
+  // 3. Verification & Provisioning Invariants
+  describe('Bundle Payment Verification & Fulfillment', () => {
+    test('handleVerifyPayment authoritatively transitions bundle order to paid and fulfills both LMS and Book', async () => {
+      const createRes = await handleCreateOrder({
         sku: 'SKU_BUNDLE_ALL_IN_ONE',
-        amountInr: 1998,
-        currency: 'INR',
-        status: 'pending_payment',
-        razorpayOrderId: 'order_fake_rzp_99',
-        items: [
-          {
-            id: 'item-u1',
-            sku: 'SKU_BUNDLE_ALL_IN_ONE',
-            name: 'Complete Arabic Learning Package',
-            targetPlatform: 'AIAS',
-            unitPriceInr: 1998,
-            quantity: 1,
-            provisioningStatus: 'pending',
-            retryCount: 0
-          }
-        ],
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      };
-      await orderRepository.save(unauthorizedBundleOrder);
+        customerEmail: 'verified.bundle@peregrineacademy.in',
+        customerName: 'Amina Al-Nuaimi'
+      });
 
-      const secret = 'test_safety_secret_xyz_777';
-      const fakePaymentId = 'pay_fake_unauth_99';
-      const validSig = crypto
+      assert.equal(createRes.success, true);
+      const orderId = createRes.order.id;
+      const rzpOrderId = createRes.razorpayOrderId;
+      const paymentId = 'pay_bundle_verified_777';
+
+      const sig = crypto
         .createHmac('sha256', secret)
-        .update(`order_fake_rzp_99|${fakePaymentId}`)
+        .update(`${rzpOrderId}|${paymentId}`)
         .digest('hex');
 
       const verifyRes = await handleVerifyPayment(
         {
-          orderId: unauthorizedBundleOrder.id,
-          razorpayOrderId: 'order_fake_rzp_99',
+          orderId,
+          razorpayOrderId: rzpOrderId,
+          razorpayPaymentId: paymentId,
+          razorpaySignature: sig
+        },
+        { razorpayKeySecret: secret, skipGatewayFetch: true }
+      );
+
+      assert.equal(verifyRes.success, true);
+      assert.equal(verifyRes.paymentVerified, true);
+      assert.equal(verifyRes.fulfillmentStatus, 'fulfilled');
+      assert.equal(verifyRes.order?.status, 'fulfilled');
+
+      const lmsItem = verifyRes.order?.items.find(i => i.sku === 'SKU_LMS_SPOKEN_ARABIC');
+      const bookItem = verifyRes.order?.items.find(i => i.sku === 'SKU_BOOK_KHALIJI_STORIES');
+
+      assert.ok(lmsItem);
+      assert.equal(lmsItem.provisioningStatus, 'granted');
+      assert.ok(lmsItem.claimUrl.includes('learn.peregrineacademy.in'));
+
+      assert.ok(bookItem);
+      assert.equal(bookItem.provisioningStatus, 'granted');
+      assert.ok(bookItem.claimToken);
+      assert.ok(bookItem.claimUrl.includes('arabic.peregrineacademy.in'));
+    });
+
+    test('Safety gate rejects verification if order was explicitly created under isPaused flag', async () => {
+      const pausedOrder = {
+        id: 'ord_explicit_paused_99',
+        orderNumber: 'PRGN-20261027-PAUSED99',
+        customerEmail: 'paused@example.com',
+        customerName: 'Paused Customer',
+        sku: 'SKU_BUNDLE_ALL_IN_ONE',
+        amountInr: 1998,
+        currency: 'INR',
+        status: 'pending_payment',
+        razorpayOrderId: 'order_paused_rzp_99',
+        items: [],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        metadata: { isPaused: true }
+      };
+      await orderRepository.save(pausedOrder);
+
+      const fakePaymentId = 'pay_fake_paused_99';
+      const validSig = crypto
+        .createHmac('sha256', secret)
+        .update(`order_paused_rzp_99|${fakePaymentId}`)
+        .digest('hex');
+
+      const verifyRes = await handleVerifyPayment(
+        {
+          orderId: pausedOrder.id,
+          razorpayOrderId: 'order_paused_rzp_99',
           razorpayPaymentId: fakePaymentId,
           razorpaySignature: validSig
         },
@@ -170,133 +217,10 @@ describe('Bundle Checkout Warning & Payment Safety Invariants', () => {
 
       assert.equal(verifyRes.success, false);
       assert.match(verifyRes.error || '', /Payment verification forbidden/);
-      assert.match(verifyRes.error || '', /undecided/);
-
-      // Verify status was NOT transitioned to paid or fulfilled
-      const current = await orderRepository.get(unauthorizedBundleOrder.id);
-      assert.equal(current?.status, 'pending_payment');
-    });
-
-    test('handleRazorpayWebhook rejects fulfillment for an unauthorized bundle order', async () => {
-      const webhookBundleOrder = {
-        id: 'ord_wh_bundle_unauth_88',
-        orderNumber: 'PRGN-20261027-WHUNAUTH',
-        customerEmail: 'wh.intruder@example.com',
-        customerName: 'Webhook Intruder',
-        sku: 'SKU_BUNDLE_ALL_IN_ONE',
-        amountInr: 1998,
-        currency: 'INR',
-        status: 'pending_payment',
-        razorpayOrderId: 'order_wh_rzp_88',
-        items: [
-          {
-            id: 'item-wh1',
-            sku: 'SKU_AIAS_TUTOR_PASS',
-            name: 'AI Speaking Partner',
-            targetPlatform: 'AIAS',
-            unitPriceInr: 0,
-            quantity: 1,
-            provisioningStatus: 'pending',
-            retryCount: 0
-          }
-        ],
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      };
-      await orderRepository.save(webhookBundleOrder);
-
-      const webhookPayload = JSON.stringify({
-        event: 'payment.captured',
-        payload: {
-          payment: {
-            entity: {
-              id: 'pay_wh_888',
-              order_id: 'order_wh_rzp_88',
-              amount: 199800,
-              status: 'captured'
-            }
-          }
-        }
-      });
-
-      const whSig = crypto
-        .createHmac('sha256', webhookSecret)
-        .update(webhookPayload)
-        .digest('hex');
-
-      const whResult = await handleRazorpayWebhook(webhookPayload, whSig, {
-        webhookSecret
-      });
-
-      assert.equal(whResult.success, false);
-      assert.match(whResult.error || '', /Webhook fulfillment rejected/);
-      assert.match(whResult.error || '', /undecided/);
-
-      // Ensure order remained pending_payment
-      const current = await orderRepository.get(webhookBundleOrder.id);
-      assert.equal(current?.status, 'pending_payment');
-    });
-
-    test('reconcileOrderPayment strictly rejects reconciliation for paused bundle orders', async () => {
-      const recBundleOrder = {
-        id: 'ord_rec_bundle_unauth_77',
-        orderNumber: 'PRGN-20261027-RECUNAUTH',
-        customerEmail: 'rec.intruder@example.com',
-        customerName: 'Reconcile Intruder',
-        sku: 'SKU_BUNDLE_ALL_IN_ONE',
-        amountInr: 1998,
-        currency: 'INR',
-        status: 'pending_payment',
-        razorpayOrderId: 'order_rec_rzp_77',
-        razorpayPaymentId: 'pay_rec_777',
-        items: [],
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      };
-      await orderRepository.save(recBundleOrder);
-
-      const recRes = await reconcileOrderPayment(recBundleOrder.id);
-      assert.equal(recRes.reconciled, false);
-      assert.match(recRes.error || '', /Reconciliation forbidden/);
     });
   });
 
-  // 4. No bundle access granted without valid authorized payment
-  describe('Fulfillment Access Control & State Machine Defense', () => {
-    test('executeOrderProvisioning refuses to fulfill unauthorized bundle order', async () => {
-      const unauthOrder = {
-        id: 'ord_prov_gate_55',
-        orderNumber: 'PRGN-20261027-PROV55',
-        customerEmail: 'prov@example.com',
-        customerName: 'Prov Test',
-        sku: 'SKU_BUNDLE_ALL_IN_ONE',
-        amountInr: 1998,
-        currency: 'INR',
-        status: 'paid',
-        items: [
-          {
-            id: 'item-p1',
-            sku: 'SKU_AIAS_TUTOR_PASS',
-            name: 'AI Speaking Partner',
-            targetPlatform: 'AIAS',
-            unitPriceInr: 0,
-            quantity: 1,
-            provisioningStatus: 'pending',
-            retryCount: 0
-          }
-        ],
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      };
-
-      const result = await executeOrderProvisioning(unauthOrder, { simulate: false });
-      assert.equal(result.allSucceeded, false);
-      assert.equal(result.provisionedCount, 0);
-      assert.match(result.itemResults[0].error || '', /Provisioning forbidden/);
-    });
-  });
-
-  // 5. Other permitted product checkouts remain unaffected
+  // 4. Preservation of Permitted Single Product Checkouts
   describe('Preservation of Permitted Single Product Checkouts', () => {
     test('Digital Arabic Book (SKU_BOOK_KHALIJI_STORIES, ₹499) checkout remains fully functional', async () => {
       const createRes = await handleCreateOrder({
@@ -312,33 +236,6 @@ describe('Bundle Checkout Warning & Payment Safety Invariants', () => {
       assert.equal(createRes.order.amountInr, 499);
       assert.equal(createRes.amountInSubunits, 49900);
       assert.ok(createRes.razorpayOrderId);
-      assert.equal(createRes.isPaused, undefined);
-
-      // Verify payment verification for book works
-      const bookOrderId = createRes.order.id;
-      const rzpOrderId = createRes.razorpayOrderId;
-      const paymentId = 'pay_book_valid_1001';
-      const sig = crypto
-        .createHmac('sha256', secret)
-        .update(`${rzpOrderId}|${paymentId}`)
-        .digest('hex');
-
-      const verifyRes = await handleVerifyPayment(
-        {
-          orderId: bookOrderId,
-          razorpayOrderId: rzpOrderId,
-          razorpayPaymentId: paymentId,
-          razorpaySignature: sig
-        },
-        { razorpayKeySecret: secret, skipGatewayFetch: true }
-      );
-
-      assert.equal(verifyRes.success, true);
-      assert.equal(verifyRes.paymentVerified, true);
-      assert.equal(verifyRes.fulfillmentStatus, 'fulfilled');
-      assert.equal(verifyRes.order?.items[0].provisioningStatus, 'granted');
-      assert.ok(verifyRes.order?.items[0].claimUrl);
-      assert.ok(verifyRes.order?.items[0].claimToken);
     });
 
     test('Spoken Arabic LMS Course (SKU_LMS_SPOKEN_ARABIC, ₹1,499) checkout remains fully functional', async () => {

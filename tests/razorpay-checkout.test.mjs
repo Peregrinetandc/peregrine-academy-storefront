@@ -426,34 +426,32 @@ describe('Real Razorpay Checkout Integration & Security Rules', () => {
     }
   });
 
-  test('Commercial safety: Bundle checkout strictly fails closed without bypass flag', async () => {
+  test('Commercial safety: Unready/invalid products strictly fail closed without bypass flag', async () => {
     const createRes = await handleCreateOrder({
-      sku: 'SKU_BUNDLE_ALL_IN_ONE',
+      sku: 'SKU_NON_EXISTENT_UNREADY',
       customerEmail: 'customer@example.com',
       customerName: 'Customer Name'
     });
 
     assert.equal(createRes.success, false);
-    assert.equal(createRes.isPaused, true);
-    assert.match(createRes.error || '', /temporarily paused/);
+    assert.match(createRes.error || '', /Invalid SKU/);
   });
 
-  test('Three-Product Package: Order creation at ₹1,998 and authoritative 1-month AI trial fulfillment', async () => {
+  test('Complete Learning Package: Order creation at ₹1,998 and authoritative multi-platform fulfillment', async () => {
     const createRes = await handleCreateOrder(
       {
         sku: 'SKU_BUNDLE_ALL_IN_ONE',
-        customerEmail: 'three.package@peregrineacademy.in',
+        customerEmail: 'two.package@peregrineacademy.in',
         customerName: 'Maryam Al-Dhaheri',
         customerPhone: '+971501234567'
       },
       {
         razorpayKeyId: testKeyId,
         razorpayKeySecret: testKeySecret,
-        allowPausedBundleForTesting: true,
         fetchFn: async () => ({
           ok: true,
           status: 200,
-          json: async () => ({ id: 'order_three_pkg_001', entity: 'order', status: 'created', amount: 199800 })
+          json: async () => ({ id: 'order_bundle_pkg_001', entity: 'order', status: 'created', amount: 199800 })
         })
       }
     );
@@ -461,20 +459,18 @@ describe('Real Razorpay Checkout Integration & Security Rules', () => {
     assert.equal(createRes.success, true);
     assert.equal(createRes.order.amountInr, 1998);
     assert.equal(createRes.amountInSubunits, 199800);
-    assert.equal(createRes.order.items.length, 3);
+    assert.equal(createRes.order.items.length, 2);
 
     const lmsItem = createRes.order.items.find(i => i.targetPlatform === 'LMS');
     const bookItem = createRes.order.items.find(i => i.targetPlatform === 'BOOK_READER');
-    const aiasItem = createRes.order.items.find(i => i.targetPlatform === 'AIAS');
 
     assert.equal(lmsItem?.unitPriceInr, 1499);
     assert.equal(bookItem?.unitPriceInr, 499);
-    assert.equal(aiasItem?.unitPriceInr, 0, 'AI Speaking Partner must be ₹0 in package');
 
     // Authoritative verification
     const orderId = createRes.order.id;
     const rzpOrderId = createRes.razorpayOrderId;
-    const paymentId = 'pay_three_pkg_101';
+    const paymentId = 'pay_bundle_pkg_101';
 
     const validSig = crypto
       .createHmac('sha256', testKeySecret)
@@ -498,6 +494,51 @@ describe('Real Razorpay Checkout Integration & Security Rules', () => {
     assert.equal(verifyRes.success, true);
     assert.equal(verifyRes.order?.status, 'fulfilled');
     assert.equal(verifyRes.order?.amountInr, 1998);
+
+    const fulfilledLms = verifyRes.order?.items.find(i => i.targetPlatform === 'LMS');
+    const fulfilledBook = verifyRes.order?.items.find(i => i.targetPlatform === 'BOOK_READER');
+    assert.equal(fulfilledLms?.provisioningStatus, 'granted');
+    assert.equal(fulfilledBook?.provisioningStatus, 'granted');
+    assert.ok(fulfilledBook?.claimToken);
+  });
+
+  test('AI Speaking Partner Standalone / Preview: 30-day non-recurring trial window', async () => {
+    const aiasRes = await handleCreateOrder(
+      {
+        sku: 'SKU_AIAS_TUTOR_PASS',
+        customerEmail: 'aias.trial@peregrineacademy.in',
+        customerName: 'Trial Student'
+      },
+      {
+        razorpayKeyId: testKeyId,
+        razorpayKeySecret: testKeySecret,
+        skipGatewayFetch: true
+      }
+    );
+
+    assert.equal(aiasRes.success, true);
+    assert.equal(aiasRes.order.amountInr, 0);
+
+    const orderId = aiasRes.order.id;
+    const paymentId = 'pay_trial_free_001';
+    const validSig = crypto
+      .createHmac('sha256', testKeySecret)
+      .update(`${aiasRes.razorpayOrderId}|${paymentId}`)
+      .digest('hex');
+
+    const verifyRes = await handleVerifyPayment(
+      {
+        orderId,
+        razorpayOrderId: aiasRes.razorpayOrderId,
+        razorpayPaymentId: paymentId,
+        razorpaySignature: validSig
+      },
+      {
+        razorpayKeyId: testKeyId,
+        razorpayKeySecret: testKeySecret,
+        skipGatewayFetch: true
+      }
+    );
 
     const fulfilledAias = verifyRes.order?.items.find(i => i.targetPlatform === 'AIAS');
     assert.equal(fulfilledAias?.provisioningStatus, 'granted');
