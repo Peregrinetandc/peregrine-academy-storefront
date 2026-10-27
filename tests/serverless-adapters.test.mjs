@@ -80,6 +80,49 @@ describe('Serverless Deployment Adapters (Netlify & Vercel)', () => {
       assert.equal(res.status, 400);
     });
 
+    test('cross-function invocation: order created by orderCreateHandler is retrievable and verifiable by orderVerifyHandler', async () => {
+      const createReq = new Request('https://example.com/.netlify/functions/order-create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sku: 'SKU_BOOK_KHALIJI_STORIES',
+          customerEmail: 'cross.function@peregrineacademy.in',
+          customerName: 'Cross Function Scholar'
+        })
+      });
+      const createRes = await orderCreateHandler(createReq);
+      assert.equal(createRes.status, 200);
+      const createData = await createRes.json();
+      assert.equal(createData.success, true);
+      const orderId = createData.order.id;
+      const rzpOrderId = createData.razorpayOrderId;
+      const paymentId = 'pay_serverless_cross_test_123';
+
+      const validSig = crypto.createHmac('sha256', secret)
+        .update(`${rzpOrderId}|${paymentId}`)
+        .digest('hex');
+
+      const verifyReq = new Request('https://example.com/.netlify/functions/order-verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          orderId,
+          razorpayOrderId: rzpOrderId,
+          razorpayPaymentId: paymentId,
+          razorpaySignature: validSig
+        })
+      });
+      const verifyRes = await orderVerifyHandler(verifyReq);
+      assert.equal(verifyRes.status, 200);
+      const verifyData = await verifyRes.json();
+      assert.equal(verifyData.success, true);
+      assert.equal(verifyData.paymentVerified, true);
+      assert.equal(verifyData.fulfillmentStatus, 'fulfilled');
+      assert.equal(verifyData.order.status, 'fulfilled');
+      assert.equal(verifyData.order.items[0].provisioningStatus, 'granted');
+      assert.ok(verifyData.order.items[0].claimUrl);
+    });
+
     test('webhook-razorpay function rejects invalid signature', async () => {
       const req = new Request('https://example.com/.netlify/functions/webhook-razorpay', {
         method: 'POST',

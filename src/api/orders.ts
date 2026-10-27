@@ -34,6 +34,14 @@ export function getActiveOrderRepository(): IOrderRepository {
   if (supabaseUrl && serviceRoleKey && !serviceRoleKey.startsWith('mock_')) {
     return new SupabaseOrderRepository({ supabaseUrl, serviceRoleKey });
   }
+  const isProd = process.env.NODE_ENV === 'production' || process.env.STOREFRONT_REQUIRE_PERSISTENT_STORAGE === 'true' || process.env.STOREFRONT_STORAGE_BACKEND === 'supabase';
+  if (isProd) {
+    throw new Error(
+      '[Storage] PRODUCTION SAFETY BLOCKER: Missing mandatory database credentials. ' +
+      'SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be configured in production. ' +
+      'Silent fallback to ephemeral /tmp storage is strictly forbidden for real payments.'
+    );
+  }
   return orderRepository;
 }
 
@@ -330,6 +338,14 @@ export async function handleVerifyPayment(
     return {
       success: false,
       error: `Razorpay order ID mismatch: expected ${order.razorpayOrderId}, received ${req.razorpayOrderId}`
+    };
+  }
+
+  // Invariant: Synthetic test order references cannot be verified in production
+  if (process.env.NODE_ENV === 'production' && order.razorpayOrderId?.startsWith('order_test_')) {
+    return {
+      success: false,
+      error: 'Synthetic test order references cannot be verified in production mode. Genuine payment gateway order required.'
     };
   }
 
