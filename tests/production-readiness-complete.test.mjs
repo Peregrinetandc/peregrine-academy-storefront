@@ -373,4 +373,39 @@ describe('Production Readiness & End-to-End Commerce Validation', () => {
       assert.doesNotMatch(html, /JNU/);
     });
   });
+
+  // 6. Meta Ads & Pixel Conversion Tracking Invariants
+  describe('Meta Ads Readiness & Pixel Event Flow Verification', () => {
+    const htmlPath = path.join(__dirname, '..', 'public', 'index.html');
+    const html = fs.readFileSync(htmlPath, 'utf8');
+
+    test('Meta Pixel base code and OpenGraph tags are present in HTML head', () => {
+      assert.match(html, /connect\.facebook\.net\/en_US\/fbevents\.js/);
+      assert.match(html, /meta-pixel-id/);
+      assert.match(html, /property="og:image"/);
+      assert.match(html, /property="og:title"/);
+      assert.match(html, /property="og:description"/);
+      assert.match(html, /twitter:card/);
+    });
+
+    test('ViewContent tracks dynamically on package view and selection change', () => {
+      assert.match(html, /trackProductView/);
+      assert.match(html, /fbq\('track',\s*'ViewContent'/);
+    });
+
+    test('InitiateCheckout fires on form checkout submission with active product price', () => {
+      assert.match(html, /handleCheckoutSubmit/);
+      assert.match(html, /fbq\('track',\s*'InitiateCheckout'/);
+      assert.match(html, /value:\s*activeProduct\.priceInr/);
+    });
+
+    test('Purchase event is strictly gated to verified server response and deduplicated', () => {
+      assert.match(html, /renderSuccessEntitlements/);
+      assert.match(html, /!trackedPurchases\.has\(order\.orderNumber\)/);
+      assert.match(html, /trackedPurchases\.add\(order\.orderNumber\)/);
+      assert.match(html, /fbq\('track',\s*'Purchase'/);
+      assert.match(html, /value:\s*order\.amountInr/);
+      assert.match(html, /order_id:\s*order\.orderNumber/);
+    });
+  });
 });

@@ -574,17 +574,26 @@
           dot.innerText = '';
         }
       });
+
+      trackProductView(sku);
     }
 
-    // Trigger Meta Pixel InitiateCheckout event on initial page load
-    if (window.fbq) {
-      window.fbq('track', 'InitiateCheckout', {
-        content_ids: [selectedSku],
-        content_name: 'Complete Arabic Learning Package',
-        value: 1998,
-        currency: 'INR'
-      });
+    // Track ViewContent on product selection change
+    function trackProductView(sku) {
+      if (window.fbq && PRODUCTS[sku]) {
+        const p = PRODUCTS[sku];
+        window.fbq('track', 'ViewContent', {
+          content_ids: [p.sku],
+          content_name: p.name,
+          content_category: p.sku === 'SKU_BUNDLE_ALL_IN_ONE' ? 'Bundle' : 'Single',
+          value: p.priceInr,
+          currency: 'INR'
+        });
+      }
     }
+
+    // Trigger Meta Pixel ViewContent event on initial page load
+    trackProductView(selectedSku);
 
     function renderSuccessEntitlements(order) {
       document.getElementById('checkout-order-section').classList.add('hidden');
@@ -712,6 +721,17 @@
       submitBtn.innerText = 'Initiating Secure Order...';
 
       try {
+        // Trigger Meta Pixel InitiateCheckout with specific selected product and price
+        if (window.fbq) {
+          window.fbq('track', 'InitiateCheckout', {
+            content_ids: [activeProduct.sku],
+            content_name: activeProduct.name,
+            value: activeProduct.priceInr,
+            currency: 'INR',
+            num_items: 1
+          });
+        }
+
         // Step 1: Create real server-side order with authoritative catalog price
         const createRes = await fetch('/api/order/create', {
           method: 'POST',
