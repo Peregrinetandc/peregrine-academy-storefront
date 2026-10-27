@@ -69,6 +69,54 @@ describe('Provisioning Adapters & Contract Verification', () => {
     assert.ok(res.enrollmentId);
   });
 
+  test('LMS Adapter communicates with /api/bundles/enroll receiver conforming to LMS API contract', async () => {
+    let capturedUrl = '';
+    let capturedHeaders = {};
+    let capturedBody = null;
+
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = async (url, init) => {
+      capturedUrl = url.toString();
+      capturedHeaders = init?.headers || {};
+      capturedBody = JSON.parse(init?.body || '{}');
+
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({
+          success: true,
+          enrollment_id: 'enr_rec_9928194',
+          course_url: `https://learn.peregrineacademy.in/courses/${SPOKEN_EMIRATI_COURSE_ID}`,
+          already_enrolled: false,
+          message: 'Successfully enrolled scholar@peregrineacademy.in'
+        })
+      };
+    };
+
+    try {
+      const res = await provisionLmsCourse({
+        orderId: testOrderId,
+        customerEmail: testEmail,
+        customerName: 'Amina Al-Falasi'
+      }, {
+        lmsApiUrl: 'https://learn.peregrineacademy.in',
+        lmsApiKey: 'test_bearer_token_123',
+        simulate: false
+      });
+
+      assert.equal(capturedUrl, 'https://learn.peregrineacademy.in/api/bundles/enroll');
+      assert.equal(capturedHeaders['Authorization'], 'Bearer test_bearer_token_123');
+      assert.equal(capturedBody.order_id, testOrderId);
+      assert.equal(capturedBody.email, testEmail);
+      assert.equal(capturedBody.name, 'Amina Al-Falasi');
+      assert.equal(capturedBody.course_id, SPOKEN_EMIRATI_COURSE_ID);
+      assert.equal(res.success, true);
+      assert.equal(res.enrollmentId, 'enr_rec_9928194');
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
+  });
+
   test('AIAS Adapter generates formatted activation code with 30-day non-recurring trial window', async () => {
     const res = await provisionAiasTutor({
       orderId: testOrderId,
