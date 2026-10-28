@@ -88,6 +88,20 @@ export interface OrderApiConfig {
   provisioningOptions?: ProvisioningOptions;
 }
 
+export function resolveProvisioningOptions(config?: OrderApiConfig): ProvisioningOptions {
+  if (config?.provisioningOptions) return config.provisioningOptions;
+  const isProd = isProductionEnvironment();
+  return {
+    lmsApiUrl: process.env.LMS_API_URL || 'https://learn.peregrineacademy.in',
+    lmsApiKey: process.env.LMS_API_KEY,
+    readerApiUrl: process.env.READER_API_URL,
+    handoffSecret: process.env.BUNDLE_HANDOFF_SECRET,
+    aiasApiUrl: process.env.AIAS_API_URL,
+    aiasSecret: process.env.AIAS_SECRET,
+    simulate: !isProd && !process.env.BUNDLE_HANDOFF_SECRET && !process.env.LMS_API_KEY
+  };
+}
+
 /**
  * Creates a new order in pending_payment status with authoritative server-calculated pricing.
  * Integrates with Razorpay Orders API server-to-server.
@@ -506,7 +520,7 @@ export async function handleVerifyPayment(
   const paidOrder = atomicTransition.order;
 
   // Trigger provisioning orchestrator
-  const orchestration = await executeOrderProvisioning(paidOrder, config?.provisioningOptions || { simulate: true });
+  const orchestration = await executeOrderProvisioning(paidOrder, resolveProvisioningOptions(config));
   await repo.save(orchestration.order);
 
   // Crucial Rule: An order is ONLY fulfilled if all entitlements actually succeeded
@@ -623,7 +637,7 @@ export async function handleRazorpayWebhook(
     }
 
     const paidOrder = atomicTransition.order;
-    const orchestration = await executeOrderProvisioning(paidOrder, config?.provisioningOptions || { simulate: true });
+    const orchestration = await executeOrderProvisioning(paidOrder, resolveProvisioningOptions(config));
     await repo.save(orchestration.order);
 
     return {
@@ -749,7 +763,7 @@ export async function reconcileOrderPayment(
           if (transitioned.success && transitioned.order) {
             const orchestration = await executeOrderProvisioning(
               transitioned.order,
-              config?.provisioningOptions || { simulate: true }
+              resolveProvisioningOptions(config)
             );
             await repo.save(orchestration.order);
             return {

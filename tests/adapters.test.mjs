@@ -8,6 +8,7 @@ import {
 } from '../src/lib/provisioning/book-adapter.ts';
 import { provisionLmsCourse, SPOKEN_EMIRATI_COURSE_ID } from '../src/lib/provisioning/lms-adapter.ts';
 import { provisionAiasTutor } from '../src/lib/provisioning/aias-adapter.ts';
+import { resolveProvisioningOptions } from '../src/api/orders.ts';
 
 describe('Provisioning Adapters & Contract Verification', () => {
   const testOrderId = 'ord_test_9928194';
@@ -131,5 +132,23 @@ describe('Provisioning Adapters & Contract Verification', () => {
     assert.ok(res.startsAt, 'startsAt timestamp must be defined');
     assert.ok(res.expiresAt, 'expiresAt timestamp must be defined');
     assert.ok(Date.parse(res.expiresAt) > Date.parse(res.startsAt), 'expiresAt must be after startsAt');
+  });
+
+  test('resolveProvisioningOptions resolves environment credentials when available', () => {
+    const prevHandoff = process.env.BUNDLE_HANDOFF_SECRET;
+    const prevLmsKey = process.env.LMS_API_KEY;
+    try {
+      process.env.BUNDLE_HANDOFF_SECRET = 'sample-handoff-secret-key-32b-length';
+      process.env.LMS_API_KEY = 'sample-lms-api-key-test';
+
+      const resolved = resolveProvisioningOptions();
+      assert.equal(resolved.handoffSecret, 'sample-handoff-secret-key-32b-length');
+      assert.equal(resolved.lmsApiKey, 'sample-lms-api-key-test');
+      assert.equal(resolved.lmsApiUrl, 'https://learn.peregrineacademy.in');
+      assert.equal(resolved.simulate, false);
+    } finally {
+      process.env.BUNDLE_HANDOFF_SECRET = prevHandoff;
+      process.env.LMS_API_KEY = prevLmsKey;
+    }
   });
 });

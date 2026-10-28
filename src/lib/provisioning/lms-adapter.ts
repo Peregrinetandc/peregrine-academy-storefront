@@ -40,9 +40,11 @@ export async function provisionLmsCourse(
 ): Promise<LmsProvisioningResult> {
   const courseId = params.courseId || SPOKEN_EMIRATI_COURSE_ID;
   const courseUrl = `https://learn.peregrineacademy.in/courses/${courseId}`;
+  const lmsApiUrl = options?.lmsApiUrl || process.env.LMS_API_URL || 'https://learn.peregrineacademy.in';
+  const lmsApiKey = options?.lmsApiKey || process.env.LMS_API_KEY;
 
   // If simulation mode or testing without external network
-  if (options?.simulate || !options?.lmsApiKey) {
+  if (options?.simulate || !lmsApiKey) {
     const mockEnrollmentId = `enr_${params.orderId.slice(0, 8)}_${Date.now().toString(36)}`;
     return {
       success: true,
@@ -53,11 +55,11 @@ export async function provisionLmsCourse(
   }
 
   try {
-    const response = await fetch(`${options.lmsApiUrl}/api/bundles/enroll`, {
+    const response = await fetch(`${lmsApiUrl}/api/bundles/enroll`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${options.lmsApiKey}`
+        'Authorization': `Bearer ${lmsApiKey}`
       },
       body: JSON.stringify({
         order_id: params.orderId,

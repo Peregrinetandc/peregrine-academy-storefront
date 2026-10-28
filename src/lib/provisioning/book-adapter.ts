@@ -104,8 +104,8 @@ export async function provisionBookReader(
     simulate?: boolean;
   }
 ): Promise<BookProvisioningResult> {
-  const secret = options?.handoffSecret || 'storefront-development-handoff-secret-key-32b-min';
-  const readerBaseUrl = options?.readerApiUrl || 'https://arabic.peregrineacademy.in';
+  const secret = options?.handoffSecret || process.env.BUNDLE_HANDOFF_SECRET || 'storefront-development-handoff-secret-key-32b-min';
+  const readerBaseUrl = options?.readerApiUrl || process.env.READER_API_URL || 'https://arabic.peregrineacademy.in';
   const productKey = params.productKey || KHALIJI_BOOK_PRODUCT_KEY;
   const lmsUserId = params.lmsUserId || `storefront_${params.orderId.slice(0, 12)}`;
   const normalizedEmail = normalizeEmail(params.customerEmail);
