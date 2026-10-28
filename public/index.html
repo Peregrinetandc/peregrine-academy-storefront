@@ -746,7 +746,9 @@
 
         const createData = await createRes.json();
         if (!createRes.ok || !createData.success) {
-          throw new Error(createData.error || 'Failed to create order on server.');
+          const createErr = new Error(createData.error || 'Failed to create order on server.');
+          createErr.supportRef = createData.supportRef;
+          throw createErr;
         }
 
         // Step 2: Open official Razorpay Checkout modal
@@ -785,7 +787,9 @@
 
                 const verifyData = await verifyRes.json();
                 if (!verifyRes.ok || !verifyData.success) {
-                  throw new Error(verifyData.error || 'Payment verification failed on server.');
+                  const verifyErr = new Error(verifyData.error || 'Payment verification failed on server.');
+                  verifyErr.supportRef = verifyData.supportRef;
+                  throw verifyErr;
                 }
 
                 if (verifyData.fulfillmentStatus === 'provisioning' || verifyData.fulfillmentStatus === 'paid') {
@@ -795,7 +799,8 @@
                 }
               } catch (verifyErr) {
                 errBox.classList.remove('hidden');
-                errBox.innerText = verifyErr.message || 'Payment verification failed.';
+                const refSuffix = verifyErr.supportRef ? ` (Ref: ${verifyErr.supportRef})` : '';
+                errBox.innerHTML = `<strong>Verification Notice:</strong> ${verifyErr.message || 'Payment verification failed.'}${refSuffix} Please contact <a href="mailto:hello@peregrinehub.com" class="underline font-semibold">hello@peregrinehub.com</a> for assistance.`;
               } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = `<span>Proceed to Secure Payment</span> <span class="text-amber-200 font-mono">${activeProduct.buttonBadge}</span> <span aria-hidden="true">&rarr;</span>`;
@@ -812,7 +817,8 @@
           const rzpInstance = new window.Razorpay(options);
           rzpInstance.on('payment.failed', function (resp) {
             errBox.classList.remove('hidden');
-            errBox.innerText = 'Payment failed: ' + (resp.error?.description || 'Transaction declined.');
+            const desc = resp.error?.description || 'Transaction declined.';
+            errBox.innerHTML = `<strong>Payment Failed:</strong> ${desc} If amount was debited, it will be refunded automatically by your bank. For help, contact <a href="mailto:hello@peregrinehub.com" class="underline font-semibold">hello@peregrinehub.com</a>.`;
             submitBtn.disabled = false;
             submitBtn.innerHTML = `<span>Proceed to Secure Payment</span> <span class="text-amber-200 font-mono">${activeProduct.buttonBadge}</span> <span aria-hidden="true">&rarr;</span>`;
           });
@@ -827,7 +833,8 @@
 
       } catch (err) {
         errBox.classList.remove('hidden');
-        errBox.innerText = err.message || 'An error occurred during order processing.';
+        const refSuffix = err.supportRef ? ` (Ref: ${err.supportRef})` : '';
+        errBox.innerHTML = `<strong>Checkout Notice:</strong> ${err.message || 'An error occurred during order processing.'}${refSuffix} If you need assistance, please contact our academic desk at <a href="mailto:hello@peregrinehub.com" class="underline font-semibold">hello@peregrinehub.com</a>.`;
         submitBtn.disabled = false;
         submitBtn.innerHTML = `<span>Proceed to Secure Payment</span> <span class="text-amber-200 font-mono">${activeProduct.buttonBadge}</span> <span aria-hidden="true">&rarr;</span>`;
       }

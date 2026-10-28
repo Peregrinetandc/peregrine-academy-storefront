@@ -2,7 +2,12 @@
  * Vercel Serverless Function Handler for /api/*
  */
 
+import crypto from 'node:crypto';
 import { handleCreateOrder, handleVerifyPayment, handleRazorpayWebhook } from '../src/api/orders.ts';
+
+function generateSupportRef(): string {
+  return `PRGN-${Date.now().toString(36).toUpperCase()}-${crypto.randomBytes(2).toString('hex').toUpperCase()}`;
+}
 
 export default async function handler(req: any, res: any) {
   const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
@@ -30,6 +35,7 @@ export default async function handler(req: any, res: any) {
 
   // POST /api/order/create
   if (req.method === 'POST' && pathname === '/api/order/create') {
+    const supportRef = generateSupportRef();
     try {
       const result = await handleCreateOrder(payload || {}, {
         razorpayKeyId: process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
@@ -37,17 +43,24 @@ export default async function handler(req: any, res: any) {
       });
       res.statusCode = result.success ? 200 : 400;
       res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify(result));
+      if (!result.success) {
+        console.error(`[Storefront Diagnostic ${supportRef}] /api/order/create notice:`, result.error);
+        res.end(JSON.stringify({ ...result, supportRef }));
+      } else {
+        res.end(JSON.stringify(result));
+      }
     } catch (err: any) {
+      console.error(`[Storefront Diagnostic ${supportRef}] /api/order/create exception:`, err.message);
       res.statusCode = 500;
       res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify({ success: false, error: err.message }));
+      res.end(JSON.stringify({ success: false, error: err.message, supportRef }));
     }
     return;
   }
 
   // POST /api/order/verify
   if (req.method === 'POST' && pathname === '/api/order/verify') {
+    const supportRef = generateSupportRef();
     try {
       const result = await handleVerifyPayment(
         {
@@ -63,17 +76,24 @@ export default async function handler(req: any, res: any) {
       );
       res.statusCode = result.success ? 200 : 400;
       res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify(result));
+      if (!result.success) {
+        console.error(`[Storefront Diagnostic ${supportRef}] /api/order/verify notice:`, result.error);
+        res.end(JSON.stringify({ ...result, supportRef }));
+      } else {
+        res.end(JSON.stringify(result));
+      }
     } catch (err: any) {
+      console.error(`[Storefront Diagnostic ${supportRef}] /api/order/verify exception:`, err.message);
       res.statusCode = 500;
       res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify({ success: false, error: err.message }));
+      res.end(JSON.stringify({ success: false, error: err.message, supportRef }));
     }
     return;
   }
 
   // POST /api/webhook/razorpay
   if (req.method === 'POST' && pathname === '/api/webhook/razorpay') {
+    const supportRef = generateSupportRef();
     try {
       const rawBody = typeof req.body === 'string' ? req.body : JSON.stringify(req.body || {});
       const signature = req.headers['x-razorpay-signature'] || '';
@@ -82,11 +102,17 @@ export default async function handler(req: any, res: any) {
       });
       res.statusCode = result.success ? 200 : 400;
       res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify(result));
+      if (!result.success) {
+        console.error(`[Storefront Diagnostic ${supportRef}] /api/webhook/razorpay notice:`, result.error);
+        res.end(JSON.stringify({ ...result, supportRef }));
+      } else {
+        res.end(JSON.stringify(result));
+      }
     } catch (err: any) {
+      console.error(`[Storefront Diagnostic ${supportRef}] /api/webhook/razorpay exception:`, err.message);
       res.statusCode = 500;
       res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify({ success: false, error: err.message }));
+      res.end(JSON.stringify({ success: false, error: err.message, supportRef }));
     }
     return;
   }

@@ -1,4 +1,5 @@
 import { handleVerifyPayment } from '../../src/api/orders.ts';
+import crypto from 'node:crypto';
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -6,11 +7,16 @@ const CORS_HEADERS = {
   'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Razorpay-Signature'
 };
 
+function generateSupportRef(): string {
+  return `PRGN-${Date.now().toString(36).toUpperCase()}-${crypto.randomBytes(2).toString('hex').toUpperCase()}`;
+}
+
 export default async function handler(req: any, _context?: any) {
   if (req instanceof Request || (req && req.url && typeof req.text === 'function')) {
     if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: CORS_HEADERS });
     if (req.method !== 'POST') return new Response(JSON.stringify({ error: 'Method Not Allowed' }), { status: 405, headers: CORS_HEADERS });
 
+    const supportRef = generateSupportRef();
     try {
       const body = await req.json();
       const result = await handleVerifyPayment(
@@ -25,12 +31,20 @@ export default async function handler(req: any, _context?: any) {
           razorpayKeySecret: process.env.RAZORPAY_KEY_SECRET
         }
       );
+      if (!result.success) {
+        console.error(`[Storefront Diagnostic ${supportRef}] /api/order/verify notice:`, result.error);
+        return new Response(JSON.stringify({ ...result, supportRef }), {
+          status: 400,
+          headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' }
+        });
+      }
       return new Response(JSON.stringify(result), {
-        status: result.success ? 200 : 400,
+        status: 200,
         headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' }
       });
     } catch (err: any) {
-      return new Response(JSON.stringify({ success: false, error: err.message }), {
+      console.error(`[Storefront Diagnostic ${supportRef}] /api/order/verify exception:`, err.message);
+      return new Response(JSON.stringify({ success: false, error: err.message, supportRef }), {
         status: 500,
         headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' }
       });
@@ -41,6 +55,7 @@ export default async function handler(req: any, _context?: any) {
   if (req.httpMethod === 'OPTIONS') return { statusCode: 204, headers: CORS_HEADERS, body: '' };
   if (req.httpMethod !== 'POST') return { statusCode: 405, headers: CORS_HEADERS, body: JSON.stringify({ error: 'Method Not Allowed' }) };
 
+  const supportRef = generateSupportRef();
   try {
     const payload = JSON.parse(req.body || '{}');
     const result = await handleVerifyPayment(
@@ -55,16 +70,25 @@ export default async function handler(req: any, _context?: any) {
         razorpayKeySecret: process.env.RAZORPAY_KEY_SECRET
       }
     );
+    if (!result.success) {
+      console.error(`[Storefront Diagnostic ${supportRef}] /api/order/verify notice:`, result.error);
+      return {
+        statusCode: 400,
+        headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...result, supportRef })
+      };
+    }
     return {
-      statusCode: result.success ? 200 : 400,
+      statusCode: 200,
       headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
       body: JSON.stringify(result)
     };
   } catch (err: any) {
+    console.error(`[Storefront Diagnostic ${supportRef}] /api/order/verify exception:`, err.message);
     return {
       statusCode: 500,
       headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ success: false, error: err.message })
+      body: JSON.stringify({ success: false, error: err.message, supportRef })
     };
   }
 }

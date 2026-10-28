@@ -5,6 +5,10 @@
 
 [build.environment]
   NODE_VERSION = "22"
+  NODE_ENV = "production"
+
+[functions.environment]
+  NODE_ENV = "production"
 
 [[redirects]]
   from = "/api/order/create"

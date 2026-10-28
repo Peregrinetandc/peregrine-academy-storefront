@@ -13,13 +13,24 @@ export interface RepositoryFactoryOptions {
   fetchFn?: typeof fetch;
 }
 
+export function isProductionEnvironment(): boolean {
+  return (
+    process.env.NODE_ENV === 'production' ||
+    process.env.CONTEXT === 'production' ||
+    process.env.NETLIFY === 'true' ||
+    process.env.VERCEL === '1' ||
+    process.env.STOREFRONT_REQUIRE_PERSISTENT_STORAGE === 'true' ||
+    process.env.STOREFRONT_STORAGE_BACKEND === 'supabase'
+  );
+}
+
 /**
  * Creates an order repository with strict fail-closed safety.
  * In production: REQUIRES Supabase credentials; never silently falls back to local disk.
  * In development/test: Defaults to LocalOrderRepository unless explicitly configured.
  */
 export function createOrderRepository(options?: RepositoryFactoryOptions): IOrderRepository {
-  const isProd = process.env.NODE_ENV === 'production';
+  const isProd = isProductionEnvironment();
   const backend = options?.backend || process.env.STOREFRONT_STORAGE_BACKEND || (isProd ? 'supabase' : 'local');
 
   if (backend === 'supabase' || isProd) {

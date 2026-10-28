@@ -27,6 +27,17 @@ export function setOrderRepositoryForTesting(repo: IOrderRepository | null) {
   activeRepoOverride = repo;
 }
 
+export function isProductionEnvironment(): boolean {
+  return (
+    process.env.NODE_ENV === 'production' ||
+    process.env.CONTEXT === 'production' ||
+    process.env.NETLIFY === 'true' ||
+    process.env.VERCEL === '1' ||
+    process.env.STOREFRONT_REQUIRE_PERSISTENT_STORAGE === 'true' ||
+    process.env.STOREFRONT_STORAGE_BACKEND === 'supabase'
+  );
+}
+
 export function getActiveOrderRepository(): IOrderRepository {
   if (activeRepoOverride) return activeRepoOverride;
   const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -34,7 +45,7 @@ export function getActiveOrderRepository(): IOrderRepository {
   if (supabaseUrl && serviceRoleKey && !serviceRoleKey.startsWith('mock_')) {
     return new SupabaseOrderRepository({ supabaseUrl, serviceRoleKey });
   }
-  const isProd = process.env.NODE_ENV === 'production' || process.env.STOREFRONT_REQUIRE_PERSISTENT_STORAGE === 'true' || process.env.STOREFRONT_STORAGE_BACKEND === 'supabase';
+  const isProd = isProductionEnvironment();
   if (isProd) {
     throw new Error(
       '[Storage] PRODUCTION SAFETY BLOCKER: Missing mandatory database credentials. ' +
@@ -180,7 +191,7 @@ export async function handleCreateOrder(
   let isTestMode = false;
 
   // Real server-to-server Razorpay order creation (only for positive amount charges)
-  if (amountInSubunits > 0 && keyId && keySecret && !keyId.startsWith('rzp_test_placeholder_unconfigured')) {
+  if (amountInSubunits > 0 && keyId && keySecret && !keyId.startsWith('rzp_test_placeholder')) {
     try {
       const rzpOrder: RazorpayOrderResponse = await createRazorpayOrder({
         amountInSubunits,
@@ -209,7 +220,7 @@ export async function handleCreateOrder(
     razorpayOrderId = `order_free_${randomSuffix.toLowerCase()}_${Date.now().toString().slice(-6)}`;
   } else {
     // Fail closed in production if gateway credentials are missing
-    if (process.env.NODE_ENV === 'production') {
+    if (isProductionEnvironment()) {
       return {
         success: false,
         error: 'Razorpay payment gateway credentials are not configured in production.',
@@ -249,7 +260,7 @@ export async function handleCreateOrder(
     success: true,
     order,
     razorpayOrderId,
-    razorpayKeyId: keyId || 'rzp_test_placeholder',
+    razorpayKeyId: keyId || (isProductionEnvironment() ? '' : 'rzp_test_placeholder'),
     amountInSubunits,
     currency: 'INR',
     testMode: isTestMode
@@ -273,7 +284,7 @@ export async function handleVerifyPayment(
   error?: string;
 }> {
   // Fail closed if testing mock signature requested in production
-  if (process.env.NODE_ENV === 'production' && config?.allowTestMockSignature) {
+  if (isProductionEnvironment() && config?.allowTestMockSignature) {
     throw new Error('Test mock signature verification is strictly forbidden in production.');
   }
 
@@ -342,7 +353,7 @@ export async function handleVerifyPayment(
   }
 
   // Invariant: Synthetic test order references cannot be verified in production
-  if (process.env.NODE_ENV === 'production' && order.razorpayOrderId?.startsWith('order_test_')) {
+  if (isProductionEnvironment() && order.razorpayOrderId?.startsWith('order_test_')) {
     return {
       success: false,
       error: 'Synthetic test order references cannot be verified in production mode. Genuine payment gateway order required.'
@@ -448,7 +459,7 @@ export async function handleVerifyPayment(
         };
       }
     } catch (err: any) {
-      if (process.env.NODE_ENV === 'production') {
+      if (isProductionEnvironment()) {
         return { success: false, error: `Failed to confirm payment status with Razorpay: ${err.message}` };
       }
     }
