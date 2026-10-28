@@ -538,6 +538,9 @@ describe('Live Checkout Failure Diagnostics & Regression Invariants Suite', () =
     delete process.env.CONTEXT;
     delete process.env.NETLIFY;
     delete process.env.VERCEL;
+    delete process.env.LAMBDA_TASK_ROOT;
+    delete process.env.AWS_LAMBDA_FUNCTION_NAME;
+    delete process.env.AWS_EXECUTION_ENV;
     delete process.env.STOREFRONT_REQUIRE_PERSISTENT_STORAGE;
     delete process.env.STOREFRONT_STORAGE_BACKEND;
 
@@ -550,6 +553,14 @@ describe('Live Checkout Failure Diagnostics & Regression Invariants Suite', () =
     process.env.NETLIFY = 'true';
     assert.equal(isProductionEnvironment(), true, 'Netlify NETLIFY=true');
     delete process.env.NETLIFY;
+
+    process.env.LAMBDA_TASK_ROOT = '/var/task';
+    assert.equal(isProductionEnvironment(), true, 'Netlify AWS Lambda task root');
+    delete process.env.LAMBDA_TASK_ROOT;
+
+    process.env.AWS_LAMBDA_FUNCTION_NAME = 'peregrine-order-create';
+    assert.equal(isProductionEnvironment(), true, 'Netlify AWS Lambda function name');
+    delete process.env.AWS_LAMBDA_FUNCTION_NAME;
 
     process.env.NODE_ENV = 'production';
     assert.equal(isProductionEnvironment(), true, 'NODE_ENV=production');

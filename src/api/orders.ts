@@ -28,10 +28,15 @@ export function setOrderRepositoryForTesting(repo: IOrderRepository | null) {
 }
 
 export function isProductionEnvironment(): boolean {
-  return (
+  return Boolean(
     process.env.NODE_ENV === 'production' ||
     process.env.CONTEXT === 'production' ||
+    process.env.CONTEXT === 'deploy-preview' ||
+    process.env.CONTEXT === 'branch-deploy' ||
     process.env.NETLIFY === 'true' ||
+    process.env.LAMBDA_TASK_ROOT ||
+    process.env.AWS_LAMBDA_FUNCTION_NAME ||
+    process.env.AWS_EXECUTION_ENV ||
     process.env.VERCEL === '1' ||
     process.env.STOREFRONT_REQUIRE_PERSISTENT_STORAGE === 'true' ||
     process.env.STOREFRONT_STORAGE_BACKEND === 'supabase'
