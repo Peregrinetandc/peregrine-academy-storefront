@@ -1,10 +1,245 @@
-<!-- Redirect alias for /privacy-policy -->
 <!DOCTYPE html>
-<html>
+<html lang="en" dir="ltr" class="scroll-smooth">
 <head>
-  <meta http-equiv="refresh" content="0; url=/privacy-policy/" />
-  <script>window.location.replace('/privacy-policy/');</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Privacy Policy | Peregrine Academy</title>
+  <meta name="description" content="Read Peregrine Academy's Privacy Policy explaining how personal information, payment records, inter-service provisioning data, and ad analytics are handled and protected." />
+  
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://peregrineacademy.in/privacy-policy" />
+  <meta property="og:title" content="Privacy Policy | Peregrine Academy" />
+  <meta property="og:description" content="Transparent explanation of our student data protection, PCI-DSS payment boundaries via Razorpay, and data retention standards." />
+  <meta property="og:image" content="https://peregrineacademy.in/images/khaliji-front-cover.jpeg" />
+  
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/favicon.png" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            peregrine: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#064e3b',
+              navy: '#0b192c',
+              gold: '#c5a059'
+            }
+          }
+        }
+      }
+    };
+  </script>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 antialiased font-sans flex flex-col min-h-screen">
+
+  <!-- Top Header Navigation -->
+  <header class="w-full bg-slate-900 border-b border-slate-800 text-white sticky top-0 z-50">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-3 group focus:outline-none focus:ring-2 focus:ring-amber-400 rounded-lg p-1">
+        <img src="/images/peregrine-logo.png" alt="Peregrine Academy Logo" class="h-8 w-auto object-contain flex-shrink-0" />
+        <div>
+          <span class="block text-xs sm:text-sm font-black tracking-widest uppercase text-white group-hover:text-amber-200 transition">Peregrine Academy</span>
+          <span class="block text-[10px] text-slate-400">Emirati Arabic Academic Storefront</span>
+        </div>
+      </a>
+      <nav class="flex items-center gap-4 text-xs font-semibold">
+        <a href="/" class="text-slate-300 hover:text-white transition">Storefront</a>
+        <a href="/pricing" class="text-slate-300 hover:text-white transition">Pricing</a>
+        <a href="/about-us" class="text-slate-300 hover:text-white transition">About Us</a>
+        <a href="/contact-us" class="text-slate-300 hover:text-white transition">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Breadcrumb -->
+  <div class="w-full bg-slate-100 border-b border-slate-200 text-xs py-2">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 text-slate-500">
+      <a href="/" class="hover:underline text-emerald-800 font-medium">Home</a> &gt; <span class="text-slate-700 font-semibold">Privacy Policy</span>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="flex-grow max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12 w-full">
+    <article class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-10">
+      
+      <header class="border-b border-slate-100 pb-6 mb-8">
+        <span class="inline-block px-3 py-1 bg-emerald-100 text-emerald-900 text-xs font-bold rounded-full uppercase tracking-wider mb-3">Data Governance &amp; Transparency</span>
+        <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Privacy Policy</h1>
+        <p class="text-xs sm:text-sm text-slate-500 mt-2">Last Updated: October 28, 2026 • Effective Date: October 28, 2026</p>
+      </header>
+
+      <section class="space-y-6 text-xs sm:text-sm leading-relaxed text-slate-700">
+        
+        <div>
+          <h2 class="text-base sm:text-lg font-bold text-slate-900 mb-2">1. Introduction</h2>
+          <p>
+            Peregrine Academy, operated by <strong>Peregrine Training &amp; Consulting (Peregrine T&amp;C)</strong> ("we", "us", or "our"), respects your personal privacy. This Privacy Policy details our data collection, handling, and protection practices across our storefront (<code>https://peregrineacademy.in</code>) and connected learning applications.
+          </p>
+          <p class="mt-2">
+            We are committed to absolute transparency regarding what information we collect, the explicit technical purposes for which it is used, and how it is secured.
+          </p>
+        </div>
+
+        <div>
+          <h2 class="text-base sm:text-lg font-bold text-slate-900 mb-2">2. Information We Collect</h2>
+          <p>We collect only the minimum information necessary to execute digital order fulfillment and customer support:</p>
+          <ul class="list-disc pl-5 mt-2 space-y-1.5">
+            <li><strong>Customer Name:</strong> Required to personalize your student record, generate certificates of completion, and address order receipts.</li>
+            <li><strong>Email Address:</strong> Mandatory identifier used to deliver course access credentials, single-use HMAC claim tokens, transaction receipts, and customer service communications.</li>
+            <li><strong>Phone Number (Optional):</strong> Voluntarily provided by the customer for order confirmation notifications or WhatsApp support.</li>
+            <li><strong>Technical Transaction Records:</strong> Generated server-side order identifiers (<code>PRGN-YYYYMMDD-XXXXXX</code>), selected SKU, purchase amount in INR, and fulfillment statuses.</li>
+          </ul>
+        </div>
+
+        <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
+          <h3 class="font-bold text-sm text-slate-900 mb-1">Financial Data &amp; Payment Processing Boundary</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            <strong>We NEVER store, process, or transmit your sensitive payment card details, CVVs, net banking passwords, or UPI PINs on Peregrine Academy servers.</strong>
+          </p>
+          <p class="text-xs text-slate-600 leading-relaxed mt-2">
+            All payment transactions are handled directly through <strong>Razorpay Software Private Limited</strong> via PCI-DSS Level 1 compliant secure iframes. Once your payment succeeds, Razorpay returns only cryptographic transaction proof: a Razorpay Order ID (<code>order_...</code>), Payment ID (<code>pay_...</code>), and an HMAC verification signature.
+          </p>
+        </div>
+
+        <div>
+          <h2 class="text-base sm:text-lg font-bold text-slate-900 mb-2">3. Inter-Service Data Sharing for Product Fulfillment</h2>
+          <p>
+            To deliver your purchased educational products across our unified multi-platform ecosystem, our backend communicates securely with specialized sub-applications:
+          </p>
+          <ul class="list-disc pl-5 mt-2 space-y-1.5">
+            <li>
+              <strong>Digital Book Reader (<code>arabic.peregrineacademy.in</code>):</strong> When you purchase the Digital Book, our backend creates an HMAC-SHA256 cryptographically signed single-use claim token containing your normalized email and internal order reference. The Reader app validates this cryptographic token to unlock the 40 narrative chapters and 952 audio clips on your device.
+            </li>
+            <li>
+              <strong>LMS Course Portal (<code>learn.peregrineacademy.in</code>):</strong> When you purchase the LMS Course, your name and email are transmitted via an authenticated server-to-server API to provision your student enrollment on our Next.js-powered course dashboard.
+            </li>
+          </ul>
+          <p class="mt-2 text-slate-500 text-xs">
+            We do not share your personal data with any third-party marketing brokers, advertisers, or external lead aggregators.
+          </p>
+        </div>
+
+        <div>
+          <h2 class="text-base sm:text-lg font-bold text-slate-900 mb-2">4. Analytics, Cookies, and Advertising Disclosures</h2>
+          <p>
+            In accordance with digital advertising transparency guidelines, our storefront utilizes the following analytics tools:
+          </p>
+          <ul class="list-disc pl-5 mt-2 space-y-1.5">
+            <li>
+              <strong>Meta Pixel (Facebook Pixel):</strong> We employ the official Meta Pixel code to measure ad performance on Facebook and Instagram. The Pixel tracks anonymous navigation events (such as <code>PageView</code> and <code>ViewContent</code>). Crucially, the <code>Purchase</code> conversion event is strictly gated to verified, captured server responses to prevent inflated or duplicate conversion reporting.
+            </li>
+            <li>
+              <strong>Essential Cookies &amp; Local Storage:</strong> Used strictly for operational functions, including maintaining selected product packages and preventing duplicate transaction submissions.
+            </li>
+          </ul>
+          <p class="mt-2">
+            You can configure your browser to reject cookies or use browser extensions to block ad pixels without losing access to purchase or read our course materials.
+          </p>
+        </div>
+
+        <div>
+          <h2 class="text-base sm:text-lg font-bold text-slate-900 mb-2">5. Data Storage and Security Controls</h2>
+          <p>
+            We implement defense-in-depth technical and organizational controls to protect customer data:
+          </p>
+          <ul class="list-disc pl-5 mt-2 space-y-1">
+            <li>All storefront and API traffic is strictly encrypted in transit using modern Transport Layer Security (TLS 1.3 / HTTPS).</li>
+            <li>Serverless execution environments strictly isolate API secrets and service-role database keys from client-accessible code.</li>
+            <li>Database tables enforce PostgreSQL Row Level Security (RLS) and require service-role authorization; public or anonymous access is completely revoked.</li>
+          </ul>
+        </div>
+
+        <div>
+          <h2 class="text-base sm:text-lg font-bold text-slate-900 mb-2">6. Data Retention and Your Rights</h2>
+          <p>
+            We retain financial transaction logs and proof of payment for the minimum period required by Indian tax and commercial record-keeping laws.
+          </p>
+          <p class="mt-2">
+            Under applicable data protection principles, you have the right to:
+          </p>
+          <ul class="list-disc pl-5 mt-2 space-y-1">
+            <li>Request a copy of the personal information we hold about you.</li>
+            <li>Request the rectification of any inaccurate personal details.</li>
+            <li>Request the deletion of your student account and access records, subject to statutory retention obligations.</li>
+          </ul>
+          <p class="mt-2">
+            To exercise any of these rights, please email our academic privacy desk at <a href="mailto:hello@peregrinehub.com" class="text-emerald-800 underline font-semibold">hello@peregrinehub.com</a>.
+          </p>
+        </div>
+
+        <div>
+          <h2 class="text-base sm:text-lg font-bold text-slate-900 mb-2">7. Children's Privacy</h2>
+          <p>
+            Our Services are designed for adult learners, university scholars, and professionals. We do not knowingly collect personal information from children under 13 years of age without verified parental consent. If we become aware that personal data of a minor has been collected inadvertently, we take immediate steps to delete it.
+          </p>
+        </div>
+
+        <div>
+          <h2 class="text-base sm:text-lg font-bold text-slate-900 mb-2">8. Grievance Officer and Privacy Inquiries</h2>
+          <p>
+            If you have questions, concerns, or complaints regarding our data handling practices, you may contact our designated desk:
+          </p>
+          <address class="not-italic mt-2 p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs">
+            <strong>Privacy Desk &amp; Grievance Officer</strong><br />
+            Peregrine Academy (Peregrine Training &amp; Consulting)<br />
+            Edappatta, Melattur, Malappuram District, Kerala - 679326, India<br />
+            Email: <a href="mailto:hello@peregrinehub.com" class="text-emerald-800 underline font-semibold">hello@peregrinehub.com</a> / <a href="mailto:admin@peregrineacademy.in" class="text-emerald-800 underline font-semibold">admin@peregrineacademy.in</a><br />
+            Telephone: +91 7012756374
+          </address>
+        </div>
+
+      </section>
+
+    </article>
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="w-full bg-slate-900 border-t border-slate-800 text-slate-400 text-xs py-10 mt-12">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 pb-8 border-b border-slate-800">
+        <div>
+          <span class="block text-sm font-bold uppercase tracking-wider text-white mb-2">Peregrine Academy</span>
+          <p class="text-slate-400 text-[11px] leading-relaxed">
+            Directed by Dr. Muhammed Swalih T (PhD, EFLU Hyderabad). Dedicated to excellence in Emirati and Gulf Arabic education.
+          </p>
+          <span class="block text-[11px] text-slate-400 mt-2">Support: <a href="mailto:hello@peregrinehub.com" class="text-emerald-400 underline">hello@peregrinehub.com</a></span>
+        </div>
+        <div>
+          <span class="block text-xs font-bold uppercase tracking-wider text-white mb-2">Programs &amp; Access</span>
+          <ul class="space-y-1.5 text-[11px]">
+            <li><a href="/" class="hover:text-white transition">Storefront Home</a></li>
+            <li><a href="/pricing" class="hover:text-white transition">Product Pricing (INR)</a></li>
+            <li><a href="/about-us" class="hover:text-white transition">About Us</a></li>
+            <li><a href="/contact-us" class="hover:text-white transition">Contact Us</a></li>
+            <li><a href="https://learn.peregrineacademy.in" target="_blank" rel="noopener noreferrer" class="hover:text-white transition">LMS Platform &rarr;</a></li>
+            <li><a href="https://arabic.peregrineacademy.in" target="_blank" rel="noopener noreferrer" class="hover:text-white transition">Digital Reader &rarr;</a></li>
+          </ul>
+        </div>
+        <div>
+          <span class="block text-xs font-bold uppercase tracking-wider text-white mb-2">Legal &amp; Policy Compliance</span>
+          <ul class="space-y-1.5 text-[11px]">
+            <li><a href="/terms-and-conditions" class="hover:text-white transition">Terms &amp; Conditions</a></li>
+            <li><a href="/privacy-policy" class="text-white font-semibold transition">Privacy Policy</a></li>
+            <li><a href="/refund-cancellation-policy" class="hover:text-white transition">Refund &amp; Cancellation Policy</a></li>
+            <li><a href="/shipping-delivery-policy" class="hover:text-white transition">Shipping &amp; Delivery Policy</a></li>
+            <li><a href="/disclaimer" class="hover:text-white transition">Disclaimer</a></li>
+            <li><a href="/grievance-redressal" class="hover:text-white transition">Grievance Redressal</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-slate-500">
+        <p>&copy; 2026 Peregrine Academy (Peregrine Training &amp; Consulting). All rights reserved.</p>
+        <p>Edappatta, Melattur, Kerala - 679326, India • United Arab Emirates</p>
+      </div>
+    </div>
+  </footer>
+
 </body>
 </html>

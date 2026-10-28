@@ -1,10 +1,179 @@
-<!-- Redirect alias for /about-us -->
 <!DOCTYPE html>
-<html>
+<html lang="en" dir="ltr" class="scroll-smooth">
 <head>
-  <meta http-equiv="refresh" content="0; url=/about-us/" />
-  <script>window.location.replace('/about-us/');</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>About Us | Peregrine Academy</title>
+  <meta name="description" content="Discover Peregrine Academy's academic mission, dialectal Emirati Arabic curriculum, and research-backed learning methodology directed by Dr. Muhammed Swalih T (PhD, EFLU Hyderabad)." />
+  
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://peregrineacademy.in/about-us" />
+  <meta property="og:title" content="About Us | Peregrine Academy" />
+  <meta property="og:description" content="Master authentic Spoken Emirati Arabic through research-backed curriculum, native audio recordings, and guided LMS masterclasses." />
+  <meta property="og:image" content="https://peregrineacademy.in/images/khaliji-front-cover.jpeg" />
+  
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/favicon.png" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            peregrine: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#064e3b',
+              navy: '#0b192c',
+              gold: '#c5a059'
+            }
+          }
+        }
+      }
+    };
+  </script>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 antialiased font-sans flex flex-col min-h-screen">
+
+  <!-- Top Header Navigation -->
+  <header class="w-full bg-slate-900 border-b border-slate-800 text-white sticky top-0 z-50">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-3 group focus:outline-none focus:ring-2 focus:ring-amber-400 rounded-lg p-1">
+        <img src="/images/peregrine-logo.png" alt="Peregrine Academy Logo" class="h-8 w-auto object-contain flex-shrink-0" />
+        <div>
+          <span class="block text-xs sm:text-sm font-black tracking-widest uppercase text-white group-hover:text-amber-200 transition">Peregrine Academy</span>
+          <span class="block text-[10px] text-slate-400">Emirati Arabic Academic Storefront</span>
+        </div>
+      </a>
+      <nav class="flex items-center gap-4 text-xs font-semibold">
+        <a href="/" class="text-slate-300 hover:text-white transition">Storefront</a>
+        <a href="/pricing" class="text-slate-300 hover:text-white transition">Pricing</a>
+        <a href="/contact-us" class="text-slate-300 hover:text-white transition">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Breadcrumb -->
+  <div class="w-full bg-slate-100 border-b border-slate-200 text-xs py-2">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 text-slate-500">
+      <a href="/" class="hover:underline text-emerald-800 font-medium">Home</a> &gt; <span class="text-slate-700 font-semibold">About Us</span>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="flex-grow max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12 w-full">
+    <article class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-10">
+      
+      <header class="border-b border-slate-100 pb-6 mb-8">
+        <span class="inline-block px-3 py-1 bg-emerald-100 text-emerald-900 text-xs font-bold rounded-full uppercase tracking-wider mb-3">Academic Mission & Background</span>
+        <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">About Peregrine Academy</h1>
+        <p class="text-sm sm:text-base text-slate-600 mt-2">Pioneering research-grounded pedagogy for Spoken Emirati (Gulf) Arabic fluency.</p>
+      </header>
+
+      <section class="space-y-6 text-sm sm:text-base leading-relaxed text-slate-700">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900 mb-2">Our Mission</h2>
+          <p>
+            Peregrine Academy is an educational initiative dedicated to bridging the communication gap between expatriates, international professionals, scholars, and native Emirati communities in the United Arab Emirates and the broader Gulf region. While Modern Standard Arabic (MSA) serves formal literature and journalism, genuine social, commercial, and governmental rapport in the Gulf requires command of authentic Spoken Emirati Arabic (<em>al-Lahja al-Imārātiyya</em>).
+          </p>
+          <p class="mt-3">
+            Our mission is to dismantle the barriers to dialectal Arabic fluency by providing structured, phonetically accurate, and culturally authentic learning tools designed for practical, real-world mastery.
+          </p>
+        </div>
+
+        <div class="bg-emerald-50/60 rounded-xl p-5 border border-emerald-200 text-emerald-950">
+          <h3 class="font-bold text-sm sm:text-base text-emerald-950 flex items-center gap-2">
+            <span>Academic Direction</span>
+          </h3>
+          <p class="text-xs sm:text-sm mt-1.5 leading-relaxed">
+            All curriculum, dialectal transcriptions, native recordings, and pedagogical frameworks at Peregrine Academy are directed by <strong>Dr. Muhammed Swalih T (PhD, The English and Foreign Languages University - EFLU, Hyderabad)</strong>. With extensive academic scholarship in Arabic linguistics, Gulf dialectology, and second-language acquisition, Dr. Swalih integrates classical linguistic precision with modern digital pedagogy.
+          </p>
+        </div>
+
+        <div>
+          <h2 class="text-lg font-bold text-slate-900 mb-2">Our Core Educational Offerings</h2>
+          <p>Peregrine Academy delivers three synchronized educational products:</p>
+          <ul class="list-disc pl-5 mt-3 space-y-2.5 text-sm sm:text-base">
+            <li>
+              <strong>Spoken Arabic LMS Course (30 Contact Hours):</strong> A comprehensive, video-guided online curriculum credit-aligned with National Higher Education Qualification Framework (NHEQF) guidelines. Features structured grammatical scaffolding, cultural etiquette in the UAE, high-frequency syntax labs, and continuous progress assessments.
+            </li>
+            <li>
+              <strong>Spoken Arabic Book (Digital Reader):</strong> A narrative-based digital reader comprising 40 real-life situational chapters and 952 synchronized, crystal-clear audio recordings from native Emirati speakers, paired with word-by-word glosses and linguistic commentary.
+            </li>
+            <li>
+              <strong>AI Speaking Partner (Rashid &amp; Maryam):</strong> An experimental conversational AI companion grounded directly in textbook vocabulary and real dialogue scenarios, offering safe, non-judgmental conversational practice.
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h2 class="text-lg font-bold text-slate-900 mb-2">Business Structure &amp; Governance</h2>
+          <p>
+            Peregrine Academy operates as the specialized language and academic training division of <strong>Peregrine Training &amp; Consulting (Peregrine T&amp;C)</strong>, established to foster intercultural communication and professional language readiness.
+          </p>
+          <p class="mt-3">
+            All digital commerce, checkout transactions, and student enrollments on this storefront (<code>peregrineacademy.in</code>) are processed transparently under strict consumer protection, data privacy, and secure financial processing standards.
+          </p>
+        </div>
+
+        <div class="border-t border-slate-100 pt-6 mt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <span class="block text-xs font-bold uppercase tracking-wider text-slate-500">Have Questions?</span>
+            <span class="text-sm text-slate-700">Contact our academic desk for syllabus inquiries or corporate batches.</span>
+          </div>
+          <a href="/contact-us" class="inline-flex items-center justify-center px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition">
+            Contact Academic Desk &rarr;
+          </a>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="w-full bg-slate-900 border-t border-slate-800 text-slate-400 text-xs py-10 mt-12">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 pb-8 border-b border-slate-800">
+        <div>
+          <span class="block text-sm font-bold uppercase tracking-wider text-white mb-2">Peregrine Academy</span>
+          <p class="text-slate-400 text-[11px] leading-relaxed">
+            Directed by Dr. Muhammed Swalih T (PhD, EFLU Hyderabad). Dedicated to excellence in Emirati and Gulf Arabic education.
+          </p>
+          <span class="block text-[11px] text-slate-400 mt-2">Support: <a href="mailto:hello@peregrinehub.com" class="text-emerald-400 underline">hello@peregrinehub.com</a></span>
+        </div>
+        <div>
+          <span class="block text-xs font-bold uppercase tracking-wider text-white mb-2">Programs &amp; Access</span>
+          <ul class="space-y-1.5 text-[11px]">
+            <li><a href="/" class="hover:text-white transition">Storefront Home</a></li>
+            <li><a href="/pricing" class="hover:text-white transition">Product Pricing (INR)</a></li>
+            <li><a href="/about-us" class="text-white font-semibold transition">About Us</a></li>
+            <li><a href="/contact-us" class="hover:text-white transition">Contact Us</a></li>
+            <li><a href="https://learn.peregrineacademy.in" target="_blank" rel="noopener noreferrer" class="hover:text-white transition">LMS Platform &rarr;</a></li>
+            <li><a href="https://arabic.peregrineacademy.in" target="_blank" rel="noopener noreferrer" class="hover:text-white transition">Digital Reader &rarr;</a></li>
+          </ul>
+        </div>
+        <div>
+          <span class="block text-xs font-bold uppercase tracking-wider text-white mb-2">Legal &amp; Policy Compliance</span>
+          <ul class="space-y-1.5 text-[11px]">
+            <li><a href="/terms-and-conditions" class="hover:text-white transition">Terms &amp; Conditions</a></li>
+            <li><a href="/privacy-policy" class="hover:text-white transition">Privacy Policy</a></li>
+            <li><a href="/refund-cancellation-policy" class="hover:text-white transition">Refund &amp; Cancellation Policy</a></li>
+            <li><a href="/shipping-delivery-policy" class="hover:text-white transition">Shipping &amp; Delivery Policy</a></li>
+            <li><a href="/disclaimer" class="hover:text-white transition">Disclaimer</a></li>
+            <li><a href="/grievance-redressal" class="hover:text-white transition">Grievance Redressal</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-slate-500">
+        <p>&copy; 2026 Peregrine Academy (Peregrine Training &amp; Consulting). All rights reserved.</p>
+        <p>Edappatta, Melattur, Kerala - 679326, India • United Arab Emirates</p>
+      </div>
+    </div>
+  </footer>
+
 </body>
 </html>

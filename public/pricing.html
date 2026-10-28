@@ -1,10 +1,296 @@
-<!-- Redirect alias for /pricing -->
 <!DOCTYPE html>
-<html>
+<html lang="en" dir="ltr" class="scroll-smooth">
 <head>
-  <meta http-equiv="refresh" content="0; url=/pricing/" />
-  <script>window.location.replace('/pricing/');</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Pricing &amp; Course Packages | Peregrine Academy</title>
+  <meta name="description" content="Official pricing for Peregrine Academy Arabic learning products: Spoken Arabic Book (₹499), LMS Course (₹1,499), and Complete Package (₹1,998). One-time payment, zero recurring fees." />
+  
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://peregrineacademy.in/pricing" />
+  <meta property="og:title" content="Course Pricing &amp; Learning Packages | Peregrine Academy" />
+  <meta property="og:description" content="Transparent, one-time pricing in INR for authentic Emirati Arabic courses and digital storybooks with native audio." />
+  <meta property="og:image" content="https://peregrineacademy.in/images/khaliji-front-cover.jpeg" />
+  
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/favicon.png" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            peregrine: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#064e3b',
+              navy: '#0b192c',
+              gold: '#c5a059'
+            }
+          }
+        }
+      }
+    };
+  </script>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 antialiased font-sans flex flex-col min-h-screen">
+
+  <!-- Top Header Navigation -->
+  <header class="w-full bg-slate-900 border-b border-slate-800 text-white sticky top-0 z-50">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-3 group focus:outline-none focus:ring-2 focus:ring-amber-400 rounded-lg p-1">
+        <img src="/images/peregrine-logo.png" alt="Peregrine Academy Logo" class="h-8 w-auto object-contain flex-shrink-0" />
+        <div>
+          <span class="block text-xs sm:text-sm font-black tracking-widest uppercase text-white group-hover:text-amber-200 transition">Peregrine Academy</span>
+          <span class="block text-[10px] text-slate-400">Emirati Arabic Academic Storefront</span>
+        </div>
+      </a>
+      <nav class="flex items-center gap-4 text-xs font-semibold">
+        <a href="/" class="text-slate-300 hover:text-white transition">Storefront</a>
+        <a href="/pricing" class="text-white font-semibold transition">Pricing</a>
+        <a href="/about-us" class="text-slate-300 hover:text-white transition">About Us</a>
+        <a href="/contact-us" class="text-slate-300 hover:text-white transition">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Breadcrumb -->
+  <div class="w-full bg-slate-100 border-b border-slate-200 text-xs py-2">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 text-slate-500">
+      <a href="/" class="hover:underline text-emerald-800 font-medium">Home</a> &gt; <span class="text-slate-700 font-semibold">Pricing</span>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="flex-grow max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12 w-full">
+    <article class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-10">
+      
+      <header class="border-b border-slate-100 pb-6 mb-8 text-center sm:text-left">
+        <span class="inline-block px-3 py-1 bg-emerald-100 text-emerald-900 text-xs font-bold rounded-full uppercase tracking-wider mb-3">Authoritative Commercial Catalog</span>
+        <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Transparent Course &amp; Book Pricing</h1>
+        <p class="text-sm sm:text-base text-slate-600 mt-2">All prices are in Indian Rupees (INR), inclusive of applicable taxes. One-time payment with zero recurring billing.</p>
+      </header>
+
+      <!-- Pricing Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        
+        <!-- 1. Spoken Arabic Book -->
+        <div class="border border-slate-200 rounded-xl p-5 flex flex-col justify-between hover:border-emerald-500 transition relative bg-white">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500 block mb-1">Self-Paced Reader</span>
+            <h3 class="font-bold text-slate-900 text-lg">Spoken Arabic Book</h3>
+            <p class="text-xs text-slate-500 mt-0.5">Digital Storybook &amp; Audio Reader</p>
+            
+            <div class="my-4 pb-4 border-b border-slate-100">
+              <span class="text-2xl font-black text-slate-900">₹499</span>
+              <span class="text-xs text-slate-400 line-through ml-1.5">₹999</span>
+              <span class="block text-[11px] text-emerald-700 font-semibold mt-1">Save ₹500 (50% Off)</span>
+            </div>
+
+            <ul class="text-xs text-slate-600 space-y-2 mb-6">
+              <li class="flex items-start gap-2">
+                <span class="text-emerald-700 font-bold">&check;</span>
+                <span><strong>40 Chapters</strong> of Emirati storytelling</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-emerald-700 font-bold">&check;</span>
+                <span><strong>952 Native Audio Clips</strong> (MP3)</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-emerald-700 font-bold">&check;</span>
+                <span>Word-for-word grammatical glosses</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-emerald-700 font-bold">&check;</span>
+                <span><strong>Lifetime Access</strong> on Reader app</span>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <div class="text-[11px] text-slate-500 mb-3 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+              <strong>Delivery:</strong> Instant claim token delivered to email &amp; screen. Unlocks on <code>arabic.peregrineacademy.in</code>.
+            </div>
+            <a href="/?sku=SKU_BOOK_KHALIJI_STORIES#checkout" class="w-full block py-2.5 px-4 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl text-center transition">
+              Purchase Book (₹499)
+            </a>
+          </div>
+        </div>
+
+        <!-- 2. Spoken Arabic LMS Course -->
+        <div class="border border-slate-200 rounded-xl p-5 flex flex-col justify-between hover:border-emerald-500 transition relative bg-white">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-500 block mb-1">Masterclass Video Course</span>
+            <h3 class="font-bold text-slate-900 text-lg">Spoken Arabic Course</h3>
+            <p class="text-xs text-slate-500 mt-0.5">LMS Guided Video Masterclasses</p>
+            
+            <div class="my-4 pb-4 border-b border-slate-100">
+              <span class="text-2xl font-black text-slate-900">₹1,499</span>
+              <span class="text-xs text-slate-400 line-through ml-1.5">₹2,499</span>
+              <span class="block text-[11px] text-emerald-700 font-semibold mt-1">Save ₹1,000 (40% Off)</span>
+            </div>
+
+            <ul class="text-xs text-slate-600 space-y-2 mb-6">
+              <li class="flex items-start gap-2">
+                <span class="text-emerald-700 font-bold">&check;</span>
+                <span><strong>30 Contact Hours</strong> HD Video Lessons</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-emerald-700 font-bold">&check;</span>
+                <span>NHEQF Credit-Aligned Syllabus</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-emerald-700 font-bold">&check;</span>
+                <span>Interactive Speaking Assessments</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-emerald-700 font-bold">&check;</span>
+                <span>Personal Student LMS Dashboard</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-emerald-700 font-bold">&check;</span>
+                <span><strong>1 Year Full Access</strong> with Certificate</span>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <div class="text-[11px] text-slate-500 mb-3 bg-slate-50 p-2.5 rounded-lg border border-slate-100">
+              <strong>Delivery:</strong> Automatic account enrollment delivered to student email. Hosted on <code>learn.peregrineacademy.in</code>.
+            </div>
+            <a href="/?sku=SKU_LMS_SPOKEN_ARABIC#checkout" class="w-full block py-2.5 px-4 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl text-center transition">
+              Enroll in Course (₹1,499)
+            </a>
+          </div>
+        </div>
+
+        <!-- 3. Complete Learning Package (Bundle) -->
+        <div class="border-2 border-emerald-600 rounded-xl p-5 flex flex-col justify-between bg-emerald-50/20 relative shadow-sm">
+          <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-700 text-white text-[10px] font-black uppercase tracking-wider py-0.5 px-3 rounded-full shadow-sm">
+            Best Value Package
+          </div>
+
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-800 block mb-1">Comprehensive Bundle</span>
+            <h3 class="font-bold text-slate-900 text-lg">Complete Learning Package</h3>
+            <p class="text-xs text-slate-600 mt-0.5">30-Hr Course + 40-Ch Book + Audio</p>
+            
+            <div class="my-4 pb-4 border-b border-emerald-200">
+              <span class="text-2xl font-black text-slate-900">₹1,998</span>
+              <span class="text-xs text-slate-400 line-through ml-1.5">₹2,498</span>
+              <span class="block text-[11px] text-emerald-800 font-bold mt-1">Includes Course + Book (Save ₹500)</span>
+            </div>
+
+            <ul class="text-xs text-slate-700 space-y-2 mb-6">
+              <li class="flex items-start gap-2">
+                <span class="text-emerald-700 font-bold">&check;</span>
+                <span><strong>Full 30-Hour LMS Course</strong> (1 Year Access)</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-emerald-700 font-bold">&check;</span>
+                <span><strong>40-Chapter Spoken Book</strong> (Lifetime Access)</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-emerald-700 font-bold">&check;</span>
+                <span><strong>952 Native Audio Recordings</strong></span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-emerald-700 font-bold">&check;</span>
+                <span><strong>AI Speaking Partner:</strong> Free 30-day preview</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-emerald-700 font-bold">&check;</span>
+                <span>Certificate of Completion upon LMS finish</span>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <div class="text-[11px] text-emerald-950 mb-3 bg-emerald-100/60 p-2.5 rounded-lg border border-emerald-200">
+              <strong>Delivery:</strong> Simultaneous dual-platform activation. LMS login + Reader claim link provided immediately upon checkout.
+            </div>
+            <a href="/?sku=SKU_BUNDLE_ALL_IN_ONE#checkout" class="w-full block py-2.5 px-4 bg-emerald-800 hover:bg-emerald-900 text-white font-bold text-xs rounded-xl text-center transition shadow-sm">
+              Get Complete Package (₹1,998)
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Commercial Terms & Guarantees -->
+      <section class="border-t border-slate-100 pt-8 space-y-6 text-xs sm:text-sm text-slate-600">
+        <h2 class="text-base sm:text-lg font-bold text-slate-900">Commercial Terms &amp; Billing Invariants</h2>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <h4 class="font-bold text-slate-900 mb-1">One-Time Non-Recurring Payment</h4>
+            <p>Every transaction on Peregrine Academy is strictly a one-time purchase. We do not store card numbers, and there are never recurring subscription debits or hidden renewal fees.</p>
+          </div>
+
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <h4 class="font-bold text-slate-900 mb-1">Inclusive Tax Treatment</h4>
+            <p>All prices quoted in INR are inclusive of applicable digital taxes (GST where applicable). The price you see on this page is the exact amount payable at checkout.</p>
+          </div>
+
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <h4 class="font-bold text-slate-900 mb-1">Secure Payment Processing</h4>
+            <p>Payments are processed exclusively through Razorpay using industry-standard PCI-DSS Level 1 compliant encryption, supporting UPI, Net Banking, Credit/Debit cards, and Indian bank wallets.</p>
+          </div>
+
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <h4 class="font-bold text-slate-900 mb-1">Instant Digital Activation</h4>
+            <p>Access is provisioned digitally in real-time. Please review our <a href="/refund-cancellation-policy" class="text-emerald-800 underline font-semibold">Refund Policy</a> and <a href="/shipping-delivery-policy" class="text-emerald-800 underline font-semibold">Delivery Policy</a> prior to purchasing.</p>
+          </div>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="w-full bg-slate-900 border-t border-slate-800 text-slate-400 text-xs py-10 mt-12">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 pb-8 border-b border-slate-800">
+        <div>
+          <span class="block text-sm font-bold uppercase tracking-wider text-white mb-2">Peregrine Academy</span>
+          <p class="text-slate-400 text-[11px] leading-relaxed">
+            Directed by Dr. Muhammed Swalih T (PhD, EFLU Hyderabad). Dedicated to excellence in Emirati and Gulf Arabic education.
+          </p>
+          <span class="block text-[11px] text-slate-400 mt-2">Support: <a href="mailto:hello@peregrinehub.com" class="text-emerald-400 underline">hello@peregrinehub.com</a></span>
+        </div>
+        <div>
+          <span class="block text-xs font-bold uppercase tracking-wider text-white mb-2">Programs &amp; Access</span>
+          <ul class="space-y-1.5 text-[11px]">
+            <li><a href="/" class="hover:text-white transition">Storefront Home</a></li>
+            <li><a href="/pricing" class="text-white font-semibold transition">Product Pricing (INR)</a></li>
+            <li><a href="/about-us" class="hover:text-white transition">About Us</a></li>
+            <li><a href="/contact-us" class="hover:text-white transition">Contact Us</a></li>
+            <li><a href="https://learn.peregrineacademy.in" target="_blank" rel="noopener noreferrer" class="hover:text-white transition">LMS Platform &rarr;</a></li>
+            <li><a href="https://arabic.peregrineacademy.in" target="_blank" rel="noopener noreferrer" class="hover:text-white transition">Digital Reader &rarr;</a></li>
+          </ul>
+        </div>
+        <div>
+          <span class="block text-xs font-bold uppercase tracking-wider text-white mb-2">Legal &amp; Policy Compliance</span>
+          <ul class="space-y-1.5 text-[11px]">
+            <li><a href="/terms-and-conditions" class="hover:text-white transition">Terms &amp; Conditions</a></li>
+            <li><a href="/privacy-policy" class="hover:text-white transition">Privacy Policy</a></li>
+            <li><a href="/refund-cancellation-policy" class="hover:text-white transition">Refund &amp; Cancellation Policy</a></li>
+            <li><a href="/shipping-delivery-policy" class="hover:text-white transition">Shipping &amp; Delivery Policy</a></li>
+            <li><a href="/disclaimer" class="hover:text-white transition">Disclaimer</a></li>
+            <li><a href="/grievance-redressal" class="hover:text-white transition">Grievance Redressal</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-slate-500">
+        <p>&copy; 2026 Peregrine Academy (Peregrine Training &amp; Consulting). All rights reserved.</p>
+        <p>Edappatta, Melattur, Kerala - 679326, India • United Arab Emirates</p>
+      </div>
+    </div>
+  </footer>
+
 </body>
 </html>
