@@ -145,10 +145,15 @@
 
       <!-- Academic Badging & Platform Links -->
       <div class="flex items-center gap-2 sm:gap-3">
-        <span class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200/80 text-[11px] font-semibold text-emerald-900">
-          <span class="w-2 h-2 rounded-full bg-emerald-600" aria-hidden="true"></span>
-          <span>Special Offer • Digital Access</span>
-        </span>
+        <a href="/pricing" class="text-xs font-semibold text-slate-600 hover:text-slate-900 py-1.5 px-2 rounded-lg hover:bg-slate-100 transition hidden sm:inline-block">
+          Pricing
+        </a>
+        <a href="/about-us" class="text-xs font-semibold text-slate-600 hover:text-slate-900 py-1.5 px-2 rounded-lg hover:bg-slate-100 transition hidden sm:inline-block">
+          About
+        </a>
+        <a href="/contact-us" class="text-xs font-semibold text-slate-600 hover:text-slate-900 py-1.5 px-2 rounded-lg hover:bg-slate-100 transition hidden sm:inline-block">
+          Contact
+        </a>
         <a href="#explore-package-heading" class="text-xs font-semibold text-slate-600 hover:text-slate-900 py-1.5 px-2.5 rounded-lg hover:bg-slate-100 transition">
           Curriculum
         </a>
@@ -354,6 +359,13 @@
               <span>•</span>
               <span class="inline-flex items-center gap-1">✨ Instant Access</span>
             </div>
+
+            <p class="text-[11px] text-slate-500 text-center mt-3 leading-relaxed">
+              By proceeding with payment, you agree to our 
+              <a href="/terms-and-conditions" target="_blank" class="text-emerald-800 underline hover:text-emerald-950 font-medium">Terms &amp; Conditions</a>, 
+              <a href="/privacy-policy" target="_blank" class="text-emerald-800 underline hover:text-emerald-950 font-medium">Privacy Policy</a>, and 
+              <a href="/refund-cancellation-policy" target="_blank" class="text-emerald-800 underline hover:text-emerald-950 font-medium">Refund Policy</a>.
+            </p>
           </div>
         </form>
 
@@ -480,31 +492,46 @@
   </main>
 
   <!-- Institutional Academic Footer -->
-  <footer class="w-full bg-slate-50 border-t border-slate-200 mt-12 py-8 text-slate-600" role="contentinfo">
+  <footer class="w-full bg-slate-900 text-slate-400 mt-12 py-10 text-xs border-t border-slate-800" role="contentinfo">
     <div class="max-w-4xl mx-auto px-4 sm:px-6">
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pb-6 border-b border-slate-200/80">
-        
-        <div class="flex items-center gap-3">
-          <img 
-            src="/images/peregrine-logo.png" 
-            alt="Peregrine Academy" 
-            class="h-8 w-auto object-contain flex-shrink-0"
-          />
-          <div>
-            <span class="block text-xs font-bold uppercase tracking-wider text-slate-900">Peregrine Academy</span>
-            <span class="block text-[11px] text-slate-500">Directed by Dr. Muhammed Swalih T (PhD, EFLU Hyderabad)</span>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 pb-8 border-b border-slate-800">
+        <div>
+          <span class="block text-sm font-bold uppercase tracking-wider text-white mb-2">Peregrine Academy</span>
+          <p class="text-slate-400 text-[11px] leading-relaxed">
+            Directed by Dr. Muhammed Swalih T (PhD, EFLU Hyderabad). Operated by Peregrine Training &amp; Consulting. Dedicated to excellence in Emirati and Gulf Arabic education.
+          </p>
+          <div class="text-[11px] text-slate-400 mt-3 space-y-1">
+            <p><strong>Email:</strong> <a href="mailto:hello@peregrinehub.com" class="text-emerald-400 underline">hello@peregrinehub.com</a></p>
+            <p><strong>Phone:</strong> <a href="tel:+917012756374" class="text-slate-300 hover:text-white">+91 7012756374</a></p>
+            <p class="text-slate-500">Edappatta, Melattur, Malappuram, Kerala - 679326, India</p>
           </div>
         </div>
-
-        <div class="text-xs text-center sm:text-right">
-          <span class="block text-slate-500">Academic & Technical Support</span>
-          <a href="mailto:hello@peregrinehub.com" class="text-xs font-semibold text-emerald-800 hover:underline">hello@peregrinehub.com</a>
+        <div>
+          <span class="block text-xs font-bold uppercase tracking-wider text-white mb-2">Programs &amp; Access</span>
+          <ul class="space-y-1.5 text-[11px]">
+            <li><a href="/" class="hover:text-white transition">Storefront Home</a></li>
+            <li><a href="/pricing" class="hover:text-white transition">Product Pricing (INR)</a></li>
+            <li><a href="/about-us" class="hover:text-white transition">About Us</a></li>
+            <li><a href="/contact-us" class="hover:text-white transition">Contact Us</a></li>
+            <li><a href="https://learn.peregrineacademy.in" target="_blank" rel="noopener noreferrer" class="hover:text-white transition">LMS Platform &rarr;</a></li>
+            <li><a href="https://arabic.peregrineacademy.in" target="_blank" rel="noopener noreferrer" class="hover:text-white transition">Digital Reader &rarr;</a></li>
+          </ul>
         </div>
-
+        <div>
+          <span class="block text-xs font-bold uppercase tracking-wider text-white mb-2">Legal &amp; Policies</span>
+          <ul class="space-y-1.5 text-[11px]">
+            <li><a href="/terms-and-conditions" class="hover:text-white transition">Terms &amp; Conditions</a></li>
+            <li><a href="/privacy-policy" class="hover:text-white transition">Privacy Policy</a></li>
+            <li><a href="/refund-cancellation-policy" class="hover:text-white transition">Refund &amp; Cancellation Policy</a></li>
+            <li><a href="/shipping-delivery-policy" class="hover:text-white transition">Shipping &amp; Delivery Policy</a></li>
+            <li><a href="/disclaimer" class="hover:text-white transition">Disclaimer</a></li>
+            <li><a href="/grievance-redressal" class="hover:text-white transition">Grievance Redressal</a></li>
+          </ul>
+        </div>
       </div>
 
-      <div class="pt-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-slate-500">
-        <p>© 2026 Peregrine Academy. All rights reserved.</p>
+      <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-slate-500">
+        <p>&copy; 2026 Peregrine Academy (Peregrine Training &amp; Consulting). All rights reserved.</p>
         <p class="text-slate-400">United Arab Emirates • India</p>
       </div>
     </div>

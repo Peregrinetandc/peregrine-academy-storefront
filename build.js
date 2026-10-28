@@ -75,7 +75,46 @@ if (!htmlContent.includes('https://checkout.razorpay.com/v1/checkout.js')) {
   process.exit(1);
 }
 
-// 5. Verify no unverified Meta Purchase pixel firing on initial render
+// 6. Verify policy and compliance pages
+const requiredPolicyRoutes = [
+  'about-us',
+  'contact-us',
+  'pricing',
+  'terms-and-conditions',
+  'privacy-policy',
+  'refund-cancellation-policy',
+  'shipping-delivery-policy',
+  'disclaimer',
+  'grievance-redressal'
+];
+
+for (const route of requiredPolicyRoutes) {
+  // Check index.html footer link
+  if (!htmlContent.includes(`href="/${route}"`)) {
+    console.error(`[build error] Missing link to /${route} in public/index.html footer!`);
+    process.exit(1);
+  }
+
+  // Check file existence
+  const dirPath = path.join(moduleDir, 'public', route, 'index.html');
+  const aliasPath = path.join(moduleDir, 'public', `${route}.html`);
+  if (!fs.existsSync(dirPath)) {
+    console.error(`[build error] Missing policy file: public/${route}/index.html!`);
+    process.exit(1);
+  }
+  if (!fs.existsSync(aliasPath)) {
+    console.error(`[build error] Missing policy alias file: public/${route}.html!`);
+    process.exit(1);
+  }
+
+  const pageContent = fs.readFileSync(dirPath, 'utf8');
+  if (!pageContent.includes('<!DOCTYPE html>') || !pageContent.includes('Peregrine Academy')) {
+    console.error(`[build error] Policy page public/${route}/index.html is corrupt or missing branding!`);
+    process.exit(1);
+  }
+}
+
+// 7. Verify no unverified Meta Purchase pixel firing on initial render
 // Purchases must only be recorded inside the server verification callback
 if (htmlContent.includes("setTimeout(() => {") && htmlContent.includes("window.fbq('track', 'Purchase'")) {
   console.error('[build error] Security violation: Client-side Meta Purchase pixel found inside unverified simulation timeout!');
@@ -87,6 +126,7 @@ console.log('✔ Concise heading verified: "Complete Your Arabic Learning Packag
 console.log('✔ Three-product rows & prices verified: LMS=₹1,499, Book=₹499, AI=FREE for 1st Month.');
 console.log('✔ Total payable verified: ₹1,998 with prominent "Proceed to Secure Payment" CTA.');
 console.log('✔ Optional product exploration section verified below checkout.');
+console.log('✔ All 9 Razorpay legal & compliance pages verified with direct files and aliases.');
 console.log('✔ Official Razorpay checkout.js integration validated.');
 console.log('✔ Meta Pixel purchase deduplication and verified server response gating validated.');
 console.log('=== Build check completed successfully ===');

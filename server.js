@@ -119,7 +119,24 @@ const server = http.createServer(async (req, res) => {
 
   // Static File Serving
   let filePath = path.join(PUBLIC_DIR, url.pathname === '/' ? 'index.html' : url.pathname);
-  if (!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
+
+  // Check if directory has an index.html
+  if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
+    const dirIndex = path.join(filePath, 'index.html');
+    if (fs.existsSync(dirIndex)) {
+      filePath = dirIndex;
+    }
+  }
+
+  // Check if clean URL matches an .html file
+  if (!fs.existsSync(filePath) && !path.extname(url.pathname)) {
+    const cleanHtml = path.join(PUBLIC_DIR, `${url.pathname}.html`);
+    if (fs.existsSync(cleanHtml)) {
+      filePath = cleanHtml;
+    }
+  }
+
+  if (!fs.existsSync(filePath)) {
     if (path.extname(url.pathname)) {
       res.writeHead(404, { 'Content-Type': 'text/plain' });
       res.end('Not Found');
