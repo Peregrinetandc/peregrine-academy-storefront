@@ -18,7 +18,7 @@ export class SupabaseOrderRepository implements IOrderRepository {
       throw new Error('[SupabaseOrderRepository] A valid supabaseUrl is required.');
     }
     if (!config.serviceRoleKey || config.serviceRoleKey.trim().length === 0) {
-      throw new Error('[SupabaseOrderRepository] SUPABASE_SERVICE_ROLE_KEY is required for server repository.');
+      throw new Error('[SupabaseOrderRepository] SUPABASE_SERVICE_ROLE_KEY or SUPABASE_SECRET_KEY is required for server repository.');
     }
 
     this.serviceRoleKey = config.serviceRoleKey.trim();
@@ -29,7 +29,7 @@ export class SupabaseOrderRepository implements IOrderRepository {
         const parts = this.serviceRoleKey.split('.');
         if (parts.length >= 2) {
           const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString('utf8'));
-          if (payload.role && payload.role !== 'service_role') {
+          if (payload.role && (payload.role === 'anon' || payload.role === 'authenticated')) {
             throw new Error(
               `[SupabaseOrderRepository] SECURITY VIOLATION: Expected 'service_role' key, but received role '${payload.role}'. Anonymous keys are strictly forbidden for repository operations.`
             );

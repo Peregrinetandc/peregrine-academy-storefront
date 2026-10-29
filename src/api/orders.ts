@@ -55,7 +55,7 @@ export function isProductionEnvironment(): boolean {
 export function getActiveOrderRepository(): IOrderRepository {
   if (activeRepoOverride) return activeRepoOverride;
   const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY;
   if (supabaseUrl && serviceRoleKey && !serviceRoleKey.startsWith('mock_')) {
     return new SupabaseOrderRepository({ supabaseUrl, serviceRoleKey });
   }
@@ -63,7 +63,7 @@ export function getActiveOrderRepository(): IOrderRepository {
   if (isProd) {
     throw new Error(
       '[Storage] PRODUCTION SAFETY BLOCKER: Missing mandatory database credentials. ' +
-      'SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be configured in production. ' +
+      'SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (or SUPABASE_SECRET_KEY) must be configured in production. ' +
       'Silent fallback to ephemeral /tmp storage is strictly forbidden for real payments.'
     );
   }
@@ -102,12 +102,12 @@ export function resolveProvisioningOptions(config?: OrderApiConfig): Provisionin
   const isProd = isProductionEnvironment();
   return {
     lmsApiUrl: process.env.LMS_API_URL || 'https://learn.peregrineacademy.in',
-    lmsApiKey: process.env.LMS_API_KEY,
+    lmsApiKey: process.env.LMS_API_KEY || process.env.LMS_SERVICE_ROLE_KEY,
     readerApiUrl: process.env.READER_API_URL,
     handoffSecret: process.env.BUNDLE_HANDOFF_SECRET,
     aiasApiUrl: process.env.AIAS_API_URL,
     aiasSecret: process.env.AIAS_SECRET,
-    simulate: !isProd && !process.env.BUNDLE_HANDOFF_SECRET && !process.env.LMS_API_KEY
+    simulate: !isProd && !process.env.BUNDLE_HANDOFF_SECRET && !process.env.LMS_API_KEY && !process.env.LMS_SERVICE_ROLE_KEY
   };
 }
 
@@ -212,7 +212,7 @@ export async function handleCreateOrder(
     });
   }
 
-  const keyId = config?.razorpayKeyId || process.env.RAZORPAY_KEY_ID;
+  const keyId = config?.razorpayKeyId || process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
   const keySecret = config?.razorpayKeySecret || process.env.RAZORPAY_KEY_SECRET;
   const amountInSubunits = catalogItem.priceInr * 100;
   let razorpayOrderId = '';
@@ -401,7 +401,7 @@ export async function handleVerifyPayment(
   }
 
   const secret = effectiveConfig.razorpayKeySecret || process.env.RAZORPAY_KEY_SECRET;
-  const keyId = effectiveConfig.razorpayKeyId || process.env.RAZORPAY_KEY_ID;
+  const keyId = effectiveConfig.razorpayKeyId || process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
 
   // Strict cryptographic HMAC signature verification
   if (secret) {
@@ -808,7 +808,7 @@ export async function reconcileOrderPayment(
     };
   }
 
-  const keyId = config?.razorpayKeyId || process.env.RAZORPAY_KEY_ID;
+  const keyId = config?.razorpayKeyId || process.env.RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
   const secret = config?.razorpayKeySecret || process.env.RAZORPAY_KEY_SECRET;
 
   if (order.status === 'fulfilled') {

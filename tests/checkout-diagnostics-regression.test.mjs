@@ -101,6 +101,7 @@ describe('Live Checkout Failure Diagnostics & Regression Invariants Suite', () =
     delete process.env.SUPABASE_URL;
     delete process.env.NEXT_PUBLIC_SUPABASE_URL;
     delete process.env.SUPABASE_SERVICE_ROLE_KEY;
+    delete process.env.SUPABASE_SECRET_KEY;
 
     assert.throws(
       () => {
@@ -108,6 +109,18 @@ describe('Live Checkout Failure Diagnostics & Regression Invariants Suite', () =
       },
       /PRODUCTION SAFETY BLOCKER: Missing mandatory database credentials/
     );
+  });
+
+  test('3c. getActiveOrderRepository accepts SUPABASE_SECRET_KEY in production when SUPABASE_SERVICE_ROLE_KEY is absent', async () => {
+    process.env.CONTEXT = 'production';
+    process.env.SUPABASE_URL = 'https://mock.supabase.co';
+    delete process.env.SUPABASE_SERVICE_ROLE_KEY;
+    process.env.SUPABASE_SECRET_KEY = 'valid_test_secret_key';
+
+    const repo = getActiveOrderRepository();
+    assert.ok(repo instanceof SupabaseOrderRepository);
+
+    delete process.env.SUPABASE_SECRET_KEY;
   });
 
   test('3b. Database HTTP failure propagates cleanly without swallowing during order save', async () => {

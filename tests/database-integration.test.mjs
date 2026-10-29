@@ -61,12 +61,14 @@ describe('Database Integration Architecture & Supabase Repository Tests', () => 
       const origEnv = process.env.NODE_ENV;
       const origUrl = process.env.SUPABASE_URL;
       const origKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+      const origSecretKey = process.env.SUPABASE_SECRET_KEY;
 
       try {
         process.env.NODE_ENV = 'production';
         delete process.env.SUPABASE_URL;
         delete process.env.NEXT_PUBLIC_SUPABASE_URL;
         delete process.env.SUPABASE_SERVICE_ROLE_KEY;
+        delete process.env.SUPABASE_SECRET_KEY;
 
         assert.throws(() => {
           createOrderRepository();
@@ -75,6 +77,29 @@ describe('Database Integration Architecture & Supabase Repository Tests', () => 
         process.env.NODE_ENV = origEnv;
         if (origUrl) process.env.SUPABASE_URL = origUrl;
         if (origKey) process.env.SUPABASE_SERVICE_ROLE_KEY = origKey;
+        if (origSecretKey) process.env.SUPABASE_SECRET_KEY = origSecretKey;
+      }
+    });
+
+    test('Instantiates SupabaseOrderRepository when SUPABASE_SECRET_KEY is provided instead of SUPABASE_SERVICE_ROLE_KEY', () => {
+      const origEnv = process.env.NODE_ENV;
+      const origKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+      const origSecretKey = process.env.SUPABASE_SECRET_KEY;
+      try {
+        process.env.NODE_ENV = 'production';
+        delete process.env.SUPABASE_SERVICE_ROLE_KEY;
+        process.env.SUPABASE_SECRET_KEY = 'test_secret_key_value';
+        const repo = createOrderRepository({
+          backend: 'supabase',
+          supabaseUrl: 'https://test-project.supabase.co'
+        });
+        assert.ok(repo instanceof SupabaseOrderRepository);
+      } finally {
+        process.env.NODE_ENV = origEnv;
+        if (origKey) process.env.SUPABASE_SERVICE_ROLE_KEY = origKey;
+        else delete process.env.SUPABASE_SERVICE_ROLE_KEY;
+        if (origSecretKey) process.env.SUPABASE_SECRET_KEY = origSecretKey;
+        else delete process.env.SUPABASE_SECRET_KEY;
       }
     });
 

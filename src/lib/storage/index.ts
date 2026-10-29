@@ -40,18 +40,18 @@ export function createOrderRepository(options?: RepositoryFactoryOptions): IOrde
 
   if (backend === 'supabase' || isProd) {
     const url = options?.supabaseUrl || process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = options?.serviceRoleKey || process.env.SUPABASE_SERVICE_ROLE_KEY;
+    const key = options?.serviceRoleKey || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY;
 
     if (!url || !key) {
       if (isProd) {
         throw new Error(
           '[StorageFactory] PRODUCTION SAFETY BLOCKER: Missing mandatory database credentials. ' +
-          'SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be configured in production. ' +
+          'SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (or SUPABASE_SECRET_KEY) must be configured in production. ' +
           'Silent fallback to local JSON file storage is strictly forbidden in production.'
         );
       }
       throw new Error(
-        '[StorageFactory] Supabase storage backend was requested, but SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY is missing.'
+        '[StorageFactory] Supabase storage backend was requested, but SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY (or SUPABASE_SECRET_KEY) is missing.'
       );
     }
 

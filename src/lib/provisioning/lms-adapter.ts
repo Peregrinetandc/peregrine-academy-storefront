@@ -41,7 +41,7 @@ export async function provisionLmsCourse(
   const courseId = params.courseId || SPOKEN_EMIRATI_COURSE_ID;
   const courseUrl = `https://learn.peregrineacademy.in/courses/${courseId}`;
   const lmsApiUrl = options?.lmsApiUrl || process.env.LMS_API_URL || 'https://learn.peregrineacademy.in';
-  const lmsApiKey = options?.lmsApiKey || process.env.LMS_API_KEY;
+  const lmsApiKey = options?.lmsApiKey || process.env.LMS_API_KEY || process.env.LMS_SERVICE_ROLE_KEY;
 
   // If simulation mode or testing without external network
   if (options?.simulate || !lmsApiKey) {
