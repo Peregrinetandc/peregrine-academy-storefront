@@ -27,6 +27,15 @@ export function setOrderRepositoryForTesting(repo: IOrderRepository | null) {
   activeRepoOverride = repo;
 }
 
+let activeVerifyConfigOverride: Partial<OrderApiConfig> | null = null;
+
+export function setVerifyConfigForTesting(config: Partial<OrderApiConfig> | null) {
+  if (isProductionEnvironment()) {
+    throw new Error('[Orders API] setVerifyConfigForTesting is strictly forbidden in production.');
+  }
+  activeVerifyConfigOverride = config;
+}
+
 export function isProductionEnvironment(): boolean {
   return Boolean(
     process.env.NODE_ENV === 'production' ||
@@ -302,8 +311,20 @@ export async function handleVerifyPayment(
   isDuplicate?: boolean;
   error?: string;
 }> {
+  const baseConfig: OrderApiConfig = { ...config };
+  for (const k of Object.keys(baseConfig) as (keyof OrderApiConfig)[]) {
+    if (baseConfig[k] === undefined) {
+      delete baseConfig[k];
+    }
+  }
+
+  const effectiveConfig: OrderApiConfig = {
+    ...baseConfig,
+    ...(!isProductionEnvironment() ? activeVerifyConfigOverride : {})
+  };
+
   // Fail closed if testing mock signature requested in production
-  if (isProductionEnvironment() && config?.allowTestMockSignature) {
+  if (isProductionEnvironment() && effectiveConfig.allowTestMockSignature) {
     throw new Error('Test mock signature verification is strictly forbidden in production.');
   }
 
@@ -354,7 +375,7 @@ export async function handleVerifyPayment(
 
   // Commercial Safety Gate: Check if order was created as a paused bundle
   const isPausedOrder = Boolean((order.metadata as any)?.isPaused);
-  const isAuthorizedTestBundle = Boolean(config?.allowPausedBundleForTesting || (order.metadata as any)?.allowPausedBundleForTesting);
+  const isAuthorizedTestBundle = Boolean(effectiveConfig.allowPausedBundleForTesting || (order.metadata as any)?.allowPausedBundleForTesting);
 
   if (isPausedOrder && !isAuthorizedTestBundle) {
     return {
@@ -379,8 +400,8 @@ export async function handleVerifyPayment(
     };
   }
 
-  const secret = config?.razorpayKeySecret || process.env.RAZORPAY_KEY_SECRET;
-  const keyId = config?.razorpayKeyId || process.env.RAZORPAY_KEY_ID;
+  const secret = effectiveConfig.razorpayKeySecret || process.env.RAZORPAY_KEY_SECRET;
+  const keyId = effectiveConfig.razorpayKeyId || process.env.RAZORPAY_KEY_ID;
 
   // Strict cryptographic HMAC signature verification
   if (secret) {
@@ -394,7 +415,7 @@ export async function handleVerifyPayment(
     if (!isValid) {
       return { success: false, error: 'Invalid Razorpay payment signature. Verification failed.' };
     }
-  } else if (config?.allowTestMockSignature) {
+  } else if (effectiveConfig.allowTestMockSignature) {
     // Controlled test mode when explicitly passed by test suite
     if (req.razorpaySignature !== 'test_valid_mock_signature') {
       return { success: false, error: 'Invalid mock test signature.' };
@@ -404,29 +425,57 @@ export async function handleVerifyPayment(
     return { success: false, error: 'Razorpay secret key not configured for payment verification.' };
   }
 
-  // Gateway payment verification and capture enforcement
-  if (keyId && secret && !config?.skipGatewayFetch && !keyId.startsWith('rzp_test_placeholder_mock')) {
+  // Production must never fulfill orders using signature-only verification.
+  if (
+    isProductionEnvironment() &&
+    (
+      !keyId ||
+      !secret ||
+      effectiveConfig.skipGatewayFetch ||
+      keyId.startsWith('rzp_test_placeholder')
+    )
+  ) {
+    return {
+      success: false,
+      error: 'Production payment verification is not fully configured.'
+    };
+  }
+
+  // Gateway verification may be bypassed only through the explicit non-production test option.
+  if (
+    !effectiveConfig.skipGatewayFetch &&
+    (!keyId || !secret || keyId.startsWith('rzp_test_placeholder'))
+  ) {
+    return {
+      success: false,
+      error: 'Razorpay gateway verification is not fully configured.'
+    };
+  }
+
+  // Gateway payment verification and capture enforcement.
+  // An explicit skip is reserved for non-production tests; production is rejected above.
+  if (!effectiveConfig.skipGatewayFetch) {
     try {
       let payment = await fetchRazorpayPayment({
         paymentId: req.razorpayPaymentId,
         keyId,
         keySecret: secret,
-        fetchFn: config?.fetchFn
+        fetchFn: effectiveConfig.fetchFn
       });
 
-      if (payment.order_id && payment.order_id !== order.razorpayOrderId) {
+      if (payment.order_id !== order.razorpayOrderId) {
         return { success: false, error: 'Payment entity order_id does not match storefront order.' };
       }
 
       const expectedSubunits = order.amountInr * 100;
-      if (payment.amount && payment.amount !== expectedSubunits) {
+      if (payment.amount !== expectedSubunits) {
         return {
           success: false,
           error: `Payment amount mismatch: expected ₹${order.amountInr} (${expectedSubunits} subunits), got ${payment.amount}`
         };
       }
 
-      if (payment.currency && payment.currency !== order.currency) {
+      if (payment.currency !== order.currency) {
         return {
           success: false,
           error: `Payment currency mismatch: expected ${order.currency}, got ${payment.currency}`
@@ -442,7 +491,7 @@ export async function handleVerifyPayment(
             currency: order.currency,
             keyId,
             keySecret: secret,
-            fetchFn: config?.fetchFn
+            fetchFn: effectiveConfig.fetchFn
           });
         } catch (capErr: any) {
           // Re-fetch to confirm whether capture succeeded despite network timeout/drop
@@ -451,7 +500,7 @@ export async function handleVerifyPayment(
               paymentId: req.razorpayPaymentId,
               keyId,
               keySecret: secret,
-              fetchFn: config?.fetchFn
+              fetchFn: effectiveConfig.fetchFn
             });
             if (refetched.status === 'captured') {
               payment = refetched;
@@ -470,6 +519,19 @@ export async function handleVerifyPayment(
         }
       }
 
+      // Validate the final gateway response after fetch/capture/refetch.
+      if (
+        payment.id !== req.razorpayPaymentId ||
+        payment.order_id !== order.razorpayOrderId ||
+        payment.amount !== expectedSubunits ||
+        payment.currency !== order.currency
+      ) {
+        return {
+          success: false,
+          error: 'Final Razorpay payment details failed strict verification.'
+        };
+      }
+
       // STRICT INVARIANT: Digital fulfillment requires payment in 'captured' status!
       if (payment.status !== 'captured') {
         return {
@@ -478,9 +540,11 @@ export async function handleVerifyPayment(
         };
       }
     } catch (err: any) {
-      if (isProductionEnvironment()) {
-        return { success: false, error: `Failed to confirm payment status with Razorpay: ${err.message}` };
-      }
+      // Fail closed in every environment when gateway verification was attempted.
+      return {
+        success: false,
+        error: `Failed to confirm payment status with Razorpay: ${err.message}`
+      };
     }
   }
 
@@ -520,7 +584,7 @@ export async function handleVerifyPayment(
   const paidOrder = atomicTransition.order;
 
   // Trigger provisioning orchestrator
-  const orchestration = await executeOrderProvisioning(paidOrder, resolveProvisioningOptions(config));
+  const orchestration = await executeOrderProvisioning(paidOrder, resolveProvisioningOptions(effectiveConfig));
   await repo.save(orchestration.order);
 
   // Crucial Rule: An order is ONLY fulfilled if all entitlements actually succeeded
@@ -605,22 +669,50 @@ export async function handleRazorpayWebhook(
       };
     }
 
-    // Idempotency: If already paid or fulfilled, do not re-provision
-    if (matchedOrder.status === 'fulfilled' || matchedOrder.status === 'paid' || matchedOrder.status === 'provisioning') {
+    // Validate critical fields before fulfillment or duplicate acknowledgement.
+    if (
+      !payment.id ||
+      !payment.order_id ||
+      payment.order_id !== matchedOrder.razorpayOrderId ||
+      payment.currency !== matchedOrder.currency ||
+      payment.status !== 'captured'
+    ) {
       return {
-        success: true,
-        event: eventData.event,
-        orderId: matchedOrder.id,
-        isDuplicate: true
+        success: false,
+        error: 'Webhook payment details failed strict verification.'
       };
     }
 
-    // Validate amount
+    // Validate amount.
     const expectedSubunits = matchedOrder.amountInr * 100;
     if (payment.amount !== expectedSubunits) {
       return {
         success: false,
         error: `Webhook amount mismatch: expected ${expectedSubunits}, received ${payment.amount}`
+      };
+    }
+
+    // A duplicate is valid only when it matches the stored payment ID.
+    if (
+      matchedOrder.status === 'fulfilled' ||
+      matchedOrder.status === 'paid' ||
+      matchedOrder.status === 'provisioning'
+    ) {
+      if (
+        !matchedOrder.razorpayPaymentId ||
+        matchedOrder.razorpayPaymentId !== payment.id
+      ) {
+        return {
+          success: false,
+          error: 'Duplicate webhook payment ID does not match the stored order payment.'
+        };
+      }
+
+      return {
+        success: true,
+        event: eventData.event,
+        orderId: matchedOrder.id,
+        isDuplicate: true
       };
     }
 

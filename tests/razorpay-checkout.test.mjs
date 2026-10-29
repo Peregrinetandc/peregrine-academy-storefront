@@ -202,6 +202,47 @@ describe('Real Razorpay Checkout Integration & Security Rules', () => {
     assert.match(verifyRes.error || '', /Razorpay order ID mismatch/);
   });
 
+  test('handleVerifyPayment: Gateway fetch failure fails closed and leaves order unpaid', async () => {
+    const createRes = await handleCreateOrder({
+      sku: 'SKU_LMS_SPOKEN_ARABIC',
+      customerEmail: 'gateway-failure@peregrineacademy.in',
+      customerName: 'Gateway Failure Test'
+    });
+
+    assert.equal(createRes.success, true);
+
+    const rzpOrderId = createRes.razorpayOrderId;
+    const paymentId = 'pay_gateway_fetch_failure_01';
+    const validSignature = crypto
+      .createHmac('sha256', testKeySecret)
+      .update(`${rzpOrderId}|${paymentId}`)
+      .digest('hex');
+
+    const verifyRes = await handleVerifyPayment(
+      {
+        orderId: createRes.order.id,
+        razorpayOrderId: rzpOrderId,
+        razorpayPaymentId: paymentId,
+        razorpaySignature: validSignature
+      },
+      {
+        razorpayKeyId: testKeyId,
+        razorpayKeySecret: testKeySecret,
+        skipGatewayFetch: false,
+        fetchFn: async () => {
+          throw new Error('Simulated gateway network failure');
+        }
+      }
+    );
+
+    assert.equal(verifyRes.success, false);
+    assert.match(verifyRes.error || '', /Failed to confirm payment status with Razorpay/);
+
+    const stored = memoryOrderLedger.get(createRes.order.id);
+    assert.equal(stored?.status, 'pending_payment');
+    assert.notEqual(stored?.status, 'fulfilled');
+  });
+
   test('handleVerifyPayment: Wrong amount reported by gateway is rejected', async () => {
     const createRes = await handleCreateOrder({
       sku: 'SKU_LMS_SPOKEN_ARABIC', // ₹1,499 -> 149,900 subunits
@@ -247,6 +288,250 @@ describe('Real Razorpay Checkout Integration & Security Rules', () => {
 
     assert.equal(verifyRes.success, false);
     assert.match(verifyRes.error || '', /Payment amount mismatch/);
+  });
+
+  test('handleVerifyPayment: Captured payment with mismatched payment ID is rejected', async () => {
+    const createRes = await handleCreateOrder({
+      sku: 'SKU_BOOK_KHALIJI_STORIES',
+      customerEmail: 'mismatch-payid@peregrineacademy.in',
+      customerName: 'Mismatch Payment ID Test'
+    });
+
+    const rzpOrderId = createRes.razorpayOrderId;
+    const requestedPaymentId = 'pay_requested_001';
+    const returnedPaymentId = 'pay_different_from_gateway_999';
+    const validSignature = crypto
+      .createHmac('sha256', testKeySecret)
+      .update(`${rzpOrderId}|${requestedPaymentId}`)
+      .digest('hex');
+
+    const mockFetchWrongPaymentId = async () => ({
+      ok: true,
+      status: 200,
+      json: async () => ({
+        id: returnedPaymentId,
+        entity: 'payment',
+        order_id: rzpOrderId,
+        amount: 49900,
+        currency: 'INR',
+        status: 'captured'
+      })
+    });
+
+    const verifyRes = await handleVerifyPayment(
+      {
+        orderId: createRes.order.id,
+        razorpayOrderId: rzpOrderId,
+        razorpayPaymentId: requestedPaymentId,
+        razorpaySignature: validSignature
+      },
+      {
+        razorpayKeyId: testKeyId,
+        razorpayKeySecret: testKeySecret,
+        skipGatewayFetch: false,
+        fetchFn: mockFetchWrongPaymentId
+      }
+    );
+
+    assert.equal(verifyRes.success, false);
+    assert.match(verifyRes.error || '', /Final Razorpay payment details failed strict verification/);
+
+    const stored = memoryOrderLedger.get(createRes.order.id);
+    assert.equal(stored?.status, 'pending_payment');
+  });
+
+  test('handleVerifyPayment: Captured payment with mismatched order ID is rejected', async () => {
+    const createRes = await handleCreateOrder({
+      sku: 'SKU_BOOK_KHALIJI_STORIES',
+      customerEmail: 'mismatch-orderid@peregrineacademy.in',
+      customerName: 'Mismatch Order ID Test'
+    });
+
+    const rzpOrderId = createRes.razorpayOrderId;
+    const paymentId = 'pay_order_mismatch_001';
+    const validSignature = crypto
+      .createHmac('sha256', testKeySecret)
+      .update(`${rzpOrderId}|${paymentId}`)
+      .digest('hex');
+
+    const mockFetchWrongOrderId = async () => ({
+      ok: true,
+      status: 200,
+      json: async () => ({
+        id: paymentId,
+        entity: 'payment',
+        order_id: 'order_completely_different_from_gateway',
+        amount: 49900,
+        currency: 'INR',
+        status: 'captured'
+      })
+    });
+
+    const verifyRes = await handleVerifyPayment(
+      {
+        orderId: createRes.order.id,
+        razorpayOrderId: rzpOrderId,
+        razorpayPaymentId: paymentId,
+        razorpaySignature: validSignature
+      },
+      {
+        razorpayKeyId: testKeyId,
+        razorpayKeySecret: testKeySecret,
+        skipGatewayFetch: false,
+        fetchFn: mockFetchWrongOrderId
+      }
+    );
+
+    assert.equal(verifyRes.success, false);
+    assert.match(verifyRes.error || '', /Payment entity order_id does not match/);
+
+    const stored = memoryOrderLedger.get(createRes.order.id);
+    assert.equal(stored?.status, 'pending_payment');
+  });
+
+  test('handleVerifyPayment: Captured payment with mismatched currency is rejected', async () => {
+    const createRes = await handleCreateOrder({
+      sku: 'SKU_BOOK_KHALIJI_STORIES',
+      customerEmail: 'mismatch-currency@peregrineacademy.in',
+      customerName: 'Mismatch Currency Test'
+    });
+
+    const rzpOrderId = createRes.razorpayOrderId;
+    const paymentId = 'pay_currency_mismatch_001';
+    const validSignature = crypto
+      .createHmac('sha256', testKeySecret)
+      .update(`${rzpOrderId}|${paymentId}`)
+      .digest('hex');
+
+    const mockFetchWrongCurrency = async () => ({
+      ok: true,
+      status: 200,
+      json: async () => ({
+        id: paymentId,
+        entity: 'payment',
+        order_id: rzpOrderId,
+        amount: 49900,
+        currency: 'USD',
+        status: 'captured'
+      })
+    });
+
+    const verifyRes = await handleVerifyPayment(
+      {
+        orderId: createRes.order.id,
+        razorpayOrderId: rzpOrderId,
+        razorpayPaymentId: paymentId,
+        razorpaySignature: validSignature
+      },
+      {
+        razorpayKeyId: testKeyId,
+        razorpayKeySecret: testKeySecret,
+        skipGatewayFetch: false,
+        fetchFn: mockFetchWrongCurrency
+      }
+    );
+
+    assert.equal(verifyRes.success, false);
+    assert.match(verifyRes.error || '', /Payment currency mismatch/);
+
+    const stored = memoryOrderLedger.get(createRes.order.id);
+    assert.equal(stored?.status, 'pending_payment');
+  });
+
+  test('handleRazorpayWebhook: Conflicting duplicate webhook payment ID is rejected', async () => {
+    const createRes = await handleCreateOrder({
+      sku: 'SKU_BOOK_KHALIJI_STORIES',
+      customerEmail: 'webhook.conflict@peregrineacademy.in',
+      customerName: 'Conflict Webhook User'
+    });
+
+    const rzpOrderId = createRes.razorpayOrderId;
+    const originalPaymentId = 'pay_webhook_orig_100';
+    const conflictingPaymentId = 'pay_webhook_conflict_200';
+
+    const buildPayload = (payId) => JSON.stringify({
+      entity: 'event',
+      account_id: 'acc_001',
+      event: 'payment.captured',
+      contains: ['payment'],
+      payload: {
+        payment: {
+          entity: {
+            id: payId,
+            order_id: rzpOrderId,
+            amount: 49900,
+            currency: 'INR',
+            status: 'captured'
+          }
+        }
+      },
+      created_at: 1700000000
+    });
+
+    const origPayload = buildPayload(originalPaymentId);
+    const origSig = crypto
+      .createHmac('sha256', testWebhookSecret)
+      .update(origPayload)
+      .digest('hex');
+
+    // First webhook delivery fulfills the order
+    const firstDelivery = await handleRazorpayWebhook(origPayload, origSig, {
+      webhookSecret: testWebhookSecret
+    });
+    assert.equal(firstDelivery.success, true);
+    assert.equal(firstDelivery.isDuplicate, false);
+
+    const storedOrder = memoryOrderLedger.get(createRes.order.id);
+    assert.equal(storedOrder?.status, 'fulfilled');
+    assert.equal(storedOrder?.razorpayPaymentId, originalPaymentId);
+
+    // Second webhook arrives with same order_id but a DIFFERENT payment ID
+    const conflictPayload = buildPayload(conflictingPaymentId);
+    const conflictSig = crypto
+      .createHmac('sha256', testWebhookSecret)
+      .update(conflictPayload)
+      .digest('hex');
+
+    const conflictDelivery = await handleRazorpayWebhook(conflictPayload, conflictSig, {
+      webhookSecret: testWebhookSecret
+    });
+    assert.equal(conflictDelivery.success, false);
+    assert.match(conflictDelivery.error || '', /Duplicate webhook payment ID does not match/);
+  });
+
+  test('handleVerifyPayment: Explicit non-production skipGatewayFetch bypass succeeds as intended', async () => {
+    const createRes = await handleCreateOrder({
+      sku: 'SKU_LMS_SPOKEN_ARABIC',
+      customerEmail: 'bypass.user@peregrineacademy.in',
+      customerName: 'Bypass User'
+    });
+
+    const rzpOrderId = createRes.razorpayOrderId;
+    const paymentId = 'pay_test_bypass_499';
+    const validSignature = crypto
+      .createHmac('sha256', testKeySecret)
+      .update(`${rzpOrderId}|${paymentId}`)
+      .digest('hex');
+
+    const verifyRes = await handleVerifyPayment(
+      {
+        orderId: createRes.order.id,
+        razorpayOrderId: rzpOrderId,
+        razorpayPaymentId: paymentId,
+        razorpaySignature: validSignature
+      },
+      {
+        razorpayKeyId: testKeyId,
+        razorpayKeySecret: testKeySecret,
+        skipGatewayFetch: true
+      }
+    );
+
+    assert.equal(verifyRes.success, true);
+    assert.equal(verifyRes.paymentVerified, true);
+    assert.equal(verifyRes.fulfillmentStatus, 'fulfilled');
+    assert.equal(verifyRes.order?.status, 'fulfilled');
+    assert.equal(verifyRes.order?.razorpayPaymentId, paymentId);
   });
 
   test('handleVerifyPayment: Replay protection prevents duplicate grants', async () => {

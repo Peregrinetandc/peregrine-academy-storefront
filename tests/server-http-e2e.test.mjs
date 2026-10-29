@@ -2,6 +2,7 @@ import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import crypto from 'node:crypto';
 import server from '../server.js';
+import { setVerifyConfigForTesting } from '../src/api/orders.ts';
 
 describe('Server-Level HTTP End-to-End Route Testing', () => {
   const secret = 'test_local_secret_999';
@@ -120,12 +121,32 @@ describe('Server-Level HTTP End-to-End Route Testing', () => {
     const paymentId = 'pay_http_valid_101';
     const validSig = crypto.createHmac('sha256', secret).update(`${rzpOrderId}|${paymentId}`).digest('hex');
 
+    setVerifyConfigForTesting({
+      razorpayKeyId: 'rzp_test_local_key_999',
+      razorpayKeySecret: secret,
+      fetchFn: async () => ({
+        ok: true,
+        status: 200,
+        json: async () => ({
+          id: paymentId,
+          entity: 'payment',
+          amount: 49900,
+          currency: 'INR',
+          status: 'captured',
+          order_id: rzpOrderId,
+          captured: true
+        })
+      })
+    });
+
     const verifyRes = await dispatch('POST', '/api/order/verify', {
       orderId,
       razorpayOrderId: rzpOrderId,
       razorpayPaymentId: paymentId,
       razorpaySignature: validSig
     });
+
+    setVerifyConfigForTesting(null);
 
     assert.equal(verifyRes.status, 200);
     assert.equal(verifyRes.body.success, true);
@@ -145,6 +166,24 @@ describe('Server-Level HTTP End-to-End Route Testing', () => {
     const paymentId = 'pay_http_replay_102';
     const validSig = crypto.createHmac('sha256', secret).update(`${rzpOrderId}|${paymentId}`).digest('hex');
 
+    setVerifyConfigForTesting({
+      razorpayKeyId: 'rzp_test_local_key_999',
+      razorpayKeySecret: secret,
+      fetchFn: async () => ({
+        ok: true,
+        status: 200,
+        json: async () => ({
+          id: paymentId,
+          entity: 'payment',
+          amount: 49900,
+          currency: 'INR',
+          status: 'captured',
+          order_id: rzpOrderId,
+          captured: true
+        })
+      })
+    });
+
     // First attempt
     const firstRes = await dispatch('POST', '/api/order/verify', {
       orderId,
@@ -161,6 +200,9 @@ describe('Server-Level HTTP End-to-End Route Testing', () => {
       razorpayPaymentId: paymentId,
       razorpaySignature: validSig
     });
+
+    setVerifyConfigForTesting(null);
+
     assert.equal(replayRes.status, 200);
     assert.equal(replayRes.body.isDuplicate, true);
     assert.equal(replayRes.body.order.status, 'fulfilled');

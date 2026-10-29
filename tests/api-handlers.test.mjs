@@ -103,7 +103,23 @@ describe('Storefront API Handlers (Orders, Payments, & Claims)', () => {
         razorpayPaymentId: rzpPaymentId,
         razorpaySignature: validSignature
       },
-      { razorpayKeySecret: secret, simulate: true }
+      {
+        razorpayKeyId: 'rzp_test_api_mock_01',
+        razorpayKeySecret: secret,
+        fetchFn: async () => ({
+          ok: true,
+          status: 200,
+          json: async () => ({
+            id: rzpPaymentId,
+            entity: 'payment',
+            amount: 199800,
+            currency: 'INR',
+            status: 'captured',
+            order_id: rzpOrderId,
+            captured: true
+          })
+        })
+      }
     );
 
     assert.equal(verifyRes.success, true);

@@ -7,6 +7,7 @@ import orderCreateHandler from '../netlify/functions/order-create.ts';
 import orderVerifyHandler from '../netlify/functions/order-verify.ts';
 import webhookHandler from '../netlify/functions/webhook-razorpay.ts';
 import vercelHandler from '../api/index.ts';
+import { setVerifyConfigForTesting } from '../src/api/orders.ts';
 
 describe('Serverless Deployment Adapters (Netlify & Vercel)', () => {
   const secret = 'test_serverless_secret_123';
@@ -112,7 +113,28 @@ describe('Serverless Deployment Adapters (Netlify & Vercel)', () => {
           razorpaySignature: validSig
         })
       });
+
+      setVerifyConfigForTesting({
+        razorpayKeyId: 'rzp_test_serverless_key_01',
+        razorpayKeySecret: secret,
+        fetchFn: async () => ({
+          ok: true,
+          status: 200,
+          json: async () => ({
+            id: paymentId,
+            entity: 'payment',
+            amount: 49900,
+            currency: 'INR',
+            status: 'captured',
+            order_id: rzpOrderId,
+            captured: true
+          })
+        })
+      });
+
       const verifyRes = await orderVerifyHandler(verifyReq);
+      setVerifyConfigForTesting(null);
+
       assert.equal(verifyRes.status, 200);
       const verifyData = await verifyRes.json();
       assert.equal(verifyData.success, true);
