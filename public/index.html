@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Complete Your Arabic Learning Package | Peregrine Academy</title>
-  <meta name="description" content="Get instant access to the complete Peregrine Arabic Learning Package: Spoken Arabic LMS Course (₹1,499), Spoken Arabic Book with 952 audio clips (₹499), and AI Speaking Partner (FREE for the first month). Total payable: ₹1,998." />
+  <title>Peregrine Academy | The Signature Gulf Arabic Learning Experience</title>
+  <meta name="description" content="Master authentic Spoken Emirati Arabic through academic excellence. 30-Hour LMS Masterclasses (₹1,499), 40-Chapter Spoken Arabic Book with 952 native audio recordings (₹499), and AI Speaking Partner (FREE for the first month). Complete Learning Package: ₹1,998." />
   
-  <!-- Open Graph / Meta Ads Social Sharing -->
+  <!-- Open Graph / Social Sharing -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://peregrineacademy.in/" />
   <meta property="og:title" content="Complete Arabic Learning Package | Peregrine Academy" />
@@ -54,7 +54,12 @@
   <!-- Official Razorpay Checkout Library -->
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
-  <!-- Tailwind CSS via CDN for standalone local preview -->
+  <!-- Google Fonts: Editorial Serif, Modern Sans, and Authentic Arabic Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -64,451 +69,1480 @@
             peregrine: {
               50: '#f0fdf4',
               100: '#dcfce7',
+              200: '#bbf7d0',
+              300: '#86efac',
+              400: '#4ade80',
+              500: '#22c55e',
               600: '#16a34a',
               700: '#15803d',
               800: '#166534',
               900: '#064e3b',
+              950: '#022c22',
+              teal: '#0d9488',
+              tealDark: '#115e59',
+              tealDeep: '#042f2e',
               navy: '#0b192c',
+              navyDark: '#060d17',
+              navyMuted: '#1e293b',
               gold: '#c5a059',
               goldLight: '#e4caa0',
-              amberDark: '#b45309',
-              amberLight: '#fef3c7'
+              goldDark: '#9a7532',
+              goldMuted: '#d4af37',
+              ivory: '#fcfaf7',
+              warmIvory: '#f7f4ed',
+              sand: '#f2ede4',
+              parchment: '#fcfbf9'
             }
           },
           fontFamily: {
-            sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-            serif: ['Merriweather', 'Georgia', 'serif'],
-            arabic: ['Amiri', 'Traditional Arabic', 'serif']
+            sans: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Merriweather', 'Georgia', 'serif'],
+            arabic: ['"IBM Plex Sans Arabic"', 'Amiri', 'serif'],
+            amiri: ['"Amiri"', 'serif']
+          },
+          boxShadow: {
+            'book': '0 25px 50px -12px rgba(11, 25, 44, 0.25), 0 0 0 1px rgba(11, 25, 44, 0.05)',
+            'subtle-elevated': '0 10px 30px -5px rgba(2, 44, 34, 0.06), 0 0 0 1px rgba(2, 44, 34, 0.04)',
+            'gold-glow': '0 0 25px rgba(197, 160, 89, 0.22)'
           }
         }
       }
     }
   </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700;800&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-  
+
   <style>
-    .font-arabic { font-family: 'Amiri', serif; }
-    /* Touch target & fluid responsiveness baseline */
+    /* Baseline typography & accessibility constraints */
     *, ::before, ::after { box-sizing: border-box; }
+    
+    html {
+      font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .font-arabic { font-family: 'IBM Plex Sans Arabic', 'Amiri', serif; }
+    .font-amiri { font-family: 'Amiri', serif; }
+
+    /* Touch target & fluid responsiveness baseline enforced by tests */
     input[type="text"], input[type="email"], input[type="tel"] {
       display: block;
       width: 100%;
       min-height: 44px;
-      padding: 10px 14px;
-      font-size: 14px;
+      padding: 12px 16px;
+      font-size: 15px;
       box-sizing: border-box;
+      touch-action: manipulation;
     }
+
     button, [role="button"], #submit-pay-btn {
       min-height: 48px;
       cursor: pointer;
       box-sizing: border-box;
+      touch-action: manipulation;
     }
+
     #submit-pay-btn {
       width: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
     }
+
     article a {
       min-height: 44px;
       display: inline-flex;
       align-items: center;
+      touch-action: manipulation;
     }
+
     input, button, a { touch-action: manipulation; }
+
+    /* Book Presentation Depth Effects */
+    .book-spine-effect {
+      box-shadow: 
+        inset 4px 0 8px rgba(0, 0, 0, 0.25),
+        inset -2px 0 4px rgba(255, 255, 255, 0.15),
+        0 20px 35px -10px rgba(6, 78, 59, 0.35);
+    }
+
+    .editorial-border {
+      border: 1px solid rgba(197, 160, 89, 0.25);
+    }
+
+    /* Soundwave Simulation Animation */
+    @keyframes wave-bounce {
+      0%, 100% { height: 6px; }
+      50% { height: 26px; }
+    }
+    .sound-bar {
+      animation: wave-bounce 1.2s ease-in-out infinite;
+    }
+    .sound-bar:nth-child(2) { animation-delay: 0.15s; }
+    .sound-bar:nth-child(3) { animation-delay: 0.3s; }
+    .sound-bar:nth-child(4) { animation-delay: 0.45s; }
+    .sound-bar:nth-child(5) { animation-delay: 0.2s; }
+    .sound-bar:nth-child(6) { animation-delay: 0.5s; }
+
+    /* Accessibility: Respect Reduced Motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, ::before, ::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
   </style>
 </head>
-<body class="bg-white text-slate-900 antialiased min-h-screen flex flex-col justify-between selection:bg-emerald-100 selection:text-emerald-900 overflow-x-hidden">
+<body class="bg-peregrine-warmIvory text-slate-900 antialiased min-h-screen flex flex-col justify-between selection:bg-peregrine-900 selection:text-peregrine-goldLight overflow-x-hidden">
 
-  <!-- Accessibility Skip Link -->
-  <a href="#order-form" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:px-4 focus:py-2 focus:bg-slate-900 focus:text-white focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-emerald-500">
-    Skip to checkout form
+  <!-- Accessibility Skip Navigation Link -->
+  <a href="#checkout-terminal" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:px-5 focus:py-3 focus:bg-peregrine-navy focus:text-white focus:rounded-xl focus:shadow-2xl focus:outline-none focus:ring-2 focus:ring-peregrine-gold font-medium text-sm">
+    Skip to package selection &amp; checkout
   </a>
 
-  <!-- Top Institutional Navigation Bar -->
-  <header class="w-full bg-white border-b border-slate-200/80 sticky top-0 z-40 backdrop-blur-md bg-white/95" role="banner">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 py-3 sm:py-3.5 flex items-center justify-between gap-3">
+  <!-- 1. Academic Institutional Announcement Bar -->
+  <aside class="w-full bg-peregrine-navy text-slate-300 border-b border-peregrine-navyMuted text-xs py-2 px-4 relative z-50" aria-label="Academic Announcement">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-1.5 sm:gap-2 text-center sm:text-left">
+      <div class="flex items-center justify-center sm:justify-start gap-2 text-[11px] sm:text-xs flex-wrap">
+        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-peregrine-900 text-peregrine-gold border border-peregrine-gold/30 tracking-wide uppercase">
+          Academic Direction
+        </span>
+        <span class="text-slate-300">
+          Directed by Dr. Muhammed Swalih T (PhD, EFLU Hyderabad) • Authentic Gulf Dialect Curriculum
+        </span>
+      </div>
+      <div class="flex items-center gap-4 text-[11px] text-slate-400">
+        <span class="hidden md:inline">Instant Multi-Platform Delivery</span>
+        <span class="hidden md:inline text-slate-600">•</span>
+        <a href="mailto:hello@peregrinehub.com" class="hover:text-peregrine-gold transition text-slate-300 flex items-center gap-1">
+          <svg class="w-3.5 h-3.5 text-peregrine-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          hello@peregrinehub.com
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- 2. Institutional Navigation Bar -->
+  <header class="w-full bg-white/95 backdrop-blur-md border-b border-slate-200/90 sticky top-0 z-40 transition-all shadow-xs" role="banner">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between gap-4">
       
-      <!-- Brand & Identity -->
-      <a href="/" class="flex items-center gap-3 group focus:outline-none focus:ring-2 focus:ring-emerald-600 rounded-lg p-1" aria-label="Peregrine Academy Home">
+      <!-- Brand & Academic Identity -->
+      <a href="/" class="flex items-center gap-3.5 group focus:outline-none focus:ring-2 focus:ring-peregrine-800 rounded-xl p-1" aria-label="Peregrine Academy Home">
         <img 
           src="/images/peregrine-logo.png" 
           alt="Peregrine Academy Logo" 
-          class="h-9 sm:h-10 w-auto object-contain flex-shrink-0 transition-transform group-hover:scale-105"
+          class="h-10 sm:h-12 w-auto object-contain flex-shrink-0 transition-transform group-hover:scale-102"
         />
         <div class="leading-tight text-left">
-          <span class="block text-xs sm:text-sm font-black tracking-wider text-slate-950 uppercase">PEREGRINE ACADEMY</span>
-          <span class="block text-[11px] sm:text-xs font-arabic text-emerald-800" dir="rtl">أكاديمية بيريجرين</span>
+          <div class="flex items-center gap-1.5">
+            <span class="block text-sm sm:text-base font-extrabold tracking-wider text-peregrine-navy uppercase">PEREGRINE ACADEMY</span>
+          </div>
+          <span class="block text-[11px] sm:text-xs font-arabic text-peregrine-900 font-semibold" dir="rtl">أكاديمية بيريجرين للغة العربية</span>
         </div>
       </a>
 
-      <!-- Academic Badging & Platform Links -->
-      <div class="flex items-center gap-2 sm:gap-3">
-        <a href="/pricing" class="text-xs font-semibold text-slate-600 hover:text-slate-900 py-1.5 px-2 rounded-lg hover:bg-slate-100 transition hidden sm:inline-block">
-          Pricing
+      <!-- Desktop Institutional Navigation -->
+      <nav class="hidden lg:flex items-center gap-6 text-xs font-semibold text-slate-700" aria-label="Primary Navigation">
+        <a href="#curriculum-triad" class="hover:text-peregrine-900 py-1 transition">Learning Pathway</a>
+        <a href="#digital-book" class="hover:text-peregrine-900 py-1 transition">Digital Book (952 Audio)</a>
+        <a href="#lms-curriculum" class="hover:text-peregrine-900 py-1 transition">30-Hour LMS Course</a>
+        <a href="#ai-partner" class="hover:text-peregrine-900 py-1 transition">AI Speaking Partner</a>
+        <a href="#academic-leadership" class="hover:text-peregrine-900 py-1 transition">Faculty</a>
+        <a href="/pricing" class="hover:text-peregrine-900 py-1 transition">Pricing</a>
+      </nav>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-3">
+        <a href="#checkout-terminal" class="inline-flex items-center justify-center px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-peregrine-900 hover:bg-peregrine-950 active:scale-98 transition shadow-xs border border-peregrine-gold/30 focus:outline-none focus:ring-2 focus:ring-peregrine-700">
+          <span>Enroll Now</span>
+          <span class="ml-1.5 px-2 py-0.5 rounded-md bg-peregrine-800 text-peregrine-goldLight text-[10px] font-mono">₹1,998</span>
         </a>
-        <a href="/about-us" class="text-xs font-semibold text-slate-600 hover:text-slate-900 py-1.5 px-2 rounded-lg hover:bg-slate-100 transition hidden sm:inline-block">
-          About
-        </a>
-        <a href="/contact-us" class="text-xs font-semibold text-slate-600 hover:text-slate-900 py-1.5 px-2 rounded-lg hover:bg-slate-100 transition hidden sm:inline-block">
-          Contact
-        </a>
-        <a href="#explore-package-heading" class="text-xs font-semibold text-slate-600 hover:text-slate-900 py-1.5 px-2.5 rounded-lg hover:bg-slate-100 transition">
-          Curriculum
-        </a>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button 
+          type="button" 
+          onclick="toggleMobileMenu()" 
+          class="lg:hidden p-2 rounded-xl text-slate-700 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-peregrine-800"
+          aria-expanded="false" 
+          aria-controls="mobile-nav-menu"
+          aria-label="Toggle navigation menu"
+          id="mobile-nav-toggle"
+        >
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
       </div>
 
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobile-nav-menu" class="hidden lg:hidden border-t border-slate-200 bg-white px-4 py-4 space-y-2 text-sm font-semibold text-slate-800 shadow-md">
+      <a href="#curriculum-triad" onclick="toggleMobileMenu()" class="block py-2 px-3 rounded-lg hover:bg-slate-50">Learning Pathway</a>
+      <a href="#digital-book" onclick="toggleMobileMenu()" class="block py-2 px-3 rounded-lg hover:bg-slate-50">Digital Book (952 Audio)</a>
+      <a href="#lms-curriculum" onclick="toggleMobileMenu()" class="block py-2 px-3 rounded-lg hover:bg-slate-50">30-Hour LMS Masterclasses</a>
+      <a href="#ai-partner" onclick="toggleMobileMenu()" class="block py-2 px-3 rounded-lg hover:bg-slate-50">AI Speaking Partner (Rashid &amp; Maryam)</a>
+      <a href="#academic-leadership" onclick="toggleMobileMenu()" class="block py-2 px-3 rounded-lg hover:bg-slate-50">Academic Leadership &amp; Faculty</a>
+      <a href="/pricing" class="block py-2 px-3 rounded-lg hover:bg-slate-50">Product Pricing (INR)</a>
+      <a href="/about-us" class="block py-2 px-3 rounded-lg hover:bg-slate-50">About Peregrine Academy</a>
+      <a href="/contact-us" class="block py-2 px-3 rounded-lg hover:bg-slate-50">Contact Academic Desk</a>
     </div>
   </header>
 
-  <!-- Main Content Area -->
-  <main id="main-content" class="w-full max-w-xl sm:max-w-2xl mx-auto px-3 sm:px-6 py-5 sm:py-10 flex-1 flex flex-col justify-center">
+  <!-- Main Content Structure -->
+  <main id="main-content" class="w-full flex-1">
 
-    <!-- Value Proposition Banner (Institutional Focus) -->
-    <div class="text-center mb-5 sm:mb-8">
-      <div class="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-[10px] sm:text-[11px] font-semibold text-slate-700 mb-2.5 sm:mb-3">
-        <span>Emirati Dialect Mastery</span>
-        <span class="text-slate-400">•</span>
-        <span>Academic Curriculum</span>
-      </div>
-      <h2 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-950 tracking-tight leading-tight">
-        Master Authentic Gulf Arabic
-      </h2>
-      <p class="text-xs sm:text-sm text-slate-600 max-w-lg mx-auto mt-2 leading-relaxed">
-        Directed by Dr. Muhammed Swalih T (PhD, EFLU Hyderabad). A comprehensive three-tier system combining structured video lessons, native audio narration, and AI speaking practice.
-      </p>
-    </div>
-
-    <!-- Primary Checkout Card -->
-    <div class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-sm p-3.5 sm:p-6 md:p-8 transition-all">
-
-      <!-- Step 1: Active Order Screen -->
-      <section id="checkout-order-section" aria-labelledby="checkout-heading">
+    <!-- 3. Signature Hero Section: Editorial Elegance & Academic Gravitas -->
+    <section class="relative bg-gradient-to-b from-white via-peregrine-warmIvory to-peregrine-sand/40 pt-10 sm:pt-16 pb-14 sm:pb-20 border-b border-slate-200/80 overflow-hidden" aria-labelledby="hero-title">
+      
+      <!-- Subtle Decorative Background Flourish -->
+      <div class="absolute inset-0 pointer-events-none opacity-[0.035] bg-[radial-gradient(#064e3b_1px,transparent_1px)] [background-size:24px_24px]"></div>
+      <div class="absolute -top-32 right-0 w-96 h-96 bg-peregrine-gold/10 rounded-full blur-3xl pointer-events-none"></div>
+      
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 relative">
         
-        <!-- Heading -->
-        <div class="border-b border-slate-100 pb-3 mb-3.5 sm:mb-4">
-          <h1 id="checkout-heading" class="text-lg sm:text-xl md:text-2xl font-black text-slate-950 tracking-tight leading-snug">
-            Choose Your Arabic Learning Package
-          </h1>
-          <p class="text-xs sm:text-sm text-slate-600 mt-1">
-            Direct institutional access to structured video masterclasses, interactive digital reader, and pronunciation labs.
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+          
+          <!-- Left Column: Value Proposition & Academic Authority -->
+          <div class="lg:col-span-7 text-left">
+            
+            <!-- Academic Dialect Badge -->
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-peregrine-900/5 border border-peregrine-900/15 text-xs font-bold text-peregrine-900 mb-5">
+              <span class="w-2 h-2 rounded-full bg-peregrine-gold animate-pulse"></span>
+              <span>Spoken Emirati Arabic Specialization</span>
+              <span class="text-slate-300">•</span>
+              <span class="text-slate-600 font-medium">NHEQF Credit-Aligned</span>
+            </div>
+
+            <!-- Primary Headline -->
+            <h1 id="hero-title" class="text-2xl sm:text-4xl md:text-5xl font-extrabold text-peregrine-navy font-serif tracking-tight leading-tight sm:leading-[1.15] mb-4">
+              Speak Gulf Arabic with the Poise of a Native Speaker.
+            </h1>
+
+            <!-- Authentic Arabic Sub-headline -->
+            <div class="font-arabic text-lg sm:text-xl md:text-2xl text-peregrine-900 font-bold mb-5 leading-snug" dir="rtl">
+              تعلّم العربية الخليجية بأصولها الأكاديمية ونبرتها الأصيلة
+            </div>
+
+            <!-- Descriptive Body -->
+            <p class="text-sm sm:text-base text-slate-700 leading-relaxed max-w-xl mb-6">
+              Modern Standard Arabic opens books; <strong>Spoken Emirati Arabic</strong> builds relationships, closes executive transactions, and earns heartfelt respect across the UAE. Directed by <strong>Dr. Muhammed Swalih T (PhD, EFLU Hyderabad)</strong>, Peregrine Academy delivers an integrated three-pillar system engineered for genuine real-world fluency.
+            </p>
+
+            <!-- Three Pillars Feature Checklist -->
+            <div class="space-y-2.5 mb-8 text-xs sm:text-sm text-slate-700">
+              <div class="flex items-center gap-2.5">
+                <span class="w-5 h-5 rounded-full bg-peregrine-900 text-peregrine-goldLight flex items-center justify-center flex-shrink-0 text-xs font-bold">✓</span>
+                <span><strong>40-Chapter Spoken Arabic Digital Book</strong> with 952 synchronized native Emirati audio recordings.</span>
+              </div>
+              <div class="flex items-center gap-2.5">
+                <span class="w-5 h-5 rounded-full bg-peregrine-900 text-peregrine-goldLight flex items-center justify-center flex-shrink-0 text-xs font-bold">✓</span>
+                <span><strong>30 Contact Hours LMS Masterclasses</strong> covering phonetic shifts, etiquette, and grammar syntax.</span>
+              </div>
+              <div class="flex items-center gap-2.5">
+                <span class="w-5 h-5 rounded-full bg-peregrine-900 text-peregrine-goldLight flex items-center justify-center flex-shrink-0 text-xs font-bold">✓</span>
+                <span><strong>AI Speaking Partner (Rashid &amp; Maryam)</strong> for private, non-judgmental conversational simulation.</span>
+              </div>
+            </div>
+
+            <!-- Hero Action Buttons -->
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-2">
+              <a href="#checkout-terminal" class="min-h-[48px] px-6 py-3.5 rounded-xl text-sm font-bold text-white bg-peregrine-900 hover:bg-peregrine-950 active:scale-98 transition shadow-md flex items-center justify-center gap-2 border border-peregrine-gold/40">
+                <span>Get Complete Package</span>
+                <span class="px-2 py-0.5 rounded-md bg-peregrine-800 text-peregrine-goldLight text-xs font-mono font-semibold">₹1,998</span>
+                <span aria-hidden="true">&rarr;</span>
+              </a>
+
+              <a href="#digital-book" class="min-h-[48px] px-5 py-3.5 rounded-xl text-sm font-bold text-peregrine-navy bg-white hover:bg-slate-50 border border-slate-300 transition flex items-center justify-center gap-2 shadow-2xs">
+                <span>Listen to Audio Sample</span>
+                <span aria-hidden="true">🎙️</span>
+              </a>
+            </div>
+
+            <!-- Trust Indicator Micro-Banner -->
+            <div class="mt-6 pt-5 border-t border-slate-200/80 flex items-center gap-4 text-[11px] text-slate-500 flex-wrap">
+              <span class="inline-flex items-center gap-1 font-semibold text-slate-700">
+                <span>🛡️</span> 100% Non-Recurring
+              </span>
+              <span>•</span>
+              <span>Instant Token Generation</span>
+              <span>•</span>
+              <span>Lifetime Digital Book Access</span>
+              <span>•</span>
+              <span>1 Year LMS Access</span>
+            </div>
+
+          </div>
+
+          <!-- Right Column: Visual Artifact Showcase (Cover + Seal) -->
+          <div class="lg:col-span-5 relative flex justify-center">
+            
+            <div class="relative w-full max-w-sm sm:max-w-md">
+              
+              <!-- Subtle Backdrop Shadow Card -->
+              <div class="absolute inset-0 bg-gradient-to-tr from-peregrine-900/10 to-peregrine-gold/20 rounded-3xl transform rotate-2 scale-98 filter blur-lg"></div>
+
+              <!-- Main Book & Seal Card Presentation -->
+              <div class="relative bg-white rounded-3xl p-5 sm:p-7 shadow-book border border-slate-200/90 text-left">
+                
+                <!-- Top Badge in Card -->
+                <div class="flex items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-100">
+                  <div class="flex items-center gap-2">
+                    <img src="/images/khaliji-stories-seal.jpeg" alt="Academic Seal" class="w-8 h-8 object-cover rounded-full border border-peregrine-gold/50 shadow-xs" />
+                    <div>
+                      <span class="block text-xs font-extrabold uppercase text-peregrine-navy tracking-wider">Peregrine Academic Edition</span>
+                      <span class="block text-[10px] text-slate-500">Official Dialectal Publication</span>
+                    </div>
+                  </div>
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-peregrine-50 text-peregrine-900 border border-peregrine-200">
+                    2026 Curriculum
+                  </span>
+                </div>
+
+                <!-- Realistic Book Visual with 3D Depth -->
+                <div class="relative mx-auto my-3 flex justify-center group">
+                  <div class="relative transform group-hover:-translate-y-1 transition duration-300">
+                    <img 
+                      src="/images/khaliji-front-cover.jpeg" 
+                      alt="Spoken Arabic Book Cover: Emirati Stories with 952 Audio Recordings" 
+                      class="w-56 sm:w-64 h-auto rounded-lg shadow-2xl book-spine-effect border border-slate-300/80 object-cover"
+                    />
+                    
+                    <!-- Floating Highlight Tag on Book -->
+                    <div class="absolute -bottom-3 -right-3 bg-peregrine-navy text-white px-3 py-1.5 rounded-xl text-[11px] font-bold shadow-lg border border-peregrine-gold/30 flex items-center gap-1.5">
+                      <span class="text-peregrine-gold">★</span>
+                      <span>952 Native Audio Clips</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Snapshot Metrics under book -->
+                <div class="mt-6 grid grid-cols-3 gap-2 text-center pt-4 border-t border-slate-100 bg-peregrine-ivory/60 rounded-xl p-3">
+                  <div>
+                    <div class="text-base sm:text-lg font-black text-peregrine-navy font-mono">40</div>
+                    <div class="text-[10px] uppercase font-bold text-slate-500">Chapters</div>
+                  </div>
+                  <div class="border-x border-slate-200">
+                    <div class="text-base sm:text-lg font-black text-peregrine-900 font-mono">952</div>
+                    <div class="text-[10px] uppercase font-bold text-slate-500">Audio Files</div>
+                  </div>
+                  <div>
+                    <div class="text-base sm:text-lg font-black text-peregrine-navy font-mono">30h</div>
+                    <div class="text-[10px] uppercase font-bold text-slate-500">LMS Videos</div>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- 4. The Peregrine Learning Triad: Architecture of Fluency -->
+    <section id="curriculum-triad" class="py-16 sm:py-24 bg-white border-b border-slate-200/80" aria-labelledby="triad-title">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        
+        <div class="text-center max-w-2xl mx-auto mb-14">
+          <span class="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-peregrine-50 text-peregrine-900 border border-peregrine-200 mb-3">
+            Integrated Pedagogy
+          </span>
+          <h2 id="triad-title" class="text-2xl sm:text-3xl md:text-4xl font-black text-peregrine-navy font-serif tracking-tight">
+            The Three Synchronized Pillars of Fluency
+          </h2>
+          <p class="text-xs sm:text-sm md:text-base text-slate-600 mt-3 leading-relaxed">
+            Language fluency cannot be achieved through passive watching alone. Peregrine Academy unites deep narrative immersion, structured video instruction, and private AI conversational feedback into a single, cohesive ecosystem.
           </p>
         </div>
 
-        <!-- Product Selection Options -->
-        <div class="mb-4 sm:mb-5">
-          <label class="block text-xs font-black uppercase tracking-wider text-slate-700 mb-2">
-            Select Your Package
-          </label>
-          <div class="space-y-2.5" role="radiogroup" aria-label="Select Learning Package">
+        <!-- The 3 Pillars Presentation -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+          
+          <!-- Pillar 1: Digital Reader & Storybook -->
+          <div class="bg-peregrine-warmIvory rounded-3xl p-6 sm:p-8 border border-slate-200 hover:border-peregrine-gold/60 transition shadow-2xs flex flex-col justify-between">
+            <div>
+              <div class="w-12 h-12 rounded-2xl bg-peregrine-900 text-peregrine-goldLight flex items-center justify-center text-xl font-bold mb-5 shadow-xs">
+                📖
+              </div>
+              <span class="text-[10px] font-black uppercase tracking-widest text-peregrine-800 block mb-1">Pillar I • Comprehensive Reading &amp; Listening</span>
+              <h3 class="text-lg sm:text-xl font-extrabold text-slate-950 mb-2">
+                Spoken Arabic Digital Book &amp; Reader
+              </h3>
+              <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                40 narrative chapters written in natural everyday Emirati Arabic. Click any sentence or phrase to trigger authentic native audio with synchronized English translation, word-for-word breakdown, and cultural footnotes.
+              </p>
+              
+              <ul class="space-y-2 text-xs text-slate-700 mb-6">
+                <li class="flex items-start gap-2">
+                  <span class="text-peregrine-600 font-bold">✓</span>
+                  <span><strong>952 Studio Audio Clips:</strong> Native Emirati speaker pronunciation.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-peregrine-600 font-bold">✓</span>
+                  <span><strong>Synchronized Reader App:</strong> Works on phone, tablet, and laptop.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-peregrine-600 font-bold">✓</span>
+                  <span><strong>Lifetime Access:</strong> Single-use cryptographic claim token.</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="pt-4 border-t border-slate-200/80 flex items-center justify-between">
+              <div>
+                <span class="text-[10px] uppercase font-bold text-slate-500 block">Standalone Price</span>
+                <span class="text-sm font-black text-slate-900 font-mono">₹499</span>
+              </div>
+              <a href="#digital-book" class="text-xs font-bold text-peregrine-900 hover:underline">
+                Explore Book &rarr;
+              </a>
+            </div>
+          </div>
+
+          <!-- Pillar 2: 30-Hour LMS Masterclasses -->
+          <div class="bg-white rounded-3xl p-6 sm:p-8 border-2 border-peregrine-900 hover:border-peregrine-950 transition shadow-subtle-elevated flex flex-col justify-between relative">
+            <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-peregrine-900 text-peregrine-goldLight px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-xs">
+              Academic Core
+            </div>
+
+            <div>
+              <div class="w-12 h-12 rounded-2xl bg-peregrine-navy text-white flex items-center justify-center text-xl font-bold mb-5 shadow-xs">
+                🎓
+              </div>
+              <span class="text-[10px] font-black uppercase tracking-widest text-peregrine-800 block mb-1">Pillar II • Structured Video Instruction</span>
+              <h3 class="text-lg sm:text-xl font-extrabold text-slate-950 mb-2">
+                Spoken Arabic LMS Course
+              </h3>
+              <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                30 contact hours of comprehensive video masterclasses credit-aligned with National Higher Education Qualification Framework (NHEQF) guidelines. Decodes phonetic sound transitions, syntax rules, and high-stakes social etiquette.
+              </p>
+
+              <ul class="space-y-2 text-xs text-slate-700 mb-6">
+                <li class="flex items-start gap-2">
+                  <span class="text-peregrine-600 font-bold">✓</span>
+                  <span><strong>30 Contact Hours:</strong> High-definition structured modules.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-peregrine-600 font-bold">✓</span>
+                  <span><strong>Interactive Dialogue Labs:</strong> Pronunciation drilling &amp; quizzes.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-peregrine-600 font-bold">✓</span>
+                  <span><strong>Certificate of Completion:</strong> Verifiable institutional credential.</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+              <div>
+                <span class="text-[10px] uppercase font-bold text-slate-500 block">Standalone Price</span>
+                <span class="text-sm font-black text-slate-900 font-mono">₹1,499</span>
+              </div>
+              <a href="#lms-curriculum" class="text-xs font-bold text-peregrine-900 hover:underline">
+                View Syllabus &rarr;
+              </a>
+            </div>
+          </div>
+
+          <!-- Pillar 3: AI Speaking Partner -->
+          <div class="bg-peregrine-warmIvory rounded-3xl p-6 sm:p-8 border border-slate-200 hover:border-peregrine-gold/60 transition shadow-2xs flex flex-col justify-between">
+            <div>
+              <div class="w-12 h-12 rounded-2xl bg-peregrine-tealDark text-white flex items-center justify-center text-xl font-bold mb-5 shadow-xs">
+                🎙️
+              </div>
+              <span class="text-[10px] font-black uppercase tracking-widest text-peregrine-teal block mb-1">Pillar III • Real-Time Dialectal Practice</span>
+              <h3 class="text-lg sm:text-xl font-extrabold text-slate-950 mb-2">
+                AI Speaking Partner (Rashid &amp; Maryam)
+              </h3>
+              <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                Conversational Emirati dialect practice grounded strictly in the 40 textbook chapters. Practice speaking anytime without embarrassment, receive immediate pronunciation feedback, and develop instinctive verbal reflex.
+              </p>
+
+              <ul class="space-y-2 text-xs text-slate-700 mb-6">
+                <li class="flex items-start gap-2">
+                  <span class="text-peregrine-600 font-bold">✓</span>
+                  <span><strong>Dual Personas:</strong> Practice with male &amp; female native voices.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-peregrine-600 font-bold">✓</span>
+                  <span><strong>RAG Grounded:</strong> Responses align with authentic textbook syntax.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-peregrine-600 font-bold">✓</span>
+                  <span><strong>Preview Pass:</strong> 30-day non-recurring trial included on Reader.</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="pt-4 border-t border-slate-200/80 flex items-center justify-between">
+              <div>
+                <span class="text-[10px] uppercase font-bold text-slate-500 block">Package Inclusion</span>
+                <span class="text-xs font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">FREE for 1st Month</span>
+              </div>
+              <a href="#ai-partner" class="text-xs font-bold text-peregrine-900 hover:underline">
+                See How It Works &rarr;
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 5. Deep-Dive Spotlight 1: The Spoken Arabic Digital Book & Reader (952 Audio Clips) -->
+    <section id="digital-book" class="py-16 sm:py-24 bg-peregrine-ivory border-b border-slate-200/80" aria-labelledby="book-title">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+          
+          <!-- Left Column: Realistic Book Visual and Audio Interactive Preview -->
+          <div class="lg:col-span-5 flex flex-col items-center">
             
-            <!-- Option 1: Complete Learning Package (Book + Course Bundle) -->
-            <label id="card-bundle" class="relative block p-3.5 sm:p-4 rounded-xl border-2 border-emerald-600 bg-emerald-50/40 shadow-xs cursor-pointer transition">
-              <input type="radio" name="product-sku" value="SKU_BUNDLE_ALL_IN_ONE" checked class="sr-only" onchange="selectProduct('SKU_BUNDLE_ALL_IN_ONE')" />
-              <div class="flex items-start justify-between gap-3">
-                <div class="flex items-start gap-2.5 sm:gap-3 min-w-0">
-                  <span id="radio-dot-bundle" class="w-5 h-5 rounded-full border-2 border-emerald-600 bg-emerald-600 flex items-center justify-center flex-shrink-0 mt-0.5 text-white text-xs font-bold">✓</span>
-                  <div class="min-w-0">
-                    <div class="flex items-center gap-2 flex-wrap">
-                      <span class="text-xs sm:text-sm font-black text-slate-950">Complete Arabic Learning Package (Book + Course)</span>
-                      <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-700 text-white">Best Value</span>
-                    </div>
-                    <p class="text-[11px] sm:text-xs text-slate-600 mt-1 leading-relaxed">
-                      Includes <strong>Full 30-Hour Spoken Arabic LMS Course</strong> (1 Year Access) + <strong>Spoken Arabic Digital Book</strong> with 952 native audio clips (Lifetime Access).
-                    </p>
-                    <div class="mt-1.5 flex items-center gap-2 text-[10px] text-emerald-800 font-semibold flex-wrap">
-                      <span>✓ Instant Multi-Platform Delivery</span>
-                      <span>•</span>
-                      <span>✓ Non-Recurring, One-Time Payment</span>
-                    </div>
-                  </div>
-                </div>
-                <div class="text-right flex-shrink-0 pl-1">
-                  <div class="text-sm sm:text-base font-black text-slate-950 font-mono">₹1,998</div>
-                  <div class="text-[10px] text-slate-400 line-through font-mono">₹2,498</div>
-                </div>
+            <div class="relative w-full max-w-sm">
+              <!-- Book Display -->
+              <div class="relative mx-auto flex justify-center mb-6">
+                <img 
+                  src="/images/khaliji-front-cover.jpeg" 
+                  alt="Spoken Arabic Book Cover: Emirati Stories" 
+                  class="w-60 sm:w-72 h-auto rounded-xl shadow-book book-spine-effect border border-slate-200 object-cover"
+                />
               </div>
-            </label>
 
-            <!-- Option 2: Spoken Arabic LMS Course -->
-            <label id="card-lms" class="relative block p-3.5 sm:p-4 rounded-xl border border-slate-200 bg-white shadow-xs cursor-pointer transition hover:border-slate-400">
-              <input type="radio" name="product-sku" value="SKU_LMS_SPOKEN_ARABIC" class="sr-only" onchange="selectProduct('SKU_LMS_SPOKEN_ARABIC')" />
-              <div class="flex items-start justify-between gap-3">
-                <div class="flex items-start gap-2.5 sm:gap-3 min-w-0">
-                  <span id="radio-dot-lms" class="w-5 h-5 rounded-full border border-slate-300 bg-white flex items-center justify-center flex-shrink-0 mt-0.5 text-white text-xs font-bold"></span>
-                  <div class="min-w-0">
-                    <span class="text-xs sm:text-sm font-bold text-slate-900 block">Spoken Arabic LMS Course (30 Contact Hours)</span>
-                    <p class="text-[11px] sm:text-xs text-slate-600 mt-0.5 leading-relaxed">
-                      Structured video lessons, speaking labs, and certificate of completion. 1 Year full access on learn.peregrineacademy.in.
-                    </p>
+              <!-- Interactive Simulated Native Audio Player Widget -->
+              <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm text-left">
+                <div class="flex items-center justify-between gap-2 mb-3 pb-2 border-b border-slate-100">
+                  <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span class="text-xs font-extrabold uppercase text-slate-800">Sample Native Pronunciation</span>
                   </div>
+                  <span class="text-[10px] font-mono text-slate-400">Audio #014</span>
                 </div>
-                <div class="text-right flex-shrink-0 pl-1">
-                  <div class="text-sm sm:text-base font-extrabold text-slate-900 font-mono">₹1,499</div>
-                  <div class="text-[10px] text-slate-400 line-through font-mono">₹2,499</div>
-                </div>
-              </div>
-            </label>
 
-            <!-- Option 3: Spoken Arabic Digital Book -->
-            <label id="card-book" class="relative block p-3.5 sm:p-4 rounded-xl border border-slate-200 bg-white shadow-xs cursor-pointer transition hover:border-slate-400">
-              <input type="radio" name="product-sku" value="SKU_BOOK_KHALIJI_STORIES" class="sr-only" onchange="selectProduct('SKU_BOOK_KHALIJI_STORIES')" />
-              <div class="flex items-start justify-between gap-3">
-                <div class="flex items-start gap-2.5 sm:gap-3 min-w-0">
-                  <span id="radio-dot-book" class="w-5 h-5 rounded-full border border-slate-300 bg-white flex items-center justify-center flex-shrink-0 mt-0.5 text-white text-xs font-bold"></span>
-                  <div class="min-w-0">
-                    <span class="text-xs sm:text-sm font-bold text-slate-900 block">Spoken Arabic Book (Digital Reader)</span>
-                    <p class="text-[11px] sm:text-xs text-slate-600 mt-0.5 leading-relaxed">
-                      40 narrative chapters with 952 synchronized native Emirati audio clips and grammar glosses. Lifetime digital access.
-                    </p>
+                <!-- Arabic Audio Clip Sample -->
+                <div class="bg-peregrine-warmIvory rounded-xl p-3 border border-slate-200 mb-3">
+                  <div class="font-arabic text-base sm:text-lg font-bold text-peregrine-900 text-right mb-1" dir="rtl">
+                    «مرحبا الساع يا بو سلطان، شو حالك وكيف الأهل؟»
+                  </div>
+                  <div class="text-[11px] text-slate-600 italic">
+                    "Marhaba al-saa', ya Bu Sultan! How are you doing, and how is your family?"
                   </div>
                 </div>
-                <div class="text-right flex-shrink-0 pl-1">
-                  <div class="text-sm sm:text-base font-extrabold text-slate-900 font-mono">₹499</div>
-                  <div class="text-[10px] text-slate-400 line-through font-mono">₹999</div>
+
+                <!-- Audio Waveform Simulation Bar -->
+                <div class="flex items-center justify-between gap-3">
+                  <button 
+                    type="button" 
+                    id="sample-audio-btn" 
+                    onclick="toggleAudioSimulation()" 
+                    class="min-h-[44px] px-3.5 py-1.5 rounded-xl bg-peregrine-900 hover:bg-peregrine-950 text-peregrine-goldLight text-xs font-bold flex items-center gap-2 transition"
+                    aria-label="Play sample phrase pronunciation"
+                  >
+                    <span id="audio-icon">▶</span>
+                    <span id="audio-btn-label">Play Clip</span>
+                  </button>
+
+                  <div class="flex items-center gap-1 h-6" aria-hidden="true">
+                    <span class="w-1 bg-peregrine-900 rounded-full sound-bar"></span>
+                    <span class="w-1 bg-peregrine-900 rounded-full sound-bar"></span>
+                    <span class="w-1 bg-peregrine-900 rounded-full sound-bar"></span>
+                    <span class="w-1 bg-peregrine-900 rounded-full sound-bar"></span>
+                    <span class="w-1 bg-peregrine-900 rounded-full sound-bar"></span>
+                    <span class="w-1 bg-peregrine-900 rounded-full sound-bar"></span>
+                  </div>
+
+                  <span class="text-[10px] font-mono text-slate-500">Native Speaker</span>
                 </div>
+
               </div>
-            </label>
+
+            </div>
 
           </div>
 
-          <!-- AI Speaking Partner Informational Card -->
-          <div class="mt-3 p-3 rounded-xl bg-slate-50 border border-slate-200/90 flex items-start justify-between gap-3 text-xs leading-relaxed">
-            <div class="flex items-start gap-2.5 min-w-0">
-              <div class="w-7 h-7 rounded-lg bg-emerald-700 text-white flex items-center justify-center flex-shrink-0 mt-0.5" aria-hidden="true">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z" />
-                </svg>
-              </div>
-              <div class="min-w-0">
-                <div class="flex items-center gap-1.5 flex-wrap">
-                  <strong class="font-bold text-slate-900">AI Speaking Partner (Rashid &amp; Maryam)</strong>
-                  <span class="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-800">Preview Available</span>
+          <!-- Right Column: Book Pedagogy & Story Highlights -->
+          <div class="lg:col-span-7 text-left">
+            
+            <span class="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-100 text-amber-900 border border-amber-200 mb-3">
+              The Digital Reader Experience
+            </span>
+
+            <h2 id="book-title" class="text-2xl sm:text-3xl md:text-4xl font-black text-peregrine-navy font-serif tracking-tight leading-tight mb-4">
+              40 Narrative Stories. 952 Synchronized Audio Recordings.
+            </h2>
+
+            <p class="text-sm sm:text-base text-slate-700 leading-relaxed mb-6">
+              Unlike dry vocabulary lists, <strong>Spoken Arabic Book (Digital Reader)</strong> immerses you in the lived experience of Emirati culture. Follow continuous narrative arcs spanning airport arrivals, corporate meetings in Dubai, negotiating contracts in Abu Dhabi, hospital consultations, desert excursions, and intimate majlis gatherings.
+            </p>
+
+            <!-- Key Academic Features of the Book -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+              
+              <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+                <div class="text-base font-extrabold text-slate-900 mb-1 flex items-center gap-2">
+                  <span class="text-peregrine-gold">★</span>
+                  <span>952 Native Audio Clips</span>
                 </div>
-                <p class="text-[11px] text-slate-600 mt-0.5">
-                  Conversational Emirati dialect practice. Available in preview directly on the Reader app (30-day non-recurring trial; no auto-debit).
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  Every dialogue sentence is recorded by authentic native Emirati speakers so you develop natural intonation, cadence, and phonetics.
                 </p>
               </div>
+
+              <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+                <div class="text-base font-extrabold text-slate-900 mb-1 flex items-center gap-2">
+                  <span class="text-peregrine-gold">★</span>
+                  <span>Word-by-Word Glosses</span>
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  Never guess word roots. Hover or click to reveal phonetic transliteration, grammatical category, and Modern Standard Arabic root comparison.
+                </p>
+              </div>
+
+              <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+                <div class="text-base font-extrabold text-slate-900 mb-1 flex items-center gap-2">
+                  <span class="text-peregrine-gold">★</span>
+                  <span>Cultural Etiquette Notes</span>
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  Detailed commentary on how to address elders, response etiquette to customary greetings, and contextual nuance in Gulf hospitality.
+                </p>
+              </div>
+
+              <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+                <div class="text-base font-extrabold text-slate-900 mb-1 flex items-center gap-2">
+                  <span class="text-peregrine-gold">★</span>
+                  <span>Lifetime Cross-Platform Access</span>
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  Instant token delivery unlocks the full reader SPA on <code>arabic.peregrineacademy.in</code> across smartphone, tablet, or browser with no app store downloads needed.
+                </p>
+              </div>
+
             </div>
-            <a href="https://arabic.peregrineacademy.in/#ai-tutor" target="_blank" rel="noopener noreferrer" class="text-emerald-800 hover:text-emerald-950 font-bold whitespace-nowrap self-center text-[11px] underline flex-shrink-0">
-              Explore &rarr;
-            </a>
+
+            <!-- Book CTA Row -->
+            <div class="flex items-center gap-4 flex-wrap">
+              <a href="#checkout-terminal" class="min-h-[44px] px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-peregrine-900 hover:bg-peregrine-950 transition flex items-center gap-2 shadow-xs">
+                <span>Enroll with Book (₹499)</span>
+                <span aria-hidden="true">&rarr;</span>
+              </a>
+              <a href="https://arabic.peregrineacademy.in/" target="_blank" rel="noopener noreferrer" class="min-h-[44px] px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 transition flex items-center gap-1.5">
+                <span>View Reader Platform</span>
+                <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+
           </div>
+
         </div>
 
-        <!-- Total Payable Summary Box -->
-        <div class="p-3.5 sm:p-4 rounded-xl bg-slate-50 border border-slate-200 mb-5">
-          <div class="flex items-baseline justify-between gap-2">
-            <div>
-              <span class="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-slate-700">Total Payable</span>
-              <div id="package-breakdown-display" class="text-[10px] sm:text-[11px] text-slate-500 mt-0.5">
-                (₹1,499 Course + ₹499 Book • One-time Payment)
+      </div>
+    </section>
+
+    <!-- 6. Deep-Dive Spotlight 2: The 30-Contact-Hour LMS Masterclasses -->
+    <section id="lms-curriculum" class="py-16 sm:py-24 bg-white border-b border-slate-200/80" aria-labelledby="lms-title">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        
+        <div class="text-center max-w-2xl mx-auto mb-14">
+          <span class="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-peregrine-50 text-peregrine-900 border border-peregrine-200 mb-3">
+            Academic Curriculum
+          </span>
+          <h2 id="lms-title" class="text-2xl sm:text-3xl md:text-4xl font-black text-peregrine-navy font-serif tracking-tight">
+            30 Contact Hours of Guided Video Masterclasses
+          </h2>
+          <p class="text-xs sm:text-sm md:text-base text-slate-600 mt-3 leading-relaxed">
+            Hosted on the official Next.js Peregrine LMS platform (<code>learn.peregrineacademy.in</code>). Credit-aligned with National Higher Education Qualification Framework (NHEQF) guidelines.
+          </p>
+        </div>
+
+        <!-- 5 Progressive Modules Curriculum Grid -->
+        <div class="space-y-4 max-w-3xl mx-auto mb-12">
+          
+          <!-- Module 1 -->
+          <div class="p-5 rounded-2xl bg-peregrine-warmIvory border border-slate-200 shadow-2xs hover:border-slate-300 transition">
+            <div class="flex items-start justify-between gap-4">
+              <div class="flex items-start gap-3">
+                <span class="w-8 h-8 rounded-xl bg-peregrine-900 text-peregrine-goldLight flex items-center justify-center text-xs font-mono font-bold flex-shrink-0 mt-0.5">01</span>
+                <div>
+                  <h3 class="text-sm sm:text-base font-extrabold text-slate-900">
+                    Phonetic System &amp; Distinctive Gulf Sound Shifts
+                  </h3>
+                  <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                    Systematic mastery of the phonetic variations between Modern Standard Arabic and Emirati dialect: the shift of <em>Jim</em> to <em>Yaa</em> (<em>masjid</em> &rarr; <em>masyid</em>), <em>Qaf</em> to <em>Gaaf</em> or <em>Jim</em>, and <em>Kaf</em> to <em>Chaf</em> (<em>kayfa haluk</em> &rarr; <em>chayf halik</em>).
+                  </p>
+                  <div class="mt-2 flex items-center gap-2 text-[11px] text-peregrine-800 font-semibold flex-wrap">
+                    <span>6 Video Lessons</span>
+                    <span>•</span>
+                    <span>Sound Comparison Lab</span>
+                    <span>•</span>
+                    <span>Phonetic Drill Workbook</span>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="text-right">
-              <span id="package-total-display" class="text-xl sm:text-2xl font-black text-slate-950 font-mono">₹1,998</span>
+          </div>
+
+          <!-- Module 2 -->
+          <div class="p-5 rounded-2xl bg-peregrine-warmIvory border border-slate-200 shadow-2xs hover:border-slate-300 transition">
+            <div class="flex items-start justify-between gap-4">
+              <div class="flex items-start gap-3">
+                <span class="w-8 h-8 rounded-xl bg-peregrine-900 text-peregrine-goldLight flex items-center justify-center text-xs font-mono font-bold flex-shrink-0 mt-0.5">02</span>
+                <div>
+                  <h3 class="text-sm sm:text-base font-extrabold text-slate-900">
+                    The Emirati Majlis: Hospitality, Kinship &amp; Social Nuance
+                  </h3>
+                  <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                    Master the high-stakes cultural protocols of entering, greeting, and participating in an authentic Gulf majlis. Complex greeting formulas, offering and receiving gahwa (Arabic coffee), and customary poetic compliments.
+                  </p>
+                  <div class="mt-2 flex items-center gap-2 text-[11px] text-peregrine-800 font-semibold flex-wrap">
+                    <span>8 Video Lessons</span>
+                    <span>•</span>
+                    <span>Real-Life Majlis Simulation</span>
+                    <span>•</span>
+                    <span>Audio Etiquette Guide</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="mt-2 pt-2 border-t border-slate-200/80 text-[10px] sm:text-[11px] text-slate-500 leading-tight">
-            🔒 <strong>Direct digital delivery:</strong> Access credentials and claim links are generated immediately upon confirmed payment. No recurring charges, subscriptions, or hidden fees.
+
+          <!-- Module 3 -->
+          <div class="p-5 rounded-2xl bg-peregrine-warmIvory border border-slate-200 shadow-2xs hover:border-slate-300 transition">
+            <div class="flex items-start justify-between gap-4">
+              <div class="flex items-start gap-3">
+                <span class="w-8 h-8 rounded-xl bg-peregrine-900 text-peregrine-goldLight flex items-center justify-center text-xs font-mono font-bold flex-shrink-0 mt-0.5">03</span>
+                <div>
+                  <h3 class="text-sm sm:text-base font-extrabold text-slate-900">
+                    Workplace, Commerce &amp; Public Affairs in the UAE
+                  </h3>
+                  <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                    Language tailored for executives, diplomats, lawyers, and healthcare professionals. Navigating ministries, contracting terms, commercial negotiations, and building peer relationships with Emirati colleagues.
+                  </p>
+                  <div class="mt-2 flex items-center gap-2 text-[11px] text-peregrine-800 font-semibold flex-wrap">
+                    <span>7 Video Lessons</span>
+                    <span>•</span>
+                    <span>Executive Dialogue Scripts</span>
+                    <span>•</span>
+                    <span>Commercial Glossary</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
+
+          <!-- Module 4 -->
+          <div class="p-5 rounded-2xl bg-peregrine-warmIvory border border-slate-200 shadow-2xs hover:border-slate-300 transition">
+            <div class="flex items-start justify-between gap-4">
+              <div class="flex items-start gap-3">
+                <span class="w-8 h-8 rounded-xl bg-peregrine-900 text-peregrine-goldLight flex items-center justify-center text-xs font-mono font-bold flex-shrink-0 mt-0.5">04</span>
+                <div>
+                  <h3 class="text-sm sm:text-base font-extrabold text-slate-900">
+                    High-Frequency Emirati Syntax &amp; Conversational Reflex
+                  </h3>
+                  <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                    Internalize the distinctive grammatical markers of Gulf Arabic: dialectal negations (<em>mā... shē</em>), future tense prefixes (<em>ba-</em> and <em>rāyih</em>), continuous aspect markers (<em>gā'id</em>), and colloquial interrogatives (<em>laysh</em>, <em>shō</em>, <em>wayn</em>).
+                  </p>
+                  <div class="mt-2 flex items-center gap-2 text-[11px] text-peregrine-800 font-semibold flex-wrap">
+                    <span>5 Video Lessons</span>
+                    <span>•</span>
+                    <span>Syntax Quick-Reference Cards</span>
+                    <span>•</span>
+                    <span>Grammar Exercises</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Module 5 -->
+          <div class="p-5 rounded-2xl bg-peregrine-warmIvory border border-slate-200 shadow-2xs hover:border-slate-300 transition">
+            <div class="flex items-start justify-between gap-4">
+              <div class="flex items-start gap-3">
+                <span class="w-8 h-8 rounded-xl bg-peregrine-900 text-peregrine-goldLight flex items-center justify-center text-xs font-mono font-bold flex-shrink-0 mt-0.5">05</span>
+                <div>
+                  <h3 class="text-sm sm:text-base font-extrabold text-slate-900">
+                    Spontaneous Fluency, Gulf Idioms &amp; Capstone Assessment
+                  </h3>
+                  <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                    Master popular proverbs, humorous expressions, and spontaneous conversational transitions. Complete the final speaking assessment to earn your official Peregrine Academy Certificate of Completion.
+                  </p>
+                  <div class="mt-2 flex items-center gap-2 text-[11px] text-peregrine-800 font-semibold flex-wrap">
+                    <span>4 Video Lessons</span>
+                    <span>•</span>
+                    <span>Graded Speaking Lab</span>
+                    <span>•</span>
+                    <span>Official Completion Certificate</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
 
-        <!-- Error / Notification Alert Message Box -->
-        <div id="checkout-error" class="hidden mb-4 text-xs text-red-800 bg-red-50 p-3 rounded-xl border border-red-200 font-medium leading-relaxed" role="alert" aria-live="polite"></div>
+        <!-- LMS Platform Links & Verification Details -->
+        <div class="bg-peregrine-ivory rounded-2xl p-6 border border-slate-200 text-center max-w-2xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div class="text-left">
+            <div class="text-xs font-bold text-slate-900">Direct LMS Platform Portal</div>
+            <div class="text-[11px] text-slate-500">Course ID: <code>23c9297a-a4c2-4237-baa7-244646de1662</code> • 1 Year Full Student Access</div>
+          </div>
+          <a href="https://learn.peregrineacademy.in/" target="_blank" rel="noopener noreferrer" class="min-h-[44px] px-5 py-2 rounded-xl text-xs font-bold text-white bg-peregrine-navy hover:bg-black transition flex items-center gap-1.5 flex-shrink-0">
+            <span>Access LMS Platform</span>
+            <span>↗</span>
+          </a>
+        </div>
 
-        <!-- Customer Contact Details Form -->
-        <form id="order-form" onsubmit="handleCheckoutSubmit(event)" class="space-y-3 sm:space-y-3.5" novalidate>
-          <div>
-            <label for="cust-name" class="block text-xs font-bold text-slate-700 mb-1">
-              Full Name <span class="text-red-500" aria-hidden="true">*</span>
-            </label>
-            <input type="text" id="cust-name" required placeholder="e.g. Sultan Al-Dhaheri" class="w-full min-h-[44px] px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition bg-slate-50/50" autocomplete="name" />
+      </div>
+    </section>
+
+    <!-- 7. Deep-Dive Spotlight 3: AI Speaking Partner (Rashid & Maryam) -->
+    <section id="ai-partner" class="py-16 sm:py-24 bg-peregrine-warmIvory border-b border-slate-200/80" aria-labelledby="ai-title">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+          
+          <!-- Left Column: AI Pedagogy & Transparent Terms -->
+          <div class="lg:col-span-7 text-left">
+            
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-peregrine-teal/10 border border-peregrine-teal/20 text-xs font-bold text-peregrine-tealDark mb-4">
+              <span>Artificial Intelligence Guided Practice</span>
+              <span class="text-slate-300">•</span>
+              <span>Available in Preview</span>
+            </div>
+
+            <h2 id="ai-title" class="text-2xl sm:text-3xl md:text-4xl font-black text-peregrine-navy font-serif tracking-tight leading-tight mb-4">
+              Conversational Practice Grounded in Academic Scholarship.
+            </h2>
+
+            <p class="text-sm sm:text-base text-slate-700 leading-relaxed mb-6">
+              Most generic language apps rely on generic LLMs that hallucinate Modern Standard Arabic phrases that no native Emirati actually uses in daily life. Peregrine's <strong>AI Speaking Partner (Rashid &amp; Maryam)</strong> is fine-tuned strictly on our 40-chapter curriculum, teaching genuine Gulf colloquial speech and correcting phonetics in real time.
+            </p>
+
+            <div class="space-y-3.5 mb-8 text-xs sm:text-sm text-slate-700">
+              <div class="flex items-start gap-3">
+                <span class="w-6 h-6 rounded-lg bg-peregrine-teal text-white flex items-center justify-center flex-shrink-0 text-xs font-bold mt-0.5">1</span>
+                <div>
+                  <strong class="font-bold text-slate-900">Zero Embarrassment:</strong> Practice speaking out loud in complete privacy until your verbal reflexes become second nature.
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <span class="w-6 h-6 rounded-lg bg-peregrine-teal text-white flex items-center justify-center flex-shrink-0 text-xs font-bold mt-0.5">2</span>
+                <div>
+                  <strong class="font-bold text-slate-900">Curriculum Grounding:</strong> Prompts draw directly from the 40 textbook chapters so lessons reinforce each other.
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <span class="w-6 h-6 rounded-lg bg-peregrine-teal text-white flex items-center justify-center flex-shrink-0 text-xs font-bold mt-0.5">3</span>
+                <div>
+                  <strong class="font-bold text-slate-900">Honest &amp; Non-Recurring:</strong> Available as a 30-day preview pass directly on the Reader app (<code>arabic.peregrineacademy.in/#ai-tutor</code>). No auto-renewal, no subscription lock-in.
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-4 flex-wrap">
+              <a href="#checkout-terminal" class="min-h-[44px] px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-peregrine-tealDark hover:bg-peregrine-teal transition flex items-center gap-2 shadow-xs">
+                <span>Unlock Complete Package (₹1,998)</span>
+                <span aria-hidden="true">&rarr;</span>
+              </a>
+              <a href="https://arabic.peregrineacademy.in/#ai-tutor" target="_blank" rel="noopener noreferrer" class="min-h-[44px] px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 transition flex items-center gap-1.5">
+                <span>Explore AI Showcase</span>
+                <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+
           </div>
 
-          <div>
-            <label for="cust-email" class="block text-xs font-bold text-slate-700 mb-1">
-              Email Address <span class="text-red-500" aria-hidden="true">*</span> 
-              <span class="text-slate-400 font-normal text-[11px]">(Access credentials sent here)</span>
-            </label>
-            <input type="email" id="cust-email" required placeholder="scholar@example.com" class="w-full min-h-[44px] px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition bg-slate-50/50" autocomplete="email" />
+          <!-- Right Column: Interactive Chat Interface Simulation -->
+          <div class="lg:col-span-5">
+            
+            <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200 shadow-book text-left">
+              
+              <!-- Chat Header -->
+              <div class="flex items-center justify-between gap-3 pb-3 mb-4 border-b border-slate-100">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-9 h-9 rounded-full bg-peregrine-teal text-white flex items-center justify-center font-bold text-xs">
+                    R
+                  </div>
+                  <div>
+                    <span class="block text-xs font-bold text-slate-900">Rashid (AI Partner)</span>
+                    <span class="block text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                      Emirati Voice Model Active
+                    </span>
+                  </div>
+                </div>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600">
+                  Preview Mode
+                </span>
+              </div>
+
+              <!-- Message Dialogue -->
+              <div class="space-y-3 mb-4 text-xs">
+                
+                <!-- AI Message -->
+                <div class="bg-slate-50 p-3 rounded-2xl rounded-tl-sm border border-slate-200 max-w-[90%]">
+                  <div class="font-arabic text-sm font-bold text-peregrine-900 mb-1" dir="rtl">
+                    «السلام عليكم يا محمد! جاهز نتدرب على حوار المجلس؟»
+                  </div>
+                  <div class="text-[11px] text-slate-500">
+                    "Peace be upon you, Mohammed! Ready to practice the majlis greeting dialogue?"
+                  </div>
+                </div>
+
+                <!-- Learner Response -->
+                <div class="bg-peregrine-900 text-white p-3 rounded-2xl rounded-tr-sm max-w-[90%] ml-auto text-right">
+                  <div class="font-arabic text-sm font-bold mb-1" dir="rtl">
+                    «وعليكم السلام يا راشد، مرحبابك الساع!»
+                  </div>
+                  <div class="text-[11px] text-slate-200 text-left">
+                    "And upon you be peace, Rashid. Most welcome!"
+                  </div>
+                </div>
+
+                <!-- AI Phonetic Feedback -->
+                <div class="bg-emerald-50 border border-emerald-200 p-2.5 rounded-xl text-[11px] text-emerald-900">
+                  <span class="font-bold">✨ Phonetic Evaluation:</span> 98% accuracy. Excellent use of the traditional welcoming suffix <em>al-saa'</em>.
+                </div>
+
+              </div>
+
+              <div class="pt-3 border-t border-slate-100 text-center">
+                <span class="text-[10px] text-slate-400">Available across all 40 textbook situational modules</span>
+              </div>
+
+            </div>
+
           </div>
 
-          <div>
-            <label for="cust-phone" class="block text-xs font-bold text-slate-700 mb-1">
-              Mobile / WhatsApp 
-              <span class="text-slate-400 font-normal text-[11px]">(Optional, for instant notification)</span>
-            </label>
-            <input type="tel" id="cust-phone" placeholder="+971 50 000 0000" class="w-full min-h-[44px] px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition bg-slate-50/50" autocomplete="tel" />
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 8. Academic Leadership & Institutional Credibility -->
+    <section id="academic-leadership" class="py-16 sm:py-24 bg-white border-b border-slate-200/80" aria-labelledby="faculty-title">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        
+        <div class="bg-gradient-to-br from-peregrine-navy to-peregrine-navyDark rounded-3xl p-8 sm:p-12 text-white shadow-xl relative overflow-hidden">
+          
+          <!-- Subtle Background Watermark Seal -->
+          <img 
+            src="/images/peregrine-academy-seal.png" 
+            alt="Peregrine Seal Background" 
+            class="absolute -right-20 -bottom-20 w-96 h-auto opacity-10 pointer-events-none filter blur-xs"
+          />
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+            
+            <div class="lg:col-span-8 text-left">
+              <span class="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-peregrine-gold/20 text-peregrine-goldLight border border-peregrine-gold/30 mb-4">
+                Academic Direction &amp; Faculty
+              </span>
+
+              <h2 id="faculty-title" class="text-2xl sm:text-3xl md:text-4xl font-black font-serif tracking-tight mb-4 leading-tight">
+                Led by Dr. Muhammed Swalih T (PhD, EFLU Hyderabad)
+              </h2>
+
+              <p class="text-sm sm:text-base text-slate-300 leading-relaxed mb-4">
+                Peregrine Academy was founded to bridge the gap between abstract academic linguistics and the practical dialectal communication required for social, commercial, and governmental success across the United Arab Emirates.
+              </p>
+
+              <p class="text-xs sm:text-sm text-slate-400 leading-relaxed mb-6">
+                Under the academic stewardship of Dr. Muhammed Swalih T (PhD, The English and Foreign Languages University - EFLU, Hyderabad), every syllabus unit, native audio recording, and syntax drill is rigorously validated for dialectal precision and pedagogical efficacy. Peregrine Academy operates as the specialized language education initiative of <strong>Peregrine Training &amp; Consulting</strong>.
+              </p>
+
+              <div class="flex items-center gap-6 pt-2 border-t border-slate-700/80 flex-wrap">
+                <div>
+                  <span class="block text-base font-bold text-white">EFLU Hyderabad</span>
+                  <span class="block text-[11px] text-slate-400">Doctor of Philosophy (PhD)</span>
+                </div>
+                <div class="h-8 w-px bg-slate-700 hidden sm:block"></div>
+                <div>
+                  <span class="block text-base font-bold text-white">Peregrine Innovation LLP</span>
+                  <span class="block text-[11px] text-slate-400">Institutional Training Division</span>
+                </div>
+                <div class="h-8 w-px bg-slate-700 hidden sm:block"></div>
+                <div>
+                  <span class="block text-base font-bold text-white">NHEQF Credit-Aligned</span>
+                  <span class="block text-[11px] text-slate-400">Higher Education Standards</span>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Right Column Seal Badge -->
+            <div class="lg:col-span-4 flex justify-center">
+              <div class="text-center p-6 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm max-w-xs">
+                <img 
+                  src="/images/peregrine-academy-seal.png" 
+                  alt="Official Seal of Peregrine Academy" 
+                  class="w-32 sm:w-36 h-auto mx-auto mb-3 object-contain drop-shadow-md"
+                />
+                <span class="block text-xs font-extrabold uppercase tracking-widest text-peregrine-goldLight">Academic Seal</span>
+                <span class="block text-[11px] text-slate-300 mt-0.5">Peregrine Training &amp; Consulting</span>
+              </div>
+            </div>
+
           </div>
 
-          <!-- Prominent Checkout CTA Button -->
-          <div class="pt-2">
-            <button type="submit" id="submit-pay-btn" class="w-full min-h-[48px] py-3.5 sm:py-4 px-4 rounded-xl text-sm sm:text-base font-bold text-white bg-emerald-800 hover:bg-emerald-900 active:bg-emerald-950 select-none transition flex items-center justify-center gap-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2">
-              <span aria-hidden="true">🔒</span>
-              <span id="btn-text">Proceed to Secure Payment</span>
-              <span id="btn-price-badge" class="text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-900 text-amber-200 font-mono">₹1,998</span>
-              <span aria-hidden="true">&rarr;</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 9. Primary Checkout Terminal & Commerce Engine -->
+    <section id="checkout-terminal" class="py-16 sm:py-24 bg-peregrine-warmIvory border-b border-slate-200/80" aria-labelledby="checkout-heading">
+      
+      <div class="max-w-2xl mx-auto px-4 sm:px-6">
+        
+        <!-- Section Header -->
+        <div class="text-center mb-8 sm:mb-10">
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-peregrine-900/5 border border-peregrine-900/15 text-[11px] font-bold text-peregrine-900 mb-3">
+            <span>Direct Student Enrollment</span>
+            <span class="text-slate-300">•</span>
+            <span>Non-Recurring Payment</span>
+          </div>
+          
+          <h2 id="checkout-heading" class="text-2xl sm:text-3xl font-black text-peregrine-navy font-serif tracking-tight leading-tight">
+            Complete Your Arabic Learning Package
+          </h2>
+          
+          <p class="text-xs sm:text-sm text-slate-600 max-w-lg mx-auto mt-2 leading-relaxed">
+            Select your preferred package below. Digital claim tokens and LMS course enrollment are issued immediately upon payment verification.
+          </p>
+        </div>
+
+        <!-- The Elevated Checkout Card Container -->
+        <div class="bg-white rounded-3xl border border-slate-200 shadow-book p-4 sm:p-7 md:p-8 transition-all">
+          
+          <!-- Step 1: Active Order Screen -->
+          <section id="checkout-order-section" aria-labelledby="package-selection-heading">
+            
+            <h3 id="package-selection-heading" class="sr-only">Choose Your Package</h3>
+
+            <!-- Product Selection Radio Cards -->
+            <div class="mb-5 sm:mb-6">
+              <label class="block text-xs font-black uppercase tracking-wider text-slate-800 mb-2.5">
+                Select Your Package
+              </label>
+
+              <div class="space-y-3" role="radiogroup" aria-label="Select Learning Package">
+                
+                <!-- Option 1: Complete Learning Package (Bundle: Book + Course) -->
+                <label id="card-bundle" class="relative block p-4 sm:p-5 rounded-2xl border-2 border-peregrine-800 bg-peregrine-50/60 shadow-xs cursor-pointer transition">
+                  <input type="radio" name="product-sku" value="SKU_BUNDLE_ALL_IN_ONE" checked class="sr-only" onchange="selectProduct('SKU_BUNDLE_ALL_IN_ONE')" />
+                  <div class="flex items-start justify-between gap-3">
+                    <div class="flex items-start gap-3 min-w-0">
+                      <span id="radio-dot-bundle" class="w-5 h-5 rounded-full border-2 border-peregrine-800 bg-peregrine-800 flex items-center justify-center flex-shrink-0 mt-0.5 text-white text-xs font-bold">✓</span>
+                      <div class="min-w-0">
+                        <div class="flex items-center gap-2 flex-wrap">
+                          <span class="text-xs sm:text-sm font-black text-slate-950">Complete Arabic Learning Package (Book + Course)</span>
+                          <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-peregrine-900 text-peregrine-goldLight">Best Value</span>
+                        </div>
+                        <p class="text-[11px] sm:text-xs text-slate-600 mt-1 leading-relaxed">
+                          Includes <strong>Spoken Arabic LMS Course</strong> (30 Contact Hours, 1 Year Access) + <strong>Spoken Arabic Book</strong> with 952 native audio clips (Lifetime Digital Reader Access).
+                        </p>
+                        <div class="mt-2 flex items-center gap-2 text-[10px] text-peregrine-900 font-semibold flex-wrap">
+                          <span>✓ Instant Multi-Platform Delivery</span>
+                          <span>•</span>
+                          <span>✓ Single One-Time Payment (No Auto-Debit)</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="text-right flex-shrink-0 pl-1">
+                      <div class="text-sm sm:text-base font-black text-slate-950 font-mono">₹1,998</div>
+                      <div class="text-[10px] text-slate-400 line-through font-mono">₹2,498</div>
+                    </div>
+                  </div>
+                </label>
+
+                <!-- Option 2: Spoken Arabic LMS Course -->
+                <label id="card-lms" class="relative block p-4 sm:p-5 rounded-2xl border border-slate-200 bg-white shadow-xs cursor-pointer transition hover:border-slate-400">
+                  <input type="radio" name="product-sku" value="SKU_LMS_SPOKEN_ARABIC" class="sr-only" onchange="selectProduct('SKU_LMS_SPOKEN_ARABIC')" />
+                  <div class="flex items-start justify-between gap-3">
+                    <div class="flex items-start gap-3 min-w-0">
+                      <span id="radio-dot-lms" class="w-5 h-5 rounded-full border border-slate-300 bg-white flex items-center justify-center flex-shrink-0 mt-0.5 text-white text-xs font-bold"></span>
+                      <div class="min-w-0">
+                        <span class="text-xs sm:text-sm font-bold text-slate-900 block">Spoken Arabic LMS Course (30 Contact Hours)</span>
+                        <p class="text-[11px] sm:text-xs text-slate-600 mt-0.5 leading-relaxed">
+                          30 hours of structured video lessons, speaking labs, and certificate of completion. 1 Year full access on <code>learn.peregrineacademy.in</code>.
+                        </p>
+                      </div>
+                    </div>
+                    <div class="text-right flex-shrink-0 pl-1">
+                      <div class="text-sm sm:text-base font-extrabold text-slate-900 font-mono">₹1,499</div>
+                      <div class="text-[10px] text-slate-400 line-through font-mono">₹2,499</div>
+                    </div>
+                  </div>
+                </label>
+
+                <!-- Option 3: Spoken Arabic Digital Book -->
+                <label id="card-book" class="relative block p-4 sm:p-5 rounded-2xl border border-slate-200 bg-white shadow-xs cursor-pointer transition hover:border-slate-400">
+                  <input type="radio" name="product-sku" value="SKU_BOOK_KHALIJI_STORIES" class="sr-only" onchange="selectProduct('SKU_BOOK_KHALIJI_STORIES')" />
+                  <div class="flex items-start justify-between gap-3">
+                    <div class="flex items-start gap-3 min-w-0">
+                      <span id="radio-dot-book" class="w-5 h-5 rounded-full border border-slate-300 bg-white flex items-center justify-center flex-shrink-0 mt-0.5 text-white text-xs font-bold"></span>
+                      <div class="min-w-0">
+                        <span class="text-xs sm:text-sm font-bold text-slate-900 block">Spoken Arabic Book (Digital Reader)</span>
+                        <p class="text-[11px] sm:text-xs text-slate-600 mt-0.5 leading-relaxed">
+                          40 narrative chapters with 952 synchronized native Emirati audio clips and grammar glosses. Lifetime digital access on <code>arabic.peregrineacademy.in</code>.
+                        </p>
+                      </div>
+                    </div>
+                    <div class="text-right flex-shrink-0 pl-1">
+                      <div class="text-sm sm:text-base font-extrabold text-slate-900 font-mono">₹499</div>
+                      <div class="text-[10px] text-slate-400 line-through font-mono">₹999</div>
+                    </div>
+                  </div>
+                </label>
+
+              </div>
+
+              <!-- AI Speaking Partner Informational Disclosure Card -->
+              <div class="mt-3.5 p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-start justify-between gap-3 text-xs leading-relaxed">
+                <div class="flex items-start gap-2.5 min-w-0">
+                  <div class="w-8 h-8 rounded-xl bg-peregrine-900 text-peregrine-gold flex items-center justify-center flex-shrink-0 mt-0.5" aria-hidden="true">
+                    🎙️
+                  </div>
+                  <div class="min-w-0">
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                      <strong class="font-bold text-slate-900">AI Speaking Partner (Rashid &amp; Maryam)</strong>
+                      <span class="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">Preview Available</span>
+                      <span class="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-100 text-amber-900">FREE for the first month</span>
+                    </div>
+                    <p class="text-[11px] text-slate-600 mt-1">
+                      Conversational Emirati practice grounded in textbook curriculum. Available in preview directly on the Reader app (30-day non-recurring trial; no auto-debit).
+                    </p>
+                  </div>
+                </div>
+                <a href="https://arabic.peregrineacademy.in/#ai-tutor" target="_blank" rel="noopener noreferrer" class="text-peregrine-900 hover:text-black font-bold whitespace-nowrap self-center text-[11px] underline flex-shrink-0">
+                  Explore &rarr;
+                </a>
+              </div>
+
+            </div>
+
+            <!-- Total Payable Summary Box -->
+            <div class="p-4 sm:p-5 rounded-2xl bg-peregrine-warmIvory border border-slate-200 mb-6">
+              <div class="flex items-baseline justify-between gap-2">
+                <div>
+                  <span class="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-slate-700">Total Payable</span>
+                  <div id="package-breakdown-display" class="text-[11px] text-slate-500 mt-0.5">
+                    (₹1,499 Course + ₹499 Book • One-time Payment)
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span id="package-total-display" class="text-2xl sm:text-3xl font-black text-slate-950 font-mono">₹1,998</span>
+                </div>
+              </div>
+              <div class="mt-3 pt-3 border-t border-slate-200/80 text-[11px] text-slate-600 leading-tight flex items-center gap-2">
+                <span>🔒</span>
+                <span><strong>Direct digital delivery:</strong> Access credentials and claim links are generated immediately upon confirmed payment. No recurring charges, subscriptions, or hidden fees.</span>
+              </div>
+            </div>
+
+            <!-- Error / Notification Alert Message Box -->
+            <div id="checkout-error" class="hidden mb-4 text-xs text-red-800 bg-red-50 p-3.5 rounded-xl border border-red-200 font-medium leading-relaxed" role="alert" aria-live="polite"></div>
+
+            <!-- Customer Details Form -->
+            <form id="order-form" onsubmit="handleCheckoutSubmit(event)" class="space-y-3.5 sm:space-y-4" novalidate>
+              <div>
+                <label for="cust-name" class="block text-xs font-bold text-slate-700 mb-1">
+                  Full Name <span class="text-red-500" aria-hidden="true">*</span>
+                </label>
+                <input 
+                  type="text" 
+                  id="cust-name" 
+                  required 
+                  placeholder="e.g. Sultan Al-Dhaheri" 
+                  class="w-full min-h-[44px] px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-peregrine-900 focus:border-transparent transition bg-slate-50/50" 
+                  autocomplete="name" 
+                />
+              </div>
+
+              <div>
+                <label for="cust-email" class="block text-xs font-bold text-slate-700 mb-1">
+                  Email Address <span class="text-red-500" aria-hidden="true">*</span> 
+                  <span class="text-slate-400 font-normal text-[11px]">(Access credentials sent here)</span>
+                </label>
+                <input 
+                  type="email" 
+                  id="cust-email" 
+                  required 
+                  placeholder="scholar@example.com" 
+                  class="w-full min-h-[44px] px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-peregrine-900 focus:border-transparent transition bg-slate-50/50" 
+                  autocomplete="email" 
+                />
+              </div>
+
+              <div>
+                <label for="cust-phone" class="block text-xs font-bold text-slate-700 mb-1">
+                  Mobile / WhatsApp 
+                  <span class="text-slate-400 font-normal text-[11px]">(Optional, for instant notification)</span>
+                </label>
+                <input 
+                  type="tel" 
+                  id="cust-phone" 
+                  placeholder="+971 50 000 0000" 
+                  class="w-full min-h-[44px] px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-peregrine-900 focus:border-transparent transition bg-slate-50/50" 
+                  autocomplete="tel" 
+                />
+              </div>
+
+              <!-- Prominent CTA Button (Razorpay Verified Integration) -->
+              <div class="pt-3">
+                <button 
+                  type="submit" 
+                  id="submit-pay-btn" 
+                  class="w-full min-h-[48px] py-4 px-6 rounded-2xl text-sm sm:text-base font-bold text-white bg-peregrine-900 hover:bg-peregrine-950 active:scale-99 select-none transition flex items-center justify-center gap-2 shadow-md border border-peregrine-gold/40 focus:outline-none focus:ring-2 focus:ring-peregrine-700 focus:ring-offset-2"
+                >
+                  <span aria-hidden="true">🔒</span>
+                  <span id="btn-text">Proceed to Secure Payment</span>
+                  <span id="btn-price-badge" class="text-xs font-semibold px-2 py-0.5 rounded-full bg-peregrine-800 text-peregrine-goldLight font-mono">₹1,998</span>
+                  <span aria-hidden="true">&rarr;</span>
+                </button>
+
+                <div class="flex items-center justify-center gap-3 text-[11px] text-slate-500 mt-3 flex-wrap">
+                  <span class="inline-flex items-center gap-1 font-medium">🔒 256-bit SSL</span>
+                  <span>•</span>
+                  <span class="inline-flex items-center gap-1 font-medium">⚡ Razorpay Verified</span>
+                  <span>•</span>
+                  <span class="inline-flex items-center gap-1 font-medium">✨ Instant Digital Delivery</span>
+                </div>
+
+                <p class="text-[11px] text-slate-500 text-center mt-3 leading-relaxed">
+                  By proceeding with payment, you agree to our 
+                  <a href="/terms-and-conditions" target="_blank" class="text-peregrine-900 underline hover:text-black font-medium">Terms &amp; Conditions</a>, 
+                  <a href="/privacy-policy" target="_blank" class="text-peregrine-900 underline hover:text-black font-medium">Privacy Policy</a>, and 
+                  <a href="/refund-cancellation-policy" target="_blank" class="text-peregrine-900 underline hover:text-black font-medium">Refund Policy</a>.
+                </p>
+              </div>
+
+            </form>
+
+          </section>
+
+          <!-- Step 2: Post-Payment Truthful Access Hub (Hidden Initially) -->
+          <section id="checkout-success-section" class="hidden" aria-labelledby="success-heading">
+            
+            <div class="text-center py-2 mb-4">
+              <div class="w-14 h-14 bg-emerald-100 text-emerald-800 rounded-full flex items-center justify-center mx-auto mb-3 text-3xl font-bold" aria-hidden="true">
+                ✓
+              </div>
+              <h2 id="success-heading" class="text-xl sm:text-2xl font-black text-slate-950 font-serif">Payment Verified!</h2>
+              <p class="text-xs sm:text-sm text-slate-600 mt-1">Your Arabic Learning Package has been activated.</p>
+              <div id="success-order-ref" class="text-[11px] font-mono text-slate-500 mt-1"></div>
+            </div>
+
+            <div class="border-t border-slate-100 pt-4 mb-5">
+              <h3 class="text-xs font-black uppercase tracking-wider text-slate-700 mb-3">Your Product Entitlements</h3>
+              <div id="success-entitlements-list" class="space-y-3">
+                <!-- Dynamically populated from verified server response -->
+              </div>
+            </div>
+
+            <div class="bg-peregrine-warmIvory rounded-2xl p-4 text-[11px] text-slate-700 border border-slate-200 mb-4">
+              <strong>Support:</strong> Questions about course access or pronunciation audio? Contact our academic desk at <a href="mailto:hello@peregrinehub.com" class="text-peregrine-900 font-semibold underline focus:outline-none focus:ring-1 focus:ring-slate-900 rounded">hello@peregrinehub.com</a>.
+            </div>
+
+            <button onclick="location.reload()" class="w-full min-h-[44px] py-3 rounded-xl text-xs sm:text-sm font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition text-center focus:outline-none focus:ring-2 focus:ring-slate-900">
+              Place Another Order / Refresh
             </button>
 
-            <div class="flex items-center justify-center gap-2 sm:gap-3 text-[10px] sm:text-[11px] text-slate-500 mt-2.5 flex-wrap">
-              <span class="inline-flex items-center gap-1">🔒 256-bit SSL</span>
-              <span>•</span>
-              <span class="inline-flex items-center gap-1">⚡ Razorpay Verified</span>
-              <span>•</span>
-              <span class="inline-flex items-center gap-1">✨ Instant Access</span>
-            </div>
+          </section>
 
-            <p class="text-[11px] text-slate-500 text-center mt-3 leading-relaxed">
-              By proceeding with payment, you agree to our 
-              <a href="/terms-and-conditions" target="_blank" class="text-emerald-800 underline hover:text-emerald-950 font-medium">Terms &amp; Conditions</a>, 
-              <a href="/privacy-policy" target="_blank" class="text-emerald-800 underline hover:text-emerald-950 font-medium">Privacy Policy</a>, and 
-              <a href="/refund-cancellation-policy" target="_blank" class="text-emerald-800 underline hover:text-emerald-950 font-medium">Refund Policy</a>.
-            </p>
-          </div>
-        </form>
-
-      </section>
-
-      <!-- Step 2: Post-Payment Truthful Access Hub (Hidden Initially) -->
-      <section id="checkout-success-section" class="hidden" aria-labelledby="success-heading">
-        
-        <div class="text-center py-2 mb-4">
-          <div class="w-12 h-12 bg-emerald-100 text-emerald-800 rounded-full flex items-center justify-center mx-auto mb-2 text-2xl font-bold" aria-hidden="true">
-            ✓
-          </div>
-          <h2 id="success-heading" class="text-xl font-black text-slate-950">Payment Verified!</h2>
-          <p class="text-xs sm:text-sm text-slate-600 mt-0.5">Your Arabic Learning Package has been activated.</p>
-          <div id="success-order-ref" class="text-[11px] font-mono text-slate-500 mt-1"></div>
         </div>
 
-        <div class="border-t border-slate-100 pt-4 mb-5">
-          <h3 class="text-xs font-black uppercase tracking-wider text-slate-700 mb-3">Your Product Entitlements</h3>
-          <div id="success-entitlements-list" class="space-y-3">
-            <!-- Dynamically populated from verified server response -->
-          </div>
-        </div>
-
-        <div class="bg-slate-50 rounded-xl p-3 text-[11px] text-slate-600 border border-slate-200 mb-4">
-          <strong>Support:</strong> Questions about course access or pronunciation audio? Contact our academic desk at <a href="mailto:hello@peregrinehub.com" class="text-emerald-800 font-semibold underline focus:outline-none focus:ring-1 focus:ring-slate-900 rounded">hello@peregrinehub.com</a>.
-        </div>
-
-        <button onclick="location.reload()" class="w-full min-h-[44px] py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition text-center focus:outline-none focus:ring-2 focus:ring-slate-900">
-          Place Another Order / Refresh
-        </button>
-
-      </section>
-
-    </div>
-
-    <!-- Optional Product Exploration Section (Below Checkout) -->
-    <section class="mt-8 sm:mt-12 pt-6 border-t border-slate-200/80" aria-labelledby="explore-package-heading">
-      <div class="mb-4 text-center sm:text-left">
-        <h2 id="explore-package-heading" class="text-sm sm:text-base font-bold text-slate-900 uppercase tracking-wider">
-          Explore Your Learning Package
-        </h2>
-        <p class="text-xs text-slate-500 mt-0.5">
-          Review the individual curriculum components and access portals:
-        </p>
       </div>
 
-      <div class="space-y-3 sm:space-y-4">
+    </section>
+
+    <!-- 10. Optional Product Exploration Section (Verified Links & Navigation) -->
+    <section class="py-16 sm:py-20 bg-white border-b border-slate-200/80" aria-labelledby="explore-package-heading">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6">
         
-        <!-- Exploration Item 1: LMS Course -->
-        <article class="p-3.5 sm:p-5 rounded-2xl bg-white border border-slate-200 shadow-2xs hover:border-slate-300 transition">
-          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <div class="flex items-start gap-3 min-w-0">
-              <div class="w-10 h-10 rounded-lg bg-emerald-950 text-amber-300 flex items-center justify-center flex-shrink-0 mt-0.5" aria-hidden="true">
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 14v7" />
-                </svg>
-              </div>
-              <div class="min-w-0">
-                <h3 class="text-sm font-bold text-slate-900">Spoken Arabic Course</h3>
-                <p class="text-xs text-slate-600 mt-1 leading-relaxed">
-                  30 hours of structured video masterclasses, dialogue labs, and speaking assessments hosted on the Peregrine LMS platform.
-                </p>
-              </div>
-            </div>
-            <a href="https://learn.peregrineacademy.in/" target="_blank" rel="noopener noreferrer" class="min-h-[44px] inline-flex items-center text-xs font-semibold text-emerald-800 hover:text-emerald-950 whitespace-nowrap self-end sm:self-center flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-emerald-700 rounded-md px-1">
-              Learn more &rarr;
-            </a>
-          </div>
-        </article>
+        <div class="mb-8 text-center sm:text-left">
+          <h2 id="explore-package-heading" class="text-lg sm:text-xl font-bold text-slate-900 uppercase tracking-wider font-serif">
+            Explore Your Learning Package
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-600 mt-1">
+            Review the individual curriculum components and access portals:
+          </p>
+        </div>
 
-        <!-- Exploration Item 2: Spoken Arabic Digital Book -->
-        <article class="p-3.5 sm:p-5 rounded-2xl bg-white border border-slate-200 shadow-2xs hover:border-slate-300 transition">
-          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <div class="flex items-start gap-3 min-w-0">
-              <img 
-                src="/images/khaliji-front-cover.jpeg" 
-                alt="Khaliji Arabic Book Cover" 
-                class="w-10 h-14 object-cover rounded shadow-xs border border-slate-200 flex-shrink-0 mt-0.5"
-              />
-              <div class="min-w-0">
-                <h3 class="text-sm font-bold text-slate-900">Spoken Arabic Digital Book</h3>
-                <p class="text-xs text-slate-600 mt-1 leading-relaxed">
-                  40 narrative chapters in natural Emirati dialect synchronized with 952 clickable native audio pronunciation recordings.
-                </p>
-              </div>
-            </div>
-            <a href="https://arabic.peregrineacademy.in/" target="_blank" rel="noopener noreferrer" class="min-h-[44px] inline-flex items-center text-xs font-semibold text-amber-800 hover:text-amber-950 whitespace-nowrap self-end sm:self-center flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-amber-700 rounded-md px-1">
-              Explore the book &rarr;
-            </a>
-          </div>
-        </article>
-
-        <!-- Exploration Item 3: AI Speaking Partner -->
-        <article class="p-3.5 sm:p-5 rounded-2xl bg-white border border-slate-200 shadow-2xs hover:border-slate-300 transition">
-          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <div class="flex items-start gap-3 min-w-0">
-              <div class="w-10 h-10 rounded-lg bg-emerald-700 text-white flex items-center justify-center flex-shrink-0 mt-0.5" aria-hidden="true">
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z" />
-                </svg>
-              </div>
-              <div class="min-w-0">
-                <div class="flex items-center gap-2 flex-wrap">
-                  <h3 class="text-sm font-bold text-slate-900">AI Speaking Partner</h3>
-                  <span class="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">FREE 1st Month</span>
+        <div class="space-y-4">
+          
+          <!-- Exploration Item 1: LMS Course -->
+          <article class="p-4 sm:p-5 rounded-2xl bg-peregrine-warmIvory border border-slate-200 shadow-2xs hover:border-slate-300 transition">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div class="flex items-start gap-3 min-w-0">
+                <div class="w-10 h-10 rounded-xl bg-peregrine-navy text-peregrine-goldLight flex items-center justify-center flex-shrink-0 mt-0.5" aria-hidden="true">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 14v7" />
+                  </svg>
                 </div>
-                <p class="text-xs text-slate-600 mt-1 leading-relaxed">
-                  Conversational practice with Rashid &amp; Maryam, grounded in the 40 textbook lessons with real-time pronunciation feedback.
-                </p>
+                <div class="min-w-0">
+                  <h3 class="text-sm sm:text-base font-bold text-slate-900">Spoken Arabic Course</h3>
+                  <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                    30 hours of structured video masterclasses, dialogue labs, and speaking assessments hosted on the Peregrine LMS platform.
+                  </p>
+                </div>
               </div>
+              <a href="https://learn.peregrineacademy.in/" target="_blank" rel="noopener noreferrer" class="min-h-[44px] inline-flex items-center text-xs font-bold text-peregrine-900 hover:text-black whitespace-nowrap self-end sm:self-center flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-peregrine-700 rounded-md px-2">
+                Learn more &rarr;
+              </a>
             </div>
-            <a href="https://arabic.peregrineacademy.in/#ai-tutor" target="_blank" rel="noopener noreferrer" class="min-h-[44px] inline-flex items-center text-xs font-semibold text-emerald-800 hover:text-emerald-950 whitespace-nowrap self-end sm:self-center flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-emerald-700 rounded-md px-1" title="Opens the verified AI Tutor showcase on the Reader app">
-              View on Reader &rarr;
-            </a>
+          </article>
+
+          <!-- Exploration Item 2: Spoken Arabic Digital Book -->
+          <article class="p-4 sm:p-5 rounded-2xl bg-peregrine-warmIvory border border-slate-200 shadow-2xs hover:border-slate-300 transition">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div class="flex items-start gap-3 min-w-0">
+                <img 
+                  src="/images/khaliji-front-cover.jpeg" 
+                  alt="Khaliji Arabic Book Cover" 
+                  class="w-10 h-14 object-cover rounded-lg shadow-xs border border-slate-300 flex-shrink-0 mt-0.5"
+                />
+                <div class="min-w-0">
+                  <h3 class="text-sm sm:text-base font-bold text-slate-900">Spoken Arabic Digital Book</h3>
+                  <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                    40 narrative chapters in natural Emirati dialect synchronized with 952 clickable native audio pronunciation recordings.
+                  </p>
+                </div>
+              </div>
+              <a href="https://arabic.peregrineacademy.in/" target="_blank" rel="noopener noreferrer" class="min-h-[44px] inline-flex items-center text-xs font-bold text-amber-900 hover:text-black whitespace-nowrap self-end sm:self-center flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-amber-700 rounded-md px-2">
+                Explore the book &rarr;
+              </a>
+            </div>
+          </article>
+
+          <!-- Exploration Item 3: AI Speaking Partner -->
+          <article class="p-4 sm:p-5 rounded-2xl bg-peregrine-warmIvory border border-slate-200 shadow-2xs hover:border-slate-300 transition">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div class="flex items-start gap-3 min-w-0">
+                <div class="w-10 h-10 rounded-xl bg-peregrine-tealDark text-white flex items-center justify-center flex-shrink-0 mt-0.5" aria-hidden="true">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z" />
+                  </svg>
+                </div>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <h3 class="text-sm sm:text-base font-bold text-slate-900">AI Speaking Partner</h3>
+                    <span class="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">FREE 1st Month</span>
+                  </div>
+                  <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                    Conversational practice with Rashid &amp; Maryam, grounded in the 40 textbook lessons with real-time pronunciation feedback.
+                  </p>
+                </div>
+              </div>
+              <a href="https://arabic.peregrineacademy.in/#ai-tutor" target="_blank" rel="noopener noreferrer" class="min-h-[44px] inline-flex items-center text-xs font-bold text-peregrine-tealDark hover:text-black whitespace-nowrap self-end sm:self-center flex-shrink-0 focus:outline-none focus:ring-2 focus:ring-emerald-700 rounded-md px-2" title="Opens the verified AI Tutor showcase on the Reader app">
+                View on Reader &rarr;
+              </a>
+            </div>
+          </article>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 11. Institutional FAQ: Student Safeguards & Academic Policies -->
+    <section class="py-16 sm:py-20 bg-peregrine-warmIvory border-b border-slate-200/80" aria-labelledby="faq-heading">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6">
+        
+        <div class="text-center max-w-xl mx-auto mb-10">
+          <span class="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-slate-100 text-slate-700 mb-2">
+            Student Guidance
+          </span>
+          <h2 id="faq-heading" class="text-2xl sm:text-3xl font-black text-peregrine-navy font-serif tracking-tight">
+            Frequently Asked Academic Questions
+          </h2>
+        </div>
+
+        <div class="space-y-4">
+          
+          <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+            <h3 class="text-sm sm:text-base font-bold text-slate-900 mb-2">
+              How does the digital delivery and access claim process work?
+            </h3>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Upon successful payment verification, access is provisioned immediately. If you purchase the Complete Package or Digital Book, an HMAC-signed single-use claim token is generated on-screen and delivered to your email. Clicking it links your device to <code>arabic.peregrineacademy.in</code> with lifetime access. LMS course credentials are sent to your email to log into <code>learn.peregrineacademy.in</code>.
+            </p>
           </div>
-        </article>
+
+          <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+            <h3 class="text-sm sm:text-base font-bold text-slate-900 mb-2">
+              Is this a recurring subscription or a one-time purchase?
+            </h3>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              All prices shown (₹1,998 for the Complete Package, ₹1,499 for the LMS Course, and ₹499 for the Digital Book) are strict, non-recurring, one-time payments. There are zero auto-debits, recurring subscriptions, or hidden charges.
+            </p>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+            <h3 class="text-sm sm:text-base font-bold text-slate-900 mb-2">
+              What are the terms of the AI Speaking Partner trial?
+            </h3>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              The AI Speaking Partner (Rashid &amp; Maryam) is currently offered in preview directly on the Reader app. It includes a 30-day non-recurring trial pass. We do not store payment details for auto-renewal; after 30 days, your textbook and audio access remain completely intact for life.
+            </p>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+            <h3 class="text-sm sm:text-base font-bold text-slate-900 mb-2">
+              Who can I contact if I require technical assistance or institutional billing?
+            </h3>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              You can contact our academic desk directly at <a href="mailto:hello@peregrinehub.com" class="text-peregrine-900 underline font-semibold">hello@peregrinehub.com</a> or call our academic coordination line at <a href="tel:+917012756374" class="text-peregrine-900 underline font-semibold">+91 7012756374</a>.
+            </p>
+          </div>
+
+        </div>
 
       </div>
     </section>
 
   </main>
 
-  <!-- Institutional Academic Footer -->
-  <footer class="w-full bg-slate-900 text-slate-400 mt-12 py-10 text-xs border-t border-slate-800" role="contentinfo">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6">
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 pb-8 border-b border-slate-800">
-        <div>
-          <span class="block text-sm font-bold uppercase tracking-wider text-white mb-2">Peregrine Academy</span>
-          <p class="text-slate-400 text-[11px] leading-relaxed">
-            Directed by Dr. Muhammed Swalih T (PhD, EFLU Hyderabad). Operated by Peregrine Training &amp; Consulting. Dedicated to excellence in Emirati and Gulf Arabic education.
+  <!-- 12. Institutional Academic Footer -->
+  <footer class="w-full bg-peregrine-navy text-slate-400 py-12 text-xs border-t border-peregrine-navyMuted" role="contentinfo">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-10 border-b border-slate-800">
+        
+        <!-- Col 1: Identity & Direction -->
+        <div class="md:col-span-2 space-y-3">
+          <div class="flex items-center gap-3">
+            <img src="/images/peregrine-logo.png" alt="Peregrine Logo" class="h-9 w-auto object-contain brightness-110" />
+            <div>
+              <span class="block text-sm font-black tracking-widest uppercase text-white">Peregrine Academy</span>
+              <span class="block text-[11px] font-arabic text-peregrine-goldLight" dir="rtl">أكاديمية بيريجرين للغة العربية</span>
+            </div>
+          </div>
+          
+          <p class="text-slate-400 text-xs leading-relaxed max-w-md">
+            Directed by Dr. Muhammed Swalih T (PhD, EFLU Hyderabad). Operated by Peregrine Training &amp; Consulting. Dedicated to linguistic rigor, phonological authenticity, and professional fluency in Spoken Emirati and Gulf Arabic.
           </p>
-          <div class="text-[11px] text-slate-400 mt-3 space-y-1">
+
+          <div class="text-[11px] text-slate-400 space-y-1 pt-1">
             <p><strong>Email:</strong> <a href="mailto:hello@peregrinehub.com" class="text-emerald-400 underline">hello@peregrinehub.com</a></p>
             <p><strong>Phone:</strong> <a href="tel:+917012756374" class="text-slate-300 hover:text-white">+91 7012756374</a></p>
             <p class="text-slate-500">Edappatta, Melattur, Malappuram, Kerala - 679326, India</p>
           </div>
         </div>
+
+        <!-- Col 2: Academic Programs -->
         <div>
-          <span class="block text-xs font-bold uppercase tracking-wider text-white mb-2">Programs &amp; Access</span>
-          <ul class="space-y-1.5 text-[11px]">
+          <span class="block text-xs font-bold uppercase tracking-wider text-white mb-3">Programs &amp; Portals</span>
+          <ul class="space-y-2 text-[11px]">
             <li><a href="/" class="hover:text-white transition">Storefront Home</a></li>
             <li><a href="/pricing" class="hover:text-white transition">Product Pricing (INR)</a></li>
             <li><a href="/about-us" class="hover:text-white transition">About Us</a></li>
@@ -517,9 +1551,11 @@
             <li><a href="https://arabic.peregrineacademy.in" target="_blank" rel="noopener noreferrer" class="hover:text-white transition">Digital Reader &rarr;</a></li>
           </ul>
         </div>
+
+        <!-- Col 3: Compliance & Legal Policies (All 9 Routes Required) -->
         <div>
-          <span class="block text-xs font-bold uppercase tracking-wider text-white mb-2">Legal &amp; Policies</span>
-          <ul class="space-y-1.5 text-[11px]">
+          <span class="block text-xs font-bold uppercase tracking-wider text-white mb-3">Legal &amp; Policies</span>
+          <ul class="space-y-2 text-[11px]">
             <li><a href="/terms-and-conditions" class="hover:text-white transition">Terms &amp; Conditions</a></li>
             <li><a href="/privacy-policy" class="hover:text-white transition">Privacy Policy</a></li>
             <li><a href="/refund-cancellation-policy" class="hover:text-white transition">Refund &amp; Cancellation Policy</a></li>
@@ -528,15 +1564,19 @@
             <li><a href="/grievance-redressal" class="hover:text-white transition">Grievance Redressal</a></li>
           </ul>
         </div>
+
       </div>
 
-      <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-slate-500">
+      <!-- Bottom Bar -->
+      <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-500">
         <p>&copy; 2026 Peregrine Academy (Peregrine Training &amp; Consulting). All rights reserved.</p>
         <p class="text-slate-400">United Arab Emirates • India</p>
       </div>
+
     </div>
   </footer>
 
+  <!-- 13. Authoritative Client-Side Commerce Script -->
   <script>
     let selectedSku = 'SKU_BUNDLE_ALL_IN_ONE';
     const PRODUCTS = {
@@ -592,11 +1632,11 @@
         if (!card || !dot) return;
 
         if (cardSku === sku) {
-          card.className = 'relative block p-3.5 sm:p-4 rounded-xl border-2 border-emerald-600 bg-emerald-50/40 shadow-xs cursor-pointer transition';
-          dot.className = 'w-5 h-5 rounded-full border-2 border-emerald-600 bg-emerald-600 flex items-center justify-center flex-shrink-0 mt-0.5 text-white text-xs font-bold';
+          card.className = 'relative block p-4 sm:p-5 rounded-2xl border-2 border-peregrine-800 bg-peregrine-50/60 shadow-xs cursor-pointer transition';
+          dot.className = 'w-5 h-5 rounded-full border-2 border-peregrine-800 bg-peregrine-800 flex items-center justify-center flex-shrink-0 mt-0.5 text-white text-xs font-bold';
           dot.innerText = '✓';
         } else {
-          card.className = 'relative block p-3.5 sm:p-4 rounded-xl border border-slate-200 bg-white shadow-xs cursor-pointer transition hover:border-slate-400';
+          card.className = 'relative block p-4 sm:p-5 rounded-2xl border border-slate-200 bg-white shadow-xs cursor-pointer transition hover:border-slate-400';
           dot.className = 'w-5 h-5 rounded-full border border-slate-300 bg-white flex items-center justify-center flex-shrink-0 mt-0.5 text-white text-xs font-bold';
           dot.innerText = '';
         }
@@ -864,6 +1904,37 @@
         errBox.innerHTML = `<strong>Checkout Notice:</strong> ${err.message || 'An error occurred during order processing.'}${refSuffix} If you need assistance, please contact our academic desk at <a href="mailto:hello@peregrinehub.com" class="underline font-semibold">hello@peregrinehub.com</a>.`;
         submitBtn.disabled = false;
         submitBtn.innerHTML = `<span>Proceed to Secure Payment</span> <span class="text-amber-200 font-mono">${activeProduct.buttonBadge}</span> <span aria-hidden="true">&rarr;</span>`;
+      }
+    }
+
+    // Interactive audio simulation toggle
+    let isPlayingSample = false;
+    function toggleAudioSimulation() {
+      const btnLabel = document.getElementById('audio-btn-label');
+      const icon = document.getElementById('audio-icon');
+      isPlayingSample = !isPlayingSample;
+      if (isPlayingSample) {
+        btnLabel.innerText = 'Playing...';
+        icon.innerText = '⏸';
+        window.setTimeout(function resetAudioClip() {
+          btnLabel.innerText = 'Play Clip';
+          icon.innerText = '▶';
+          isPlayingSample = false;
+        }, 2500);
+      } else {
+        btnLabel.innerText = 'Play Clip';
+        icon.innerText = '▶';
+      }
+    }
+
+    // Mobile nav drawer toggle
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobile-nav-menu');
+      const toggle = document.getElementById('mobile-nav-toggle');
+      if (!menu) return;
+      const isExpanded = menu.classList.toggle('hidden');
+      if (toggle) {
+        toggle.setAttribute('aria-expanded', !isExpanded);
       }
     }
   </script>
