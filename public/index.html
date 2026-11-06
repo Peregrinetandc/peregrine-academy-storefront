@@ -615,14 +615,14 @@
                 />
               </div>
 
-              <!-- Interactive Simulated Native Audio Player Widget -->
+              <!-- Excerpt Sample Card -->
               <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm text-left">
                 <div class="flex items-center justify-between gap-2 mb-3 pb-2 border-b border-slate-100">
                   <div class="flex items-center gap-2">
-                    <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span class="text-xs font-extrabold uppercase text-slate-800">Sample Native Pronunciation</span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-peregrine-900"></span>
+                    <span class="text-xs font-extrabold uppercase text-slate-800 tracking-wide">Sample Chapter Excerpt</span>
                   </div>
-                  <span class="text-[10px] font-mono text-slate-400">Audio #014</span>
+                  <span class="text-[10px] font-mono text-slate-400">Chapter 14 • Audio #014</span>
                 </div>
 
                 <!-- Arabic Audio Clip Sample -->
@@ -635,29 +635,11 @@
                   </div>
                 </div>
 
-                <!-- Audio Waveform Simulation Bar -->
-                <div class="flex items-center justify-between gap-3">
-                  <button 
-                    type="button" 
-                    id="sample-audio-btn" 
-                    onclick="toggleAudioSimulation()" 
-                    class="min-h-[44px] px-3.5 py-1.5 rounded-xl bg-peregrine-900 hover:bg-peregrine-950 text-peregrine-goldLight text-xs font-bold flex items-center gap-2 transition"
-                    aria-label="Play sample phrase pronunciation"
-                  >
-                    <span id="audio-icon">▶</span>
-                    <span id="audio-btn-label">Play Clip</span>
-                  </button>
-
-                  <div class="flex items-center gap-1 h-6" aria-hidden="true">
-                    <span class="w-1 bg-peregrine-900 rounded-full sound-bar"></span>
-                    <span class="w-1 bg-peregrine-900 rounded-full sound-bar"></span>
-                    <span class="w-1 bg-peregrine-900 rounded-full sound-bar"></span>
-                    <span class="w-1 bg-peregrine-900 rounded-full sound-bar"></span>
-                    <span class="w-1 bg-peregrine-900 rounded-full sound-bar"></span>
-                    <span class="w-1 bg-peregrine-900 rounded-full sound-bar"></span>
-                  </div>
-
-                  <span class="text-[10px] font-mono text-slate-500">Native Speaker</span>
+                <div class="pt-1 text-[11px] text-slate-500 leading-relaxed flex items-center justify-between gap-2">
+                  <span>🎙️ Full synchronized native audio recordings (952 clips) are playable directly inside the Reader web app.</span>
+                  <a href="https://arabic.peregrineacademy.in/" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-peregrine-900 hover:underline flex-shrink-0">
+                    Open Reader &rarr;
+                  </a>
                 </div>
 
               </div>
@@ -757,7 +739,7 @@
             30 Contact Hours of Guided Video Masterclasses
           </h2>
           <p class="text-xs sm:text-sm md:text-base text-slate-600 mt-3 leading-relaxed">
-            Hosted on the official Next.js Peregrine LMS platform (<code>learn.peregrineacademy.in</code>). Credit-aligned with National Higher Education Qualification Framework (NHEQF) guidelines.
+            Curriculum overview aligned with National Higher Education Qualification Framework (NHEQF) continuing education credit guidelines. Full 30 contact hours with interactive dialogue labs, lecture videos, and assessments are hosted on the official Next.js Peregrine LMS platform (<code>learn.peregrineacademy.in</code>).
           </p>
         </div>
 
@@ -940,7 +922,7 @@
               <div class="flex items-start gap-3">
                 <span class="w-6 h-6 rounded-lg bg-peregrine-teal text-white flex items-center justify-center flex-shrink-0 text-xs font-bold mt-0.5">3</span>
                 <div>
-                  <strong class="font-bold text-slate-900">Honest &amp; Non-Recurring:</strong> Available as a 30-day preview pass directly on the Reader app (<code>arabic.peregrineacademy.in/#ai-tutor</code>). No auto-renewal, no subscription lock-in.
+                  <strong class="font-bold text-slate-900">Non-Recurring Preview Pass:</strong> Provided as a 30-day trial preview pass with the learning package on the Reader app (<code>arabic.peregrineacademy.in/#ai-tutor</code>), capped under fair-usage daily turn limits (not unlimited). No credit card stored, zero auto-renewal.
                 </div>
               </div>
             </div>
@@ -958,11 +940,17 @@
 
           </div>
 
-          <!-- Right Column: Interactive Chat Interface Simulation -->
+          <!-- Right Column: Interface Concept Demonstration -->
           <div class="lg:col-span-5">
             
-            <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200 shadow-book text-left">
+            <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200 shadow-book text-left relative">
               
+              <!-- Concept Demonstration Notice Ribbon -->
+              <div class="mb-3 px-3 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-[10px] text-slate-600 flex items-center justify-between">
+                <span class="font-bold uppercase tracking-wider text-slate-700">UI Concept Demonstration</span>
+                <span>Reader App Showcase</span>
+              </div>
+
               <!-- Chat Header -->
               <div class="flex items-center justify-between gap-3 pb-3 mb-4 border-b border-slate-100">
                 <div class="flex items-center gap-2.5">
@@ -970,15 +958,14 @@
                     R
                   </div>
                   <div>
-                    <span class="block text-xs font-bold text-slate-900">Rashid (AI Partner)</span>
-                    <span class="block text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
-                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                      Emirati Voice Model Active
+                    <span class="block text-xs font-bold text-slate-900">Rashid Persona (Simulated UI)</span>
+                    <span class="block text-[10px] text-slate-500 font-medium">
+                      Curriculum Dialogue Preview
                     </span>
                   </div>
                 </div>
                 <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600">
-                  Preview Mode
+                  Concept Mockup
                 </span>
               </div>
 
@@ -1005,15 +992,15 @@
                   </div>
                 </div>
 
-                <!-- AI Phonetic Feedback -->
-                <div class="bg-emerald-50 border border-emerald-200 p-2.5 rounded-xl text-[11px] text-emerald-900">
-                  <span class="font-bold">✨ Phonetic Evaluation:</span> 98% accuracy. Excellent use of the traditional welcoming suffix <em>al-saa'</em>.
+                <!-- Simulated Feedback Concept -->
+                <div class="bg-slate-50 border border-slate-200 p-2.5 rounded-xl text-[11px] text-slate-700">
+                  <span class="font-bold text-peregrine-900">ℹ️ Feedback Concept:</span> Demonstrates how grammar &amp; pronunciation notes are presented inside the Reader app interface.
                 </div>
 
               </div>
 
               <div class="pt-3 border-t border-slate-100 text-center">
-                <span class="text-[10px] text-slate-400">Available across all 40 textbook situational modules</span>
+                <span class="text-[10px] text-slate-400">Illustrative design. Live interactive dialogue runs directly on arabic.peregrineacademy.in/#ai-tutor</span>
               </div>
 
             </div>
@@ -1904,26 +1891,6 @@
         errBox.innerHTML = `<strong>Checkout Notice:</strong> ${err.message || 'An error occurred during order processing.'}${refSuffix} If you need assistance, please contact our academic desk at <a href="mailto:hello@peregrinehub.com" class="underline font-semibold">hello@peregrinehub.com</a>.`;
         submitBtn.disabled = false;
         submitBtn.innerHTML = `<span>Proceed to Secure Payment</span> <span class="text-amber-200 font-mono">${activeProduct.buttonBadge}</span> <span aria-hidden="true">&rarr;</span>`;
-      }
-    }
-
-    // Interactive audio simulation toggle
-    let isPlayingSample = false;
-    function toggleAudioSimulation() {
-      const btnLabel = document.getElementById('audio-btn-label');
-      const icon = document.getElementById('audio-icon');
-      isPlayingSample = !isPlayingSample;
-      if (isPlayingSample) {
-        btnLabel.innerText = 'Playing...';
-        icon.innerText = '⏸';
-        window.setTimeout(function resetAudioClip() {
-          btnLabel.innerText = 'Play Clip';
-          icon.innerText = '▶';
-          isPlayingSample = false;
-        }, 2500);
-      } else {
-        btnLabel.innerText = 'Play Clip';
-        icon.innerText = '▶';
       }
     }
 
